@@ -150,8 +150,10 @@ while(cap.isOpened()):
     ret, frame = cap.read()
     lane_lines = image.detect_lane(frame)
     lane_detected = image.display_lines(frame, lane_lines)
+    lanes = cv.addWeighted(frame, 0.8, lane_detected, 1, 1)
     
-    cv.imshow('lane_detected',lane_detected)
+    cv.imshow('lane_detected',lanes)
+    #cv.imshow('frame', frame)
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
