@@ -1,11 +1,15 @@
 ## laoding modules that we need
 
+from numpy.lib.type_check import imag
+
+
 try:
     import cv2 as cv
     import numpy as np
     import matplotlib.pyplot as plt
     import cython
     import logging
+    import math
 except Exception as e:
     logging.error(e)
 
@@ -108,7 +112,7 @@ class imagePreporcessing:
         x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
         x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
         
-        return [[x1, y1, x2, y2]]
+        return np.array([x1, y1, x2, y2])
     
     def display_lines(self, image, lines):
         
@@ -119,16 +123,23 @@ class imagePreporcessing:
                 cv.line(lines_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
                 
         return lines_image
+    
+    ### putting it all together
+    def detect_lane(self, frame):
+        
+        edges = image.edges(frame)
+        cropped_edges = image.mask(edges)
+        line_segments = image.detectlanes(cropped_edges)
+        lane_lines = image.average(frame, line_segments)
+        
+        return lane_lines
 
-### putting it all together
-def detect_lane(frame):
-    
-    edges = image.edges(frame)
-    cropped_edges = image.mask(edges)
-    line_segments = image.detectlanes(cropped_edges)
-    lane_lines = image.average(frame, line_segments)
-    
-    return lane_lines
+
+###### compute the steering directions between the two lanes detected ######
+
+
+
+
 
 ### reading the video frame
 image = imagePreporcessing()
@@ -137,10 +148,10 @@ cap = cv.VideoCapture(video_path)
 
 while(cap.isOpened()):
     ret, frame = cap.read()
-    lane_lines = detect_lane(frame)
-    print(lane_lines)
+    lane_lines = image.detect_lane(frame)
+    lane_detected = image.display_lines(frame, lane_lines)
     
-    cv.imshow('frame',frame)
+    cv.imshow('lane_detected',lane_detected)
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
