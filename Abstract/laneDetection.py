@@ -18,6 +18,7 @@ class imagePreporcessing:
         return self.videopath
     
     def edges(self, frame):
+        
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         blurred = cv.GaussianBlur(gray, (5,5), 0)
         edges = cv.Canny(blurred, 100, 300)
@@ -45,45 +46,28 @@ class imagePreporcessing:
         min_threshold = 10
         linesegement = cv.HoughLinesP(mask, rho, angle, min_threshold, np.array([]), minLineLength=8, maxLineGap=4)
         
-        return linesegement
+        return linesegement 
     
-    def make_points(frame, line):
-            
-        height, width = frame.shape
-        slope, intercept = line
-        y1 = height  # bottom of the frame
-        y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
-
-        # bound the coordinates within the frame
-        x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
-        x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
-        
-        return [[x1, y1, x2, y2]] 
-    
-    def averageslope(self, linesegement, edges):
+    def average(self, frame, line_segments):
         """
-    
-    This function combines line segments into one or two lane lines
-    If all line slopes are < 0: then we only have detected left lane
-    If all line slopes are > 0: then we only have detected right lane
-    
+        This function combines line segments into one or two lane lines
+        If all line slopes are < 0: then we only have detected left lane
+        If all line slopes are > 0: then we only have detected right lane
         """
         lane_lines = []
-        if linesegement is None:
+        if line_segments is None:
             logging.info('No line_segment segments detected')
             return lane_lines
-    
-        height, width= edges.shape
+
+        height, width, _ = frame.shape
         left_fit = []
         right_fit = []
-        
-        image = imagePreporcessing()
-        
+
         boundary = 1/3
         left_region_boundary = width * (1 - boundary)  # left lane line segment should be on left 2/3 of the screen
         right_region_boundary = width * boundary # right lane line segment should be on left 2/3 of the screen
-        
-        for line_segment in linesegement:
+
+        for line_segment in line_segments:
             for x1, y1, x2, y2 in line_segment:
                 if x1 == x2:
                     logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
@@ -97,8 +81,8 @@ class imagePreporcessing:
                 else:
                     if x1 > right_region_boundary and x2 > right_region_boundary:
                         right_fit.append((slope, intercept))
-            left_fit_average = np.average(left_fit, axis=0)
-            
+
+        left_fit_average = np.average(left_fit, axis=0)
         if len(left_fit) > 0:
             lane_lines.append(image.make_points(frame, left_fit_average))
 
@@ -110,17 +94,42 @@ class imagePreporcessing:
 
         return lane_lines
     
-### putting it all together
-def detect_lane(frame): 
-    image = imagePreporcessing()
-         
-    edges = image.edges(frame)
-    mask = image.mask(edges)
-    lines = image.detectlanes(mask)
-    lanelines = image.averageslope(frame, lines)
-        
-    return lanelines
+    def height(self, image):
+        height = image.shape[0]
+        return height
     
+    def make_points(self, frame, line):
+        height, width, _ = frame.shape
+        slope, intercept = line
+        y1 = height  # bottom of the frame
+        y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+
+        # bound the coordinates within the frame
+        x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+        x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
+        
+        return [[x1, y1, x2, y2]]
+    
+    def display_lines(self, image, lines):
+        
+        lines_image = np.zeros_like(image)
+        if lines is not None:
+            for line in lines:
+                x1, y1, x2, y2 = line
+                cv.line(lines_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                
+        return lines_image
+
+### putting it all together
+def detect_lane(frame):
+    
+    edges = image.edges(frame)
+    cropped_edges = image.mask(edges)
+    line_segments = image.detectlanes(cropped_edges)
+    lane_lines = image.average(frame, line_segments)
+    
+    return lane_lines
+
 ### reading the video frame
 image = imagePreporcessing()
 video_path = str(image.videopath)
@@ -128,10 +137,10 @@ cap = cv.VideoCapture(video_path)
 
 while(cap.isOpened()):
     ret, frame = cap.read()
-    #cv.imshow('frame',frame))
-    lanes = detect_lane(frame)
-    #cv.imshow('edges', detected_edges)
-    cv.imshow('lanes', lanes)
+    lane_lines = detect_lane(frame)
+    print(lane_lines)
+    
+    cv.imshow('frame',frame)
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
