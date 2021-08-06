@@ -19,7 +19,7 @@ class imagePreporcessing:
         self.videopath = 'resources/video.mp4'
         
     def videopath(self):
-        return self.videopath
+        return str(self.videopath)
     
     def edges(self, frame):
         
@@ -143,7 +143,7 @@ class imagePreporcessing:
 
 ### reading the video frame
 image = imagePreporcessing()
-video_path = str(image.videopath)
+video_path = image.videopath
 cap = cv.VideoCapture(video_path)
 
 while(cap.isOpened()):
