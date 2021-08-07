@@ -137,20 +137,88 @@ class imagePreporcessing:
 
 ###### compute the steering directions between the two lanes detected ######
 
+class motionPlanning(imagePreporcessing):
+    def __init__(self):
+        super().__init__()
+    pass
 
+    def laneLines(self, frame):
+        
+        lane_lines = image.detect_lane(frame)
+        return lane_lines[0][0], lane_lines[1][0]
+    
+    def heightAndWidth(self, qframe):
+        
+        height, width, _ = frame.shape
+        return height, width
+    
+    def steering(self, frame):
+        
+        height, width = motion.heightAndWidth(frame)
+        left_x2= lane_lines[0][0]
+        right_x2= lane_lines[1][0]
+        mid = int(width / 2)
+        
+        x_offset = (left_x2 + right_x2) / 2 - mid
+        y_offset = int(height / 2)
+        angle_to_mid_radian = math.atan(x_offset / y_offset)  # angle (in radian) to center vertical line
+        angle_to_mid_deg = int(angle_to_mid_radian * 180.0 / math.pi)  # angle (in degrees) to center vertical line
+        steering_angle = angle_to_mid_deg + 90  # this is the steering angle needed by picar front wheel
+        
+        return steering_angle
 
+    
+    def display_heading_line(self, frame, steering_angle, line_color=(0, 0, 255), line_width=10 ):
+        heading_image = np.zeros_like(frame)
+        height, width, _ = frame.shape
+
+        # figure out the heading line from steering angle
+        # heading line (x1,y1) is always center bottom of the screen
+        # (x2, y2) requires a bit of trigonometry
+
+        # Note: the steering angle of:
+        # 0-89 degree: turn left
+        # 90 degree: going straight
+        # 91-180 degree: turn right 
+        steering_angle_radian = steering_angle / 180.0 * math.pi
+        x1 = int(width / 2)
+        y1 = height
+        x2 = int(x1 - height / 2 / math.tan(steering_angle_radian))
+        y2 = int(height / 2)
+
+        cv.line(heading_image, (x1, y1), (x2, y2), line_color, line_width)
+        heading_image = cv.addWeighted(frame, 0.8, heading_image, 1, 1)
+
+        return heading_image
 
 
 ### reading the video frame
 image = imagePreporcessing()
+motion = motionPlanning()
 video_path = image.videopath
 cap = cv.VideoCapture(video_path)
+
+
+
 
 while(cap.isOpened()):
     ret, frame = cap.read()
     lane_lines = image.detect_lane(frame)
     lane_detected = image.display_lines(frame, lane_lines)
-    lanes = cv.addWeighted(frame, 0.8, lane_detected, 1, 1)
+    lanes = motion.laneLines(frame)
+    steering = motion.steering(frame)
+    heading = motion.display_heading_line(frame, steering)
+
+    
+    lanes = cv.addWeighted(heading, 0.8, lane_detected, 1, 1)
+    font = cv.FONT_HERSHEY_SIMPLEX
+    cv.putText(lanes, 
+                'STEERING ANGLE :{}'.format(steering), 
+                (50, 50), 
+                font, 1, 
+                (0, 255, 255), 
+                2, 
+                cv.LINE_4)
     
     cv.imshow('lane_detected',lanes)
     #cv.imshow('frame', frame)
