@@ -14,14 +14,60 @@ except Exception as e:
     logging.error(e)
 
 
-class imagePreporcessing:
+class Imagepreporcessing:
+    """ 
+    ImagePreprocessing : class
+    
+    parameters
+    __________
+    
+    videopath = 'test video path'
+    
+    functions
+    _________
+    
+    edges - canny edge detector
+    mask - overlay edges on mask
+    detected lanes - 
+    average - 
+    height - returns height of the frame
+    make_points - 
+    display_lines - draw lines 
+    detected_lanes - wrapper function for all the other functions in the class
+    
+    """
     def __init__(self):
         self.videopath = 'resources/video.mp4'
         
     def videopath(self):
+        """ 
+        
+        return 
+        ______
+        
+        
+        return the videopath variable as a string
+        
+        """
         return str(self.videopath)
     
     def edges(self, frame):
+        """ 
+        parameters
+        _________
+        
+        frame - frame of the opencv video object
+        
+        converts the frame to grayscale
+        blurs using gaussian blur
+        detects edges using canny function
+        
+        return
+        ______
+        
+        detected edges : return edgdes
+        
+        """
         
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         blurred = cv.GaussianBlur(gray, (5,5), 0)
@@ -30,10 +76,30 @@ class imagePreporcessing:
         return edges
     
     def mask(self, edges):
+        """ 
+        parameters
+        __________
+        
+        edges - use the detected edges from egdes method
+        
+        obtains the height and width from calling shape function numpy
+        creates polygon 
+        creates blank mask using numpy zeros_like
+        fills the mask with the polygon using fillpoly
+        combines the filled mask with the detected edges using bitwise_and
+        returns the final output
+        
+        return
+        ______
+        
+        return mask
+        
+        
+        """
         height, width = edges.shape
         ploygon = np.array([[
-            (0, height/2),
-            (width, height/2),
+            (0, height/3),
+            (width, height),
             (width, height),
             (0, height),
         ]], np.int32)
@@ -137,7 +203,7 @@ class imagePreporcessing:
 
 ###### compute the steering directions between the two lanes detected ######
 
-class motionPlanning(imagePreporcessing):
+class motionPlanning(Imagepreporcessing):
     def __init__(self):
         super().__init__()
     pass
@@ -193,7 +259,7 @@ class motionPlanning(imagePreporcessing):
 
 
 ### reading the video frame
-image = imagePreporcessing()
+image = Imagepreporcessing()
 motion = motionPlanning()
 video_path = image.videopath
 cap = cv.VideoCapture(video_path)
