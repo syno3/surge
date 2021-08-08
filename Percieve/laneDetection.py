@@ -1,5 +1,6 @@
 ## laoding modules that we need
 
+from matplotlib.patches import Polygon
 from numpy.lib.type_check import imag
 
 
@@ -97,16 +98,16 @@ class Imagepreporcessing:
         
         """
         height, width = edges.shape
-        ploygon = np.array([[
-            (0, height/3),
-            (width, height),
-            (width, height),
-            (0, height),
+        Polygon = np.array([[
+            (104, 1070),
+            (620, 630),
+            (1300, 620),
+            (1920, 1040),
         ]], np.int32)
         
         mask = np.zeros_like(edges)
         
-        mask = cv.fillPoly(mask, ploygon, 255)
+        mask = cv.fillPoly(mask, Polygon, 255)
         mask = cv.bitwise_and(edges, mask)
         return mask
     
@@ -234,7 +235,7 @@ class motionPlanning(Imagepreporcessing):
         return steering_angle
 
     
-    def display_heading_line(self, frame, steering_angle, line_color=(0, 0, 255), line_width=10 ):
+    def display_heading_line(self, frame, steering_angle, line_color=(0, 255, 0), line_width=20 ):
         heading_image = np.zeros_like(frame)
         height, width, _ = frame.shape
 
@@ -250,7 +251,7 @@ class motionPlanning(Imagepreporcessing):
         x1 = int(width / 2)
         y1 = height
         x2 = int(x1 - height / 2 / math.tan(steering_angle_radian))
-        y2 = int(height / 2)
+        y2 = int(550)
 
         cv.line(heading_image, (x1, y1), (x2, y2), line_color, line_width)
         heading_image = cv.addWeighted(frame, 0.8, heading_image, 1, 1)
@@ -277,9 +278,10 @@ while(cap.isOpened()):
 
     
     lanes = cv.addWeighted(heading, 0.8, lane_detected, 1, 1)
+    print(lanes)
     font = cv.FONT_HERSHEY_SIMPLEX
     cv.putText(lanes, 
-                'STEERING ANGLE :{}'.format(steering), 
+                'STEERING ANGLE : {} '.format(steering), 
                 (50, 50), 
                 font, 1, 
                 (0, 255, 255), 
