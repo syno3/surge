@@ -8,7 +8,6 @@ try:
     import cv2 as cv
     import numpy as np
     import matplotlib.pyplot as plt
-    import cython
     import logging
     import math
 except Exception as e:
@@ -169,6 +168,7 @@ class Imagepreporcessing:
         height = image.shape[0]
         return height
     
+    
     def make_points(self, frame, line):
         height, width, _ = frame.shape
         slope, intercept = line
@@ -192,6 +192,7 @@ class Imagepreporcessing:
         return lines_image
     
     ### putting it all together
+
     def detect_lane(self, frame):
         
         edges = image.edges(frame)
@@ -209,6 +210,7 @@ class motionPlanning(Imagepreporcessing):
         super().__init__()
     pass
 
+ 
     def laneLines(self, frame):
         
         lane_lines = image.detect_lane(frame)
@@ -218,6 +220,7 @@ class motionPlanning(Imagepreporcessing):
         
         height, width, _ = frame.shape
         return height, width
+    
     
     def steering(self, frame):
         
