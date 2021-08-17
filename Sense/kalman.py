@@ -49,6 +49,27 @@ class KalmanFilter:
     @property
     def mean_cov(self):
         return self.p, self.x
+    def update(self, meas_value: float, meas_variance: float):
+        # Y = Z - H X
+        # S = H P HT + R
+        # K = P HT S^-1
+        # X = X + K Y
+        # P = (I - K H) + P
+        
+        Z = np.array([meas_value])
+        R = np.array([meas_variance])
+        H = np.array([1, 0]).reshape(1, 2)
+        
+        Y = Z - H.dot(self.x)
+        S = H.dot(self.p).dot(H.T) + R
+        
+        K = self.p.dot(H.T).dot(np.linalg.inv(S))
+        
+        new_x = self.x + K.dot(Y)
+        new_p = (np.eye(2), - K.dot(H)).dot(self.p)
+        
+        self.p = new_p
+        self.x = new_x
         
 KF = KalmanFilter(initial_x=0.2, initial_y=0.5, a=0.0)
 DT = 0.1    
