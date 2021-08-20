@@ -1,9 +1,6 @@
 #### we build a particle filter python
 from math import cos, exp, pi, sin, sqrt
-
 from numpy.random.mtrand import rand
-
-
 try:
     import numpy as np
     import random
@@ -136,24 +133,52 @@ class Robot:
         
                 
             
-res = Robot()
-res = res.move(0.2, 5.0)
-sense = res.sense()
+myrobot = Robot()
+myrobot = myrobot.move(0.2, 5.0)
+sense = myrobot.sense()
 
 #### we generate randome particles
 
 N = 1000
+T = 10
+
+# initialise randomly guessed particles
 p = []
-
-for _ in range(N):
+for i in range(N):
     x = Robot()
-    x.set_noise(0.05, 0.05, 5.0)  # add noise
+    x.set_noise(0.05, 0.05, 5.0)
     p.append(x)
-
-w = []
-
-for rob in p:
-    prob = rob.measurement_prob(sense)  # Z remains the same
-    w.append(prob)
     
-print(np.array(w))
+#print(np.array(p))
+
+for rd in range(T):
+    myrobot = myrobot.move(0.1, 5.0)
+    Z = myrobot.sense()
+    
+    ###### we move the robot 1000 times
+    p2 = []
+    for i in range(N):
+        # turn 0.1 and move 5 meters
+        p2.append(p[i].move(0.1, 5.0))
+    p = p2
+
+    ##### given the particle's location, how likely measure it as Z
+    w = []
+    for rob in p:
+        prob = rob.measurement_prob(Z)  # Z remains the same
+        w.append(prob)
+    print(np.array(w))
+    
+    # resampling particles based on prabability weights
+    p3 = []
+    index = int(random.random()*N)
+    beta = 0
+    mw = max(w)
+
+    for i in range(N):
+        beta += random.random() * 2 * mw
+        while beta > w[index]:
+            beta -= w[index]
+            index = (index + 1)%N
+        p3.append(p[index])
+    p = p3
