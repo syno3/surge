@@ -1,5 +1,5 @@
 #### we build a particle filter python
-from math import pi, sqrt
+from math import cos, exp, pi, sin, sqrt
 
 from numpy.random.mtrand import rand
 
@@ -21,7 +21,7 @@ class Robot:
     def __init__(self):
         self._x = random.random() * world_size ### we initialize with random value and multiply with 100
         self._y = random.random() * world_size
-        self.orientation = int(random.random() * 2.0 * pi) ## we initalize the original orientation of the vehicle
+        self._orientation = int(random.random() * 2.0 * pi) ## we initalize the original orientation of the vehicle
         
         self.foward_noise = 0.0
         self.turn_noise = 0.0
@@ -44,6 +44,8 @@ class Robot:
         else:
             self._x = float(new_x)
             self._y = float(new_y)
+            
+            
     def set_noise(self, new_f_noise : float, new_t_noise : float, new_s_noise : float):
         """ 
         parameter
@@ -95,14 +97,63 @@ class Robot:
             z.append(dist)
             
         return np.array(z)
-    def move(self):
-        pass
+    def Gaussian(self, mu, sigma, x):
+        # calculates the probability of x for 1-dim Gaussian with mean mu and var. sigma
+        return exp(- ((mu - x) ** 2) / (sigma ** 2) / 2.0) / sqrt(2.0 * pi * (sigma ** 2))
+    
+    def measurement_prob(self, measurement):
+        # calculates how likely a measurement should be
+        prob = 1.0
+        for i in range(len(landmarks)):
+            dist = sqrt((self._x - landmarks[i][0]) ** 2 + (self._y - landmarks[i][1]) ** 2)
+            prob *= self.Gaussian(dist, self.sense_noise, measurement[i])
+        return prob
+    
+    def move(self, turn: float , foward: float):
+        if foward < 0:
+            logging.critical('Foward value is incorrent, cannot move backwards')
+        ### turning produces the orientation, we add randomness
+        orientation = float(turn) + self._orientation + random.gauss(0.0, self.turn_noise)
+        orientation %= 2 * pi 
+        
+        ### move and add randomness to the motion command
+        dist = float(foward) + random.gauss(0.0, self.foward_noise)
+        x = self._x + (cos(orientation) * dist)
+        y = self._y + (sin(orientation) * dist)
+        
+        x %= world_size
+        y %= world_size
+        
+        #### set the particle filter
+        
+        robot = Robot()
+        robot.set(x, y, orientation)
+        robot.set_noise(self.foward_noise, self.turn_noise, self.sense_noise)
+        
+        return robot
+        
+        
+        
                 
             
+res = Robot()
+res = res.move(0.2, 5.0)
+sense = res.sense()
 
+#### we generate randome particles
 
-robot = Robot()
-robot.set_noise()
-dist = robot.sense
+N = 1000
+p = []
 
-print(dist)
+for _ in range(N):
+    x = Robot()
+    x.set_noise(0.05, 0.05, 5.0)  # add noise
+    p.append(x)
+
+w = []
+
+for rob in p:
+    prob = rob.measurement_prob(sense)  # Z remains the same
+    w.append(prob)
+    
+print(np.array(w))
