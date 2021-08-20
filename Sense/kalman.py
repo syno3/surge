@@ -10,7 +10,7 @@ try:
     import logging
 except Exception as e:
     logging.error('please fix error {}').format(e)
-    
+
 class KalmanFilter:
     def __init__(self, initial_x: float, initial_y: float, a: float):
         # mean of state GRV
