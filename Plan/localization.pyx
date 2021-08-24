@@ -16,12 +16,12 @@ try:
     import cv2 as cv
     import numpy as np
     import logging
+    import cython
 except Exception as e:
     logging.critical('please fix the following errors {}').format(e)
 
 ### some random variables
 path = 'resources/video1.mp4'
-(major_ver, minor_ver, subminor_ver) = (cv.__version__).split('.')
 
 
 class opticalFlow:

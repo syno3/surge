@@ -14,9 +14,11 @@ show_animation = True
 
 
 def dwa_control(x, config, goal, ob):
+
     """
     Dynamic Window Approach control
     """
+    
     dw = calc_dynamic_window(x, config)
 
     u, trajectory = calc_control_and_trajectory(x, dw, config, goal, ob)
