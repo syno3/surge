@@ -1,24 +1,51 @@
-## About The Project:shit:
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra, vestibulum rutrum ligula. Suspendisse pretium felis leo. Nulla hendrerit blandit elementum. Aenean rutrum augue sit amet lectus lobortis pulvinar. Vivamus orci quam, aliquam at urna luctus, maximus hendrerit enim. Etiam quis vulputate est. Quisque feugiat massa.
-## Built with
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra.
-## Libraries used
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra.
+## What is openpilot?
+------
 
-### Getting Started
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetraLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+[openpilot](http://github.com/commaai/openpilot) is an open source driver assistance system. Currently, openpilot performs the functions of Adaptive Cruise Control (ACC), Automated Lane Centering (ALC), Forward Collision Warning (FCW) and Lane Departure Warning (LDW) for a growing variety of supported [car makes, models and model years](#supported-cars). In addition, while openpilot is engaged, a camera based Driver Monitoring (DM) feature alerts distracted and asleep drivers.
 
-## Prerequisites
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+## Limitations of openpilot ALC and LDW
+------
 
-## Usage
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+openpilot ALC and openpilot LDW do not automatically drive the vehicle or reduce the amount of attention that must be paid to operate your vehicle. The driver must always keep control of the steering wheel and be ready to correct the openpilot ALC action at all times.
 
-## RoadMap
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+While changing lanes, openpilot is not capable of looking next to you or checking your blind spot. Only nudge the wheel to initiate a lane change after you have confirmed it's safe to do so.
 
-## DreamON !!
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetraLorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+Many factors can impact the performance of openpilot ALC and openpilot LDW, causing them to be unable to function as intended. These include, but are not limited to:
 
-## Contributing
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla arcu augue, aliquet et massa pharetra
+* Poor visibility (heavy rain, snow, fog, etc.) or weather conditions that may interfere with sensor operation.
+* The road facing camera is obstructed, covered or damaged by mud, ice, snow, etc.
+* Obstruction caused by applying excessive paint or adhesive products (such as wraps, stickers, rubber coating, etc.) onto the vehicle.
+* The device is mounted incorrectly.
+* When in sharp curves, like on-off ramps, intersections etc...; openpilot is designed to be limited in the amount of steering torque it can produce.
+* In the presence of restricted lanes or construction zones.
+* When driving on highly banked roads or in presence of strong cross-wind.
+* Extremely hot or cold temperatures.
+* Bright light (due to oncoming headlights, direct sunlight, etc.).
+* Driving on hills, narrow, or winding roads.
+
+The list above does not represent an exhaustive list of situations that may interfere with proper operation of openpilot components. It is the driver's responsibility to be in control of the vehicle at all times.
+
+## Limitations of openpilot ACC and FCW
+------
+
+openpilot ACC and openpilot FCW are not systems that allow careless or inattentive driving. It is still necessary for the driver to pay close attention to the vehicle’s surroundings and to be ready to re-take control of the gas and the brake at all times.
+
+Many factors can impact the performance of openpilot ACC and openpilot FCW, causing them to be unable to function as intended. These include, but are not limited to:
+
+* Poor visibility (heavy rain, snow, fog, etc.) or weather conditions that may interfere with sensor operation.
+* The road facing camera or radar are obstructed, covered, or damaged by mud, ice, snow, etc.
+* Obstruction caused by applying excessive paint or adhesive products (such as wraps, stickers, rubber coating, etc.) onto the vehicle.
+* The device is mounted incorrectly.
+* Approaching a toll booth, a bridge or a large metal plate.
+* When driving on roads with pedestrians, cyclists, etc...
+* In presence of traffic signs or stop lights, which are not detected by openpilot at this time.
+* When the posted speed limit is below the user selected set speed. openpilot does not detect speed limits at this time.
+* In presence of vehicles in the same lane that are not moving.
+* When abrupt braking maneuvers are required. openpilot is designed to be limited in the amount of deceleration and acceleration that it can produce.
+* When surrounding vehicles perform close cut-ins from neighbor lanes.
+* Driving on hills, narrow, or winding roads.
+* Extremely hot or cold temperatures.
+* Bright light (due to oncoming headlights, direct sunlight, etc.).
+* Interference from other equipment that generates radar waves.
+
+The list above does not represent an exhaustive list of situations that may interfere with proper operation of openpilot components. It is the driver's responsibility to be in control of the vehicle at all times.
