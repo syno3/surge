@@ -1,51 +1,32 @@
-## What is openpilot?
-------
+## What is surge? 
 
-[openpilot](http://github.com/commaai/openpilot) is an open source driver assistance system. Currently, openpilot performs the functions of Adaptive Cruise Control (ACC), Automated Lane Centering (ALC), Forward Collision Warning (FCW) and Lane Departure Warning (LDW) for a growing variety of supported [car makes, models and model years](#supported-cars). In addition, while openpilot is engaged, a camera based Driver Monitoring (DM) feature alerts distracted and asleep drivers.
+Is a level 2 self driving system that performs functions like Adaptive cruise control (ACC), Automated Lane Centering (ALC), Fowards Collision Warning (FCW) and Lane Departure Wanring (LDW) and uses data from it vision system to determine the appropriate driving path, speed, throtle and velocity.
 
-## Limitations of openpilot ALC and LDW
-------
+### How does it work
 
-openpilot ALC and openpilot LDW do not automatically drive the vehicle or reduce the amount of attention that must be paid to operate your vehicle. The driver must always keep control of the steering wheel and be ready to correct the openpilot ALC action at all times.
+We system is built in python and will be deployed in c++ to increase speed and efficiency. We use normal computer vision to get data from a camera module installed as a dashcam. The data from the camera goes through various processes (ie.) Lane detection, object detection, semantic segmentation, Visual Odometry and motion planning to output a driving signals. The signals are then sent to the car ECU via an OBD2 port connection in the car.
 
-While changing lanes, openpilot is not capable of looking next to you or checking your blind spot. Only nudge the wheel to initiate a lane change after you have confirmed it's safe to do so.
+### Limitation of surge
 
-Many factors can impact the performance of openpilot ALC and openpilot LDW, causing them to be unable to function as intended. These include, but are not limited to:
+Using basic computer vision comes with its fair of downsides (ie.):
+<ul>
+    <li> The system lacks a dynamic approach to outputing a driving tragectory
+    <li> Poor visibility (heavy rain, snow, fog, etc.) or weather conditions that may interfere with sensor operation.
+    <li> The road facing camera is obstructed, covered or damaged by mud, ice, snow, etc.
+    <li> When in sharp curves, like on-off ramps, intersections etc...; openpilot is designed to be limited in the amount of steering torque it can produce.
+    <li> When driving on highly banked roads or in presence of strong cross-wind.
+    <li> Bright light (due to oncoming headlights, direct sunlight, etc.).
+    <li> Driving on hills, narrow, or winding roads.
+</ul>
 
-* Poor visibility (heavy rain, snow, fog, etc.) or weather conditions that may interfere with sensor operation.
-* The road facing camera is obstructed, covered or damaged by mud, ice, snow, etc.
-* Obstruction caused by applying excessive paint or adhesive products (such as wraps, stickers, rubber coating, etc.) onto the vehicle.
-* The device is mounted incorrectly.
-* When in sharp curves, like on-off ramps, intersections etc...; openpilot is designed to be limited in the amount of steering torque it can produce.
-* In the presence of restricted lanes or construction zones.
-* When driving on highly banked roads or in presence of strong cross-wind.
-* Extremely hot or cold temperatures.
-* Bright light (due to oncoming headlights, direct sunlight, etc.).
-* Driving on hills, narrow, or winding roads.
+### future upgrades
 
-The list above does not represent an exhaustive list of situations that may interfere with proper operation of openpilot components. It is the driver's responsibility to be in control of the vehicle at all times.
+our goal is to use supervised LSTM in Reinforcement Learning combine both of its advantages (context and dynamic) nature to create a full end-to-end driving module that is dynamic and applies context from it pervious experience to output driving signals
 
-## Limitations of openpilot ACC and FCW
-------
+### Developers
 
-openpilot ACC and openpilot FCW are not systems that allow careless or inattentive driving. It is still necessary for the driver to pay close attention to the vehicle’s surroundings and to be ready to re-take control of the gas and the brake at all times.
+Me !!!!!
 
-Many factors can impact the performance of openpilot ACC and openpilot FCW, causing them to be unable to function as intended. These include, but are not limited to:
 
-* Poor visibility (heavy rain, snow, fog, etc.) or weather conditions that may interfere with sensor operation.
-* The road facing camera or radar are obstructed, covered, or damaged by mud, ice, snow, etc.
-* Obstruction caused by applying excessive paint or adhesive products (such as wraps, stickers, rubber coating, etc.) onto the vehicle.
-* The device is mounted incorrectly.
-* Approaching a toll booth, a bridge or a large metal plate.
-* When driving on roads with pedestrians, cyclists, etc...
-* In presence of traffic signs or stop lights, which are not detected by openpilot at this time.
-* When the posted speed limit is below the user selected set speed. openpilot does not detect speed limits at this time.
-* In presence of vehicles in the same lane that are not moving.
-* When abrupt braking maneuvers are required. openpilot is designed to be limited in the amount of deceleration and acceleration that it can produce.
-* When surrounding vehicles perform close cut-ins from neighbor lanes.
-* Driving on hills, narrow, or winding roads.
-* Extremely hot or cold temperatures.
-* Bright light (due to oncoming headlights, direct sunlight, etc.).
-* Interference from other equipment that generates radar waves.
 
-The list above does not represent an exhaustive list of situations that may interfere with proper operation of openpilot components. It is the driver's responsibility to be in control of the vehicle at all times.
+
