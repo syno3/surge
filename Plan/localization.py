@@ -66,7 +66,7 @@ while(cap.isOpened()):
     # ret = a boolean return value from getting the frame, frame = the current frame being projected in the video
     ret, frame = cap.read()
     # Opens a new window and displays the input frame
-    #cv.imshow("input", frame)
+    cv.imshow("input", frame)
     gray = OF.gray(frame)
     #cv.imshow('gray', gray)
     rgb = OF.denseFlow(first_frame, gray) 
