@@ -3,6 +3,9 @@
 # (https://github.com/uppala75/CarND-Advanced-Lane-Lines/blob/master/AdvancedLaneLines.md)
 
 
+## improvements: 1. add timeit 2. add loading animation for corners found 3. write tests for the class 4.
+
+
 try:
     import numpy as np
     import cv2
@@ -19,27 +22,30 @@ except Exception as e:
 #### SOME GLOBAL VARIABLES
 
 
-## CAMERA CALIBRATION
+## CAMERA CALIBRATION CLASS
 class cameracalibration:
-    def __init__(self, nx: int, ny: int, path: str) -> None:
+    def __init__(self, nx: int, ny: int) -> None:
         # Calibrate the Camera
         # number of inside corners in x & y directions
         self.nx = nx
         self.ny = ny
-        self.path = path
+        self.path = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration*.jpg'
+        self.path_calibration1 = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration1.jpg'
+        self.path_calibrationPickle = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration_pickle.p'
 
         # prepare object points
         self.objp = np.zeros((6*9,3), np.float32)
         self.objp[:,:2] = np.mgrid[0:9, 0:6].T.reshape(-1,2)
 
-        # Arrays to store object points and image points from all the images
-        self.objpoints = [] # 3d points in real world space
-        self.imgpoints = [] # 2d points in image plane
-
         # list the images
-        self.images = glob.glob(path)
+        self.images = glob.glob(self.path)
 
+
+    @property
     def cornersfound(self):
+        # Arrays to store object points and image points from all the images
+        objpoints = []# 3d points in real world space
+        imgpoints = []# 2d points in image plane
 
         plt.figure(figsize = (18,12))
         grid = gridspec.GridSpec(5,4)
@@ -47,7 +53,7 @@ class cameracalibration:
         # set the spacing between axes.
         grid.update(wspace=0.05, hspace=0.15)  
 
-        for idx, fname in enumerate(self.images):
+        for _, fname in enumerate(self.images):
             img = cv2.imread(fname)
             # Convert to grayscale
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -57,31 +63,47 @@ class cameracalibration:
 
             # If found, add to object points, image points
             if ret == True:
-                self.objpoints.append(self.objp)
-                self.imgpoints.append(corners)
+                objpoints.append(self.objp)
+                imgpoints.append(corners)
 
-                # Draw and display the corners
-                img = cv2.drawChessboardCorners(img, (self.nx, self.ny), corners, ret)
-                write_name = 'corners_found'+str(idx)+'.jpg'
-                #cv2.imwrite(write_name,img)
-                img_plt = plt.subplot(grid[idx])
-                plt.axis('on')
-                img_plt.set_xticklabels([])
-                img_plt.set_yticklabels([])
-                #img_plt.set_aspect('equal')
-                plt.imshow(img)
-                plt.title(write_name)
-                plt.axis('off')
-        plt.show()
-        #plt.axis('off')
+        return objpoints, imgpoints
 
     def distortionCoefficients(self):
         """ 
         Use the objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. This distortion correction was applied to the test image using the cv2.undistort() function.
 
         """
+        # Take an image, object points, image points, and perform the camera calibration. Undistort the image after camera calibration
+        
+        #load image for reference
+        image = cv2.imread(self.path_calibration1)
+        img_size = (image.shape[1], image.shape[0])
+        print(img_size)
+
+        # Perform camera calibration with the given object and image points
+        objpoints, imgpoints = self.cornersfound
+        print(objpoints, imgpoints)
+
+        _, mtx, dist, _, _ = cv2.calibrateCamera(objpoints, imgpoints, img_size, None, None)
+
+        # Save the camera calibration results for later use
+        dist_pickle = {}
+        dist_pickle["mtx"] = mtx
+        dist_pickle["dist"] = dist
+        pickle.dump(dist_pickle, open(self.path_calibrationPickle, "wb"))
+
+        #Visualize the before/after distortion on chessboard images
+        #undist = cv2.undistort(image, mtx, dist, None, mtx)
+
+    def applyUndistort(self):
         pass
 
 
+## ACTUAL LANE DETECTION CLASS
+class Lanedetection:
+    def __init__(self) -> None:
+        pass
+
 # we initialize the class
-cameracalibration = cameracalibration(9, 6, 'resources/calibration*.jpg')
+#cameracalibration = cameracalibration(9, 6)
+#cameracalibration.distortionCoefficients()
