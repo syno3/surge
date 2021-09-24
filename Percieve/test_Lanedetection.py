@@ -1,6 +1,5 @@
 
 # we write test functions for lane detection file
-from unittest import result
 from Lanedetection import cameracalibration, Lanedetection
 import unittest
 
@@ -10,13 +9,16 @@ class TestStringMethods(unittest.TestCase):
         """  
         we assert that the results from cameracalibration.cornersfound is not empty
         """
-        assert True
+        
+        with self.assertRaises(TypeError):
+            objpoints, imgpoints = cameracalibration.cornersfound
+
 
     def test_not_empty_image(self):
         """ 
         we assert that the img variable from cameracalibration.cornersfound is not empty
         """
-        assert True
+        assert 
         
 
     def test_ret_true(self):
