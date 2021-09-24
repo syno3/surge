@@ -29,6 +29,8 @@ class cameracalibration:
         # number of inside corners in x & y directions
         self.nx = nx
         self.ny = ny
+        
+        #paths for the methods
         self.path = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration*.jpg'
         self.path_calibration1 = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration1.jpg'
         self.path_calibrationPickle = r'C:\Users\kirimi\Desktop\surge\resources\camera_cal\calibration_pickle.p'
@@ -47,12 +49,6 @@ class cameracalibration:
         objpoints = []# 3d points in real world space
         imgpoints = []# 2d points in image plane
 
-        plt.figure(figsize = (18,12))
-        grid = gridspec.GridSpec(5,4)
-
-        # set the spacing between axes.
-        grid.update(wspace=0.05, hspace=0.15)  
-
         for _, fname in enumerate(self.images):
             img = cv2.imread(fname)
             # Convert to grayscale
@@ -68,9 +64,19 @@ class cameracalibration:
 
         return objpoints, imgpoints
 
-    def distortionCoefficients(self):
-        """ 
+    def distortionCoefficients(self) ->None:
+        """
+        parameter
+        ________
+        None 
+
+        Function
+        _______
         Use the objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. This distortion correction was applied to the test image using the cv2.undistort() function.
+
+        return 
+        _______
+        None
 
         """
         # Take an image, object points, image points, and perform the camera calibration. Undistort the image after camera calibration
@@ -78,11 +84,9 @@ class cameracalibration:
         #load image for reference
         image = cv2.imread(self.path_calibration1)
         img_size = (image.shape[1], image.shape[0])
-        print(img_size)
 
         # Perform camera calibration with the given object and image points
         objpoints, imgpoints = self.cornersfound
-        print(objpoints, imgpoints)
 
         _, mtx, dist, _, _ = cv2.calibrateCamera(objpoints, imgpoints, img_size, None, None)
 
@@ -95,8 +99,45 @@ class cameracalibration:
         #Visualize the before/after distortion on chessboard images
         #undist = cv2.undistort(image, mtx, dist, None, mtx)
 
-    def applyUndistort(self):
-        pass
+    def applyUndistort(self) ->None:
+
+        """ 
+        parameter
+        ________
+        None
+
+        Function
+        _______
+        we apply undistortion to test images using the cv2.undistort function and visualize using matplotlib
+
+        return 
+        _______
+        None
+
+        """
+
+        # Choose from the test images to demonstrate the before/after applying undistortion 
+        testImg = cv2.imread('.resources/test_images/test5.jpg')
+        testImg = cv2.cvtColor(testImg, cv2.COLOR_BGR2RGB)
+
+        undistTest = cv2.undistort(testImg, mtx, dist, None, mtx)
+
+        #Visualize the before/after distortion on test images
+        plt.figure(figsize = (18,12))
+        grid = gridspec.GridSpec(1,2)
+        # set the spacing between axes.
+        grid.update(wspace=0.1, hspace=0.1)  
+
+        img_plt = plt.subplot(grid[0])
+        plt.imshow(testImg)
+        plt.title('Original test Image')
+
+        img_plt = plt.subplot(grid[1])
+        plt.imshow(undistTest)
+        plt.title('Undistorted test Image')
+
+
+        plt.show()
 
 
 ## ACTUAL LANE DETECTION CLASS
