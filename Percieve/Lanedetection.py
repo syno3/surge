@@ -76,9 +76,9 @@ class LaneDetect:
             dst = np.float32([[offset,0],[img_size[0]-offset,0],[img_size[0]-offset,img_size[1]],[offset,img_size[1]]])
             
             #perform the warp perspective transform
-            M = cv2.getPerspectiveTransform(src,dst)
-            Minv = cv2.getPerspectiveTransform(dst,src)
-            warped = cv2.warpPerspective(preprocessImage,M,img_size,flags=cv2.INTER_LINEAR)
+            M = cv2.getPerspectiveTransform(src, dst)
+            Minv = cv2.getPerspectiveTransform(dst, src)
+            warped = cv2.warpPerspective(preprocessImage, M, img_size, flags=cv2.INTER_LINEAR)
 
     def apply_convolution(self):
 
