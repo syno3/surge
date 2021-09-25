@@ -1,6 +1,7 @@
 
 # we write test functions for lane detection file
-from Lanedetection import CameraCalibration, LaneDetect
+from Lanedetection import LaneDetect, PreprocessImage
+from cameracalibration import CameraCalibration
 import unittest
 from logging import error
 import pickle
@@ -42,7 +43,7 @@ class TestStringMethods(unittest.TestCase):
         try:
             cameracalibration = CameraCalibration(9, 6)
             with open(cameracalibration.path_calibrationPickle, "rb") as input_file:
-                e = pickle.load(input_file)
+                pickle.load(input_file)
         except EOFError:
             self.fail("Cannot load pickle file")
 
