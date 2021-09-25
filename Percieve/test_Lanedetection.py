@@ -2,6 +2,9 @@
 # we write test functions for lane detection file
 from Lanedetection import LaneDetect, PreprocessImage
 from cameracalibration import CameraCalibration
+from tracker import tracker
+from preprocessimages import PreprocessImage
+from logging import error
 import unittest
 from logging import error
 import pickle

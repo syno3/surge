@@ -179,9 +179,9 @@ class LaneDetect:
         plt.show()
 
 # we initialize the class
-
-lane = LaneDetect()
-lane.apply_convolution()
+if __name__ == '__main__':
+    lane = LaneDetect()
+    lane.apply_convolution()
 
 
 
