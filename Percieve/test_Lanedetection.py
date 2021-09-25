@@ -1,6 +1,6 @@
 
 # we write test functions for lane detection file
-from Lanedetection import LaneDetect, PreprocessImage
+from laneDetection import LaneDetect
 from cameracalibration import CameraCalibration
 from tracker import tracker
 from preprocessimages import PreprocessImage
