@@ -1,3 +1,6 @@
+from numpy import matrix
+
+
 try:
     import numpy as np
     import cv2
@@ -80,11 +83,11 @@ class PreprocessImage(CameraCalibration):
 
         return mtx, dist
 
-    def image_pipeline(self, frames):
+    def image_pipeline(self, images: matrix):
 
         mtx, dist = self.load_pickle
 
-        undistTest = cv2.undistort(frames, mtx, dist, None, mtx)
+        undistTest = cv2.undistort(images, mtx, dist, None, mtx)
         #Apply Sobel operator in X-direction to experiment with gradient thresholds
         gradx = self.abs_sobel_thresh(undistTest, orient='x', thresh_min=20, thresh_max=100)
 
