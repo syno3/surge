@@ -9,11 +9,12 @@ import os
 
 # file imports
 from enviroment import enviroment
+from face import face
 
 
 # global varibales
 Enviroment = enviroment()
-
+Face = face()
 
 # main video class
 class videoOutput:
@@ -23,7 +24,15 @@ class videoOutput:
         self.font_size = 0.6
         self.font_thickness = 1
         self.line_type = cv2.LINE_AA
+
+        #colors for opencv
         self.yellow = (0, 255, 255)
+        self.red = (0, 0, 255)
+        self.blue = (255, 0, 0)
+        self.green = (0, 255, 0)
+        self.white = (255, 255, 255)
+        self.black = (0, 0, 0)
+
         self.path = '../resources/video1.mp4'
 
     def debug(self):
@@ -48,6 +57,27 @@ class videoOutput:
 
             #frames per second test
             cv2.putText(frame, "Frames Per Sec: {}".format(Enviroment.frames_per_second()), (10, 90),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type)
+
+            # error for face not detected
+            detected = Face.detect_face(frame)
+
+            if detected == True:
+                # face detected
+                cv2.putText(frame, "Face detected: {}".format(detected), (10, 130),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type)
+            else:
+                # face not detected
+                cv2.putText(frame, "Face not detected", (10, 130),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+
+
+            # number of faces detected
+
+            # eyes glases detected
+
+            # driver attention
+
+            # illegal substances
+
+            # wearing seatbelt
 
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) == ord('q'):
