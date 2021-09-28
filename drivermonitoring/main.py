@@ -5,7 +5,8 @@ import cv2
 from logging import error
 import time
 import numpy as np
-import os
+import os 
+import thread # threading module
 
 # file imports
 from enviroment import enviroment
@@ -33,7 +34,7 @@ class videoOutput:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        self.path = '../resources/video1.mp4'
+        self.path = '../resources/video4.mp4'
 
     def debug(self):
         # main video
