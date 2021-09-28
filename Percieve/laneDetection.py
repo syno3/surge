@@ -60,23 +60,17 @@ class LaneDetect:
 if __name__ == '__main__':
 
     preprocess = LaneDetect()
-    cap = cv2.VideoCapture('../resources/video2.mp4')
 
-    if (cap.isOpened()== False): 
-        print("Error opening video  file")
-        
-    # Read until video is completed
-    while(cap.isOpened()):
-        # Capture frame-by-frame
+    # we add this lines for debugging purpose
+    cap = cv2.VideoCapture('../resources/video1.mp4')
+    while cap.isOpened():
         ret, frame = cap.read()
-        if ret == True:
-            # Display the resulting frame
-            frame = preprocess.lanedetection_pipeline(frame)
-            cv2.imshow('Frame', frame)
-        # Press Q on keyboard to  exit
-        if cv2.waitKey() & 0xFF == ord('q'):
+        # if frame is read correctly ret is True
+        if not ret:
+            print("Can't receive frame (stream end?). Exiting ...")
             break
-        # Break the loop
-        else: 
-            break 
-    
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(1) == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
