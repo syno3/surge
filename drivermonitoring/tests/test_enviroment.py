@@ -1,12 +1,13 @@
 import unittest
 import pytest
+import sys
+sys.path.append("..") # added for relative imports!
 from enviroment import enviroment
 from main import videoOutput
 
 
-
 class TestStringMethods(unittest.TestCase):
-    
+
     # check import errors
     def test_import_error(self):
         try:
@@ -26,17 +27,18 @@ class TestStringMethods(unittest.TestCase):
         string = path.brightness_level
         assert string != ''
 
-    #check if saturation output not empty
+    # check if saturation output not empty
     def test_saturation_str(self):
         path = enviroment()
         string = path.saturation_level
-        assert string !=''
+        assert string != ''
 
-    #check frames per second is not empty
+    # check frames per second is not empty
     def test_frames_per_second_int(self):
         path = enviroment()
         output = path.frames_per_second
         assert output != 0
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -40,7 +40,7 @@ class cpu:
                 return f"{bytes:.2f}{unit}{suffix}"
             bytes /= self.factor
 
-    def run(self):
+    def run(self) ->None:
 
         print("="*40, "System Information", "="*40)
         uname = platform.uname()
@@ -128,6 +128,3 @@ class cpu:
         print(f"Total Bytes Sent: {self.get_size(net_io.bytes_sent)}")
         print(f"Total Bytes Received: {self.get_size(net_io.bytes_recv)}")
 
-if __name__ == "__main__":
-    CPU = cpu()
-    CPU.run()

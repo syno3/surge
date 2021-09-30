@@ -1,14 +1,23 @@
-# we detect resolution, brightness, saturation
-
+# distutils: language = c
+# cython: language_level = 3
 import cv2
-from logging import error
-import math
 import time
 import numpy as np
+import cython
+
+# we optimize the code
+import cython
+from libcpp cimport bool
+
 
 # main class
-class enviroment:
-    def __init__(self) -> None:
+# we need to use numpy to optimize the code, // learn opencv optimization
+cdef class enviroment:
+    # cython variables
+    cdef int _no_exposure, _little_exposure, _slight_exposure, _normal_exposure, _over_exposure, _no_saturation, _little_saturation, _slight_saturation, _normal_saturation, _over_saturation
+    cdef float prev_frame_time, new_frame_time
+
+    def __init__(self):
         
         # exposure values
         self._no_exposure = 0
@@ -25,11 +34,11 @@ class enviroment:
         self._over_saturation = 255
 
         #frames per second values
-        self.prev_frame_time = 0
-        self.new_frame_time = 0
+        self.prev_frame_time = 0.0
+        self.new_frame_time = 0.0
 
 
-    def brightness_level(self, frame: np.ndarray) -> str:
+    cdef char* brightness_level(self, list frame):
 
         """ 
         parameters
@@ -50,7 +59,12 @@ class enviroment:
         str : the output string of the levels of brightness
 
         """
-        
+        # initilize variables
+
+        cdef float value
+        cdef list hsv, response 
+        cdef char* out
+
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         value = hsv[...,2].mean()
         response = []
@@ -70,9 +84,11 @@ class enviroment:
         if value > self._normal_exposure  and value < self._over_exposure:
             response.append('over exposure')
 
-        return response[0]
+        out = response[0]
 
-    def saturation_level(self, frame: np.ndarray) ->str:
+        return out
+
+    cdef char* saturation_level(self, list frame):
 
         """ 
         parameters
@@ -93,6 +109,11 @@ class enviroment:
         str : the output string of the levels of saturation
 
         """
+        # we declare variables
+        cdef double value
+        cdef list response 
+        cdef char* out
+
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         value = hsv[...,1].mean()
         response = []
@@ -112,9 +133,11 @@ class enviroment:
         if value > self._normal_saturation  and value < self._over_saturation:
             response.append('over saturation')
 
-        return response[0]
+        out = response[0]
 
-    def frames_per_second(self) ->int:
+        return out
+
+    cdef double frames_per_second(self):
 
         """ 
         parameters
@@ -134,15 +157,14 @@ class enviroment:
         int : the number of frames per second
 
         """
+        # initilize variables
+        cdef double fps
+
         self.new_frame_time = time.time()
 
         fps = 1/(self.new_frame_time-self.prev_frame_time)
 
         self.prev_frame_time = self.new_frame_time
 
-        fps = int(fps)
 
         return fps
-
-if __name__ == "__main__":
-    run = enviroment()
