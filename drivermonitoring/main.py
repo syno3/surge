@@ -7,7 +7,7 @@ import numpy as np
 import os 
 import threaded # threading module
 
-# file imports
+# importing required cython files
 from enviroment import enviroment
 from face import face
 from cpu import cpu

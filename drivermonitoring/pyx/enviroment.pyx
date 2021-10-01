@@ -1,5 +1,7 @@
 # distutils: language = c
 # cython: language_level = 3
+
+# we require ubuntu
 import cv2
 import time
 import numpy as np
