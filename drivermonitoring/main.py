@@ -1,21 +1,26 @@
 # we warp all the functions together to one video and display the output
+# convert to cython
 
 # required imports
 import cv2
-from logging import error
-import time
 import numpy as np
 import os 
-import thread # threading module
+import threaded # threading module
 
-# file imports
+# importing required cython files
 from enviroment import enviroment
 from face import face
+from cpu import cpu
+from abstract import abstract
 
 
-# global varibales
+# we instantiate class in global variables
 Enviroment = enviroment()
 Face = face()
+CPU = cpu()
+Abstract = abstract()
+
+
 
 # main video class
 class videoOutput:
@@ -34,9 +39,21 @@ class videoOutput:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        self.path = '../resources/video4.mp4'
+        self.path = '../resources/video1.mp4'
+        self.recording_path = 'assets/recordings'
 
-    def debug(self):
+        #debugging
+        self.attentive = False
+        self.i = 0
+        
+
+    # we record evidence of inappropriate driving   
+    def record_evidence(self, frame: np.ndarray):
+        location = os.path.join(self.recording_path, 'capture'+str(self.i)+'.jpg')
+        cv2.imwrite(location, frame)
+        self.i +=1
+
+    def debug(self):  
         # main video
         cap = cv2.VideoCapture(self.path)
         while cap.isOpened():
@@ -45,7 +62,8 @@ class videoOutput:
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
-            frame = cv2.resize(frame, (640, 480)) 
+
+            frame = cv2.resize(frame, (320, 240)) # reducing this increases speed
 
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type) 
@@ -57,36 +75,50 @@ class videoOutput:
             cv2.putText(frame, "Saturation: {}".format(Enviroment.saturation_level(frame)), (10, 70),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type)
 
             #frames per second test
-            cv2.putText(frame, "Frames Per Sec: {}".format(Enviroment.frames_per_second()), (10, 90),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type)
+            number = Enviroment.frames_per_second()
+            if number < 15:
+                cv2.putText(frame, "Frames Per Sec: {}".format(number), (10, 90),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+            else:
+                cv2.putText(frame, "Frames Per Sec: {}".format(number), (10, 90),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
 
             # error for face not detected
-            detected = Face.detect_face(frame)
+            e1 = cv2.getTickCount() # debugging speed
+            detected, num_of_faces = Face.detect_face(frame)
 
-            if detected == True:
+            if detected:
                 # face detected
-                cv2.putText(frame, "Face detected: {}".format(detected), (10, 130),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type)
+                cv2.putText(frame, "Face detected: {}".format(detected), (10, 130),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
+
+                # number of faces detected
+                cv2.putText(frame, "Number of Faces detected: {}".format(num_of_faces), (10, 150),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
+                # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
+                #attentive = Face.driver_attention(frame)
+                if self.attentive:
+                    # run the record part
+                    self.record_evidence(frame)
+                    cv2.putText(frame, "Stay Alert", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
 
+            e2 = cv2.getTickCount() # debugging speed
+            time = (e2 - e1)/ cv2.getTickFrequency() # debugging speed
 
-            # number of faces detected
-
-            # eyes glases detected
-
-            # driver attention
-
-            # illegal substances
-
-            # wearing seatbelt
+            print(f"clock cycles per second: {time}") # debugging speed
 
             cv2.imshow('frame', frame)
-            if cv2.waitKey(1) == ord('q'):
+            if cv2.waitKey(10) == ord('q'):
                 break
+
         cap.release()
         cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
     run = videoOutput()
-    run.debug()
+    run.debug() # actual video output
+
+    CPU.run() # we get cpu debug information
+
+

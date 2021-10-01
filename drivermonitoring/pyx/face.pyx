@@ -1,12 +1,30 @@
+# distutils: language = c
+# cython: language_level = 3
+
+# we require ubuntu !!!!!
 import cv2
 import numpy as np
 import os
+import cython
 import threaded
+
+# we optimize the code
+import cython
+from libcpp cimport bool
+
+# global variables
+
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
 
-class face:
+cdef class face:
+    # cython variables
+    cdef int i
+    cdef int number_of_faces
+    cdef char* front_face_harcascaade_path
+    cdef bool eye_glasses, distracted, seat_belt, drowsy, boolean
+
     def __init__(self) ->None:
 
         # random variables we need
@@ -27,7 +45,7 @@ class face:
 
     # we detect frontal face consider cvlibs
     
-    def detect_face(self, frame: np.ndarray) ->bool:
+    cpdef int detect_face(self, list frame):
 
         """ 
         parameters
@@ -48,6 +66,11 @@ class face:
         Bool : boolean of wether True incase face detected or false
 
         """
+        # initilize variables
+        cdef int scale_percent, width, height
+        cdef tuple dim
+        cdef list faces
+
         # we resize image to reduce lag
         scale_percent = 60 # percent of original size
         width = int(frame.shape[1] * scale_percent / 100)
@@ -64,9 +87,9 @@ class face:
             self.boolean = True
 
 
-        return self.boolean, self.number_of_faces
+        return 0
         
-    def driver_attention(self, frame: np.ndarray) -> str:
+    cdef int driver_attention(self, list frame):
 
         """ 
         parameters
@@ -84,4 +107,4 @@ class face:
         int : number of detected faces in the image
 
         """
-        pass
+        return 0

@@ -1,5 +1,7 @@
 import unittest
 import pytest
+import sys
+sys.path.append("..") # added for relative imports!
 from face import face
 
 # global variables
