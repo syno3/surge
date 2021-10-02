@@ -9,7 +9,7 @@ import threaded # threading module
 
 # importing required cython files
 from enviroment import enviroment
-from face import face
+from face import face, drowsines
 from cpu import cpu
 from abstract import abstract
 
@@ -19,7 +19,7 @@ Enviroment = enviroment()
 Face = face()
 CPU = cpu()
 Abstract = abstract()
-
+Drowsy = drowsines()
 
 
 # main video class
@@ -39,11 +39,12 @@ class videoOutput:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        self.path = '../resources/video1.mp4'
+        self.path = '../resources/video4.mp4'
         self.recording_path = 'assets/recordings'
 
         #debugging
-        self.attentive = False
+        self.distracted = False
+        self.drowsy = False
         self.i = 0
         
 
@@ -63,7 +64,7 @@ class videoOutput:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
 
-            frame = cv2.resize(frame, (320, 240)) # reducing this increases speed
+            frame = cv2.resize(frame, (680, 480)) # reducing this increases speed
 
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30),self.font, self.font_size, self.yellow, self.font_thickness, self.line_type) 
@@ -83,7 +84,7 @@ class videoOutput:
 
             # error for face not detected
             e1 = cv2.getTickCount() # debugging speed
-            detected, num_of_faces = Face.detect_face(frame)
+            detected, num_of_faces, _= Face.detect_face(frame) # will use rect later
 
             if detected:
                 # face detected
@@ -92,12 +93,15 @@ class videoOutput:
                 # number of faces detected
                 cv2.putText(frame, "Number of Faces detected: {}".format(num_of_faces), (10, 150),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
-                #attentive = Face.driver_attention(frame)
-                if self.attentive:
+                #distracted, warning = Face.driver_attention(frame)
+                drowsy, _, _ = Drowsy.detect_drowsiness(frame)
+                if drowsy:
                     # run the record part
                     self.record_evidence(frame)
-                    cv2.putText(frame, "Stay Alert", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
-
+                    cv2.putText(frame, "Stay alert !!", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+                if self.drowsy:
+                    self.record_evidence(frame)
+                    #cv2.putText(frame, f"{warning}", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
@@ -119,6 +123,6 @@ if __name__ == '__main__':
     run = videoOutput()
     run.debug() # actual video output
 
-    CPU.run() # we get cpu debug information
+    #CPU.run()  we get cpu debug information
 
 
