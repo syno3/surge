@@ -11,9 +11,9 @@ X = np.reshape([[0, 0], [0, 1], [1, 0], [1, 1]], (4,2,1))
 Y = np.reshape([[0], [1], [1], [0]], (4, 1, 1))
 # create the network and use the tanget activator after every activator
 network = [
-    denseLayer(2, 8),
+    denseLayer(2, 3),
     tanh(),
-    denseLayer(8, 1),
+    denseLayer(3, 1),
     tanh()
 ]
 
