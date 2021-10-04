@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="assets/whats-going-on-driving.gif" alt="Logo" width="680" height="320">
+    <img src="assets/whats-going-on-driving.gif" alt="Logo" width="640" height="480">
   </a>
 
   <h3 align="center">SURGE Driver-state-monitoring</h3>
@@ -56,11 +56,11 @@ for linux users:
 * git
   ```sh
   sudo apt-get install git
-  `
+
 * git
   ```sh
   sudo apt-get install python3
-  `
+  
 for windows users:
 1. install [git](https://git-scm.com/downloads) using the link.
 2. install [python3](https://www.python.org/downloads/)
@@ -110,9 +110,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b dev`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Push to the Branch (`git push origin dev`)
 5. Open a Pull Request
 
 ## License
