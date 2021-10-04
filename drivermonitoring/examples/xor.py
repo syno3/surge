@@ -9,11 +9,12 @@ import matplotlib.pyplot as plt
 # input and desired output
 X = np.reshape([[0, 0], [0, 1], [1, 0], [1, 1]], (4,2,1))
 Y = np.reshape([[0], [1], [1], [0]], (4, 1, 1))
+
 # create the network and use the tanget activator after every activator
 network = [
-    denseLayer(2, 8),
+    denseLayer(2, 3),
     tanh(),
-    denseLayer(8, 1),
+    denseLayer(3, 1),
     tanh()
 ]
 
@@ -25,10 +26,10 @@ for e in range(epochs):
     error = 0
 
     for x, y in zip(X, Y):
-        # foward
+        # forward
         output = x
         for layer in network:
-            output = layer.foward(output)
+            output = layer.forward(output)
 
         error += mse(y, output)
         # BACKPROP
