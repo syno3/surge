@@ -7,20 +7,7 @@
     <img src="assets/whats-going-on-driving.gif" alt="Logo" width="320" height="240">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
+  <h3 align="center">SURGE Driver-state-monitoring</h3>
 </div>
 
 
@@ -38,7 +25,6 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -54,20 +40,11 @@
 
 
 <!-- ABOUT THE PROJECT -->
+<!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+The driver state monitoring, also known as driver attention monitor, is a vehicle safety system to assess the driver's alertness and warn the driver if needed and eventually apply the brakes. It was first introduced by Toyota in 2006 for its and Lexus latest models. It was first offered in Japan on the GS 450h. The system's functions co-operate with the pre-collision system (PCS). The system uses infrared sensors to monitor driver attentiveness. Specifically, the driver monitoring system includes a CCD camera placed on the steering column which tracks the face, via infrared LED detectors. If the driver is not paying attention to the road ahead and a dangerous situation is detected, the system will warn the driver by flashing lights, warning sounds. If no action is taken, the vehicle will apply the brakes (a warning alarm will sound followed by a brief automatic application of the braking system).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
