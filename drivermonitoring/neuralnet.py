@@ -8,7 +8,7 @@ class baselayer:
         self.input = None
         self.output = None
 
-    def foward(self, input: np.ndarray):
+    def forwardd(self, input: np.ndarray):
         # this takes in input and give the output
         pass
 
@@ -26,7 +26,7 @@ class denseLayer(baselayer):
         self.weights = np.random.randn(output_size, input_size) # W = J.I
         self.bias = np.random.randn(output_size, 1) # B = J.1
 
-    def foward(self, input: np.ndarray) -> np.ndarray:
+    def forward(self, input: np.ndarray) -> np.ndarray:
         self.input = input
         return np.dot(self.weights, self.input) + self.bias # Y = W.X+B
 
@@ -44,7 +44,7 @@ class activation(baselayer):
         self.activation = activation
         self.activation_prime = activation_prime
 
-    def foward(self, input: np.ndarray):
+    def forward(self, input: np.ndarray):
         self.input = input
         return self.activation(self.input)
 
