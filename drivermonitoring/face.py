@@ -7,7 +7,7 @@ from imutils import face_utils
 from imutils.video import VideoStream
 from threading import Thread
 import time
-import dlib
+#import dlib
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
@@ -161,3 +161,8 @@ class drowsines:
                     self.DROWSY = True
 
         return self.DROWSY, leftEyeHull, rightEyeHull
+
+
+
+if __name__ == "__main__":
+    Drowsiness = drowsines()

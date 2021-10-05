@@ -5,11 +5,12 @@
 import cv2
 import numpy as np
 import os 
-import threaded # threading module
+from threading import Thread
+
 
 # importing required cython files
 from enviroment import enviroment
-from face import face, drowsines
+from face import face
 from cpu import cpu
 from abstract import abstract
 
@@ -19,7 +20,7 @@ Enviroment = enviroment()
 Face = face()
 CPU = cpu()
 Abstract = abstract()
-Drowsy = drowsines()
+#Drowsy = drowsines()
 
 
 # main video class
@@ -46,7 +47,7 @@ class videoOutput:
         self.distracted = False
         self.drowsy = False
         self.i = 0
-        
+        self.cap = None
 
     # we record evidence of inappropriate driving   
     def record_evidence(self, frame: np.ndarray):
@@ -56,9 +57,9 @@ class videoOutput:
 
     def debug(self):  
         # main video
-        cap = cv2.VideoCapture(self.path)
-        while cap.isOpened():
-            ret, frame = cap.read()
+        self.cap = cv2.VideoCapture(self.path)
+        while self.cap.isOpened():
+            ret, frame = self.cap.read()
             # if frame is read correctly ret is True
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
@@ -94,11 +95,11 @@ class videoOutput:
                 cv2.putText(frame, "Number of Faces detected: {}".format(num_of_faces), (10, 150),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
                 #distracted, warning = Face.driver_attention(frame)
-                drowsy, _, _ = Drowsy.detect_drowsiness(frame)
-                if drowsy:
+                #drowsy, _, _ = Drowsy.detect_drowsiness(frame)
+                if self.distracted:
                     # run the record part
                     self.record_evidence(frame)
-                    cv2.putText(frame, "Stay alert !!", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+                    #cv2.putText(frame, "Stay alert !!", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
                 if self.drowsy:
                     self.record_evidence(frame)
                     #cv2.putText(frame, f"{warning}", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
@@ -115,7 +116,12 @@ class videoOutput:
             if cv2.waitKey(10) == ord('q'):
                 break
 
-        cap.release()
+            # we try to stream to web
+            _, frame = cv2.imencode('.jpg', frame)
+            frame = frame.tobytes()
+            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+        self.cap.release()
         cv2.destroyAllWindows()
 
 
