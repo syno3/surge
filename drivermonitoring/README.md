@@ -43,9 +43,8 @@ The driver state monitoring, also known as driver attention monitor, is a vehicl
 The code has been primarily written in python but will soon be ported to c++ for speed and efficiency, here are some of the languages used (or planning to be used) in the final distribution
 
 * [python](https://www.python.org/)
-* [c++](https://isocpp.org/)
+* [Java](https://www.java.com/)
 * [bash](https://www.gnu.org/software/bash/)
-* [golang](https://golang.org/)
 * [javascript](https://www.javascript.com/)
 
 ## Getting Started
@@ -92,7 +91,10 @@ _please refer to the [Documentation](documentation.md)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Move the codebase to c++
+- [] Move the codebase to java
+- [] Add user Interface
+- [] Add distance measurement to reduce false (+ve's)
+- [] fix issues with sunglasses
 - [] clean redundant code
 - [] Intergrate with CAN buses in cars
 - [] Add more parameters to track
