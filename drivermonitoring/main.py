@@ -64,7 +64,7 @@ class videoOutput:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
 
-            frame = cv2.resize(frame, (680 // 2, 480 // 2))  # reducing this increases speed
+            frame = cv2.resize(frame, (680, 480))  # reducing this increases speed
 
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30), self.font, self.font_size,
@@ -116,18 +116,12 @@ class videoOutput:
 
             e2 = cv2.getTickCount()  # debugging speed
             time = (e2 - e1) / cv2.getTickFrequency()  # debugging speed
-
             print(f"clock cycles per second: {time}")  # debugging speed
 
             cv2.imshow('frame', frame)
             if cv2.waitKey(10) == ord('q'):
                 break
-
-            # we try to stream to web
-            _, frame = cv2.imencode('.jpg', frame)
-            frame = frame.tobytes()
-            yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
-
+            
         self.cap.release()
         cv2.destroyAllWindows()
 
