@@ -1,8 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--meta details-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <!-- external references-->
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="assets/fontawesome-free-5.15.4-web/css/all.css" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" href="assets/index.js">
+    <title>Surge driver state Monitoring</title>
+</head>
 <body>
-    <div class="container">
-        <center>
-            <h3 class="mt-5">Live Streaming</h3>
-            <img src="{{ url_for('video_feed') }}" width="50%">
-        </center>      
-    </div>
+    <div class ="container"><!--start container-->
+        <div class = "sidebar"><!--start sidebar-->
+            <img src="assets/images/logo2.png" alt="logo"><!--close image-->
+            <ul class="navigation"><!--start link list-->
+                <li><i class="fas fa-home margin"></i>Dashboard</li>
+                <li><i class="fas fa-play-circle margin"></i>Recordings</li>
+                <li><i class="fas fa-sort-amount-down margin"></i>Statitsics</li>
+                <li><i class="fas fa-car-side margin"></i>Drivers</li>
+                <li><i class="fas fa-laptop margin"></i>Devices</li>
+                <li><i class="fas fa-user-circle margin"></i>User account</li>
+                <li><i class="fas fa-cog margin"></i>Settings</li>
+            </ul><!--close link list-->
+        </div><!--close sidebar-->
+        <div class ="main_container"><!--main container-->
+            <div class ="topsection"><!--start topsection-->
+                <h2>Dashboard</h2><!--start h2-->
+            </div><!--close topsection-->
+            <div class="main_video"><!--start main video-->
+                <img src="assets/images/image1.jpg" alt="Streaming"><!--start video section-->
+                <div class ="nametag"><!--start name tag-->
+                    <p class ="medium">James<span class="voiceicon"><i class="fas fa-microphone"></i></span></p>
+                </div><!--close nametage-->
+                <div class="video_container"><!--start video container-->
+                    <div class ="pintag"><!--start name tag-->
+                        <i class="fas fa-thumbtack"></i>
+                    </div><!--close nametage-->
+                </div><!--close video conatiner-->
+        </div><!--close main video-->
+        <div class="content">
+            <div class="content_text">
+                <h2 class="content_title">Frames Per Second</h2><span class="dot"></span><br><h2 class ="content_output small">24</h2>
+            </div>
+            <div class="content_text">
+                <h2 class="content_title">Detected Faces</h2><span class="dot"></span><br><h2 class ="content_output small">2</h2>
+            </div>
+            <div class="content_text">
+                <h2 class="content_title">Visibility Level</h2><span class="dot"></span><br><h2 class ="content_output small">Good</h2>
+            </div>
+            <div class="content_text">
+                <h2 class="content_title">Ignorance Detected</h2><span class="dot"></span><br><h2 class ="content_output small">None</h2>
+            </div>
+        </div>
+        <div class="infosection"><!--start infosection-->
+            <div class="column_main"><!--start column main-->
+                <div class="column_container"></div>
+            </div><!--close column main-->
+            <div class="column_sub"><!--start column sub-->
+                <div class="column_container"></div>
+            </div><!--close column sub-->
+            <div class="driver_state">
+                <i class="fa fa-car" aria-hidden="true"></i>
+            </div><!--close driver state-->
+        </div><!--close infosection-->         
+    </div><!--close container-->
 </body>
+</html>

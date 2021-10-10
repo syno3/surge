@@ -1,6 +1,6 @@
 # we stream the output to the browser
-from main import videoOutput
 from flask import Flask, render_template, Response
+from main import videoOutput
 import cv2
 
 run = videoOutput() # we instantiate the class

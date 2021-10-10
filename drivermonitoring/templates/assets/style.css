@@ -10,12 +10,12 @@ body {
     background-color: var(--bacgroundColor);
 }
 :root{
-    --sidebarColor: #1C7179;
-    --bacgroundColor: #F3F3F7;
+    --sidebarColor: #1A1E3D;
+    --bacgroundColor: #201F32;
     --sidebarWidth: 332px;
     --topBarheight: 74px;
     --topbarfontfamily: 'Open Sans', sans-serif;
-    --topbarcolor: #F9F9FB;
+    --topbarcolor: #201F32;
     --indicatorGreen: #05FF00;
     --indicatorRed: #FF0000;
     --indicatorDriverStatus: #2BCCA3;
@@ -23,7 +23,7 @@ body {
     --cardheight: 500px;
     --maincontainermargin: 20.7rem;
     --mainmarginleft: 2rem; 
-    --driverstatecolor: #2BCCA3;
+    --driverstatecolor: #05FF00;
 }
 
 .sidebar{
@@ -36,13 +36,31 @@ body {
     overflow: auto;
     z-index: 1;
 }
+.navigation{
+    margin-left: 3.75rem;
+    text-decoration: none;
+    font-family: var(--topbarfontfamily);
+    font-size: 30px;
+    color: #B8B7BA;
+}
+.navigation > li {
+    list-style-type: none;
+    padding-bottom: 1.25rem;
+}
+.margin{
+    margin-right: 1.25rem;
+}
 .sidebar > img{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border:none;
-    height: 300px;
-    width: 300px;
+    height: 150px;
+    width: 180px;
+}
+
+.sidebar >img:hover{
+    transform: rotate(360deg);
 }
 .image{
     opacity: 0;
@@ -63,6 +81,7 @@ body {
     padding-top: 1rem;
     font-family: var(--topbarfontfamily);
     padding-left: 1rem;
+    color: #B8B7BA;
 }
 .main_video{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -75,14 +94,14 @@ body {
 }
 
 .main_video > img {
-    border-radius: 0.6rem 0.6rem 0.6rem 0.6rem;
+    border-radius: 0.7rem 0.7rem 0.7rem 0.7rem;
     max-height: var(--cardheight);
     width: var(--cardwidth);
     height: var(--cardheight);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border:none;
+    border: solid 7px var(--indicatorGreen);
 }
 .content{
     margin-top: 1rem;
@@ -93,6 +112,7 @@ body {
 .content_text{
     font-family: var(--topbarfontfamily);
     display: inline-block;
+    color: #B8B7BA;
 }
 .content_text > h2{
     text-decoration: none;
@@ -129,14 +149,17 @@ body {
 .infosection{
     margin-left: var(--mainmarginleft);
     margin-bottom: 2rem;
+    
 }
 .column_main{
+    
     width: 500px;
     height: 90px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     margin-top: 1rem;
     display: inline-block;
     margin-right: 2rem;
+    background-color: #484752;
 }
 .column_sub {
     width: 300px;
@@ -144,6 +167,7 @@ body {
     display: inline-block;
     margin-right: 2rem;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    background-color: #484752;
 }
 .driver_state{
     display:inline-block;
@@ -172,4 +196,64 @@ body {
     text-align: center;
     vertical-align: bottom;
 }
+.nametag{
+    width: 234px;
+    height: 51px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-top: 0.7rem;
+    display: inline-block;
+    margin-right: 2rem;
+    background-color: #0C0A12;
+    opacity: 0.9;
+    color: white;
+    transform: translate(3.75rem, -6.875rem);
+}
+.nametag > p{
+    text-align: center;
+    font-family: var(--topbarfontfamily);
+    font-size: 25px;
+    margin-top: 0.01rem;
+}
+.nametag >p::before{
+    content: '';
+    margin-right: 1.2rem;
+    height: 15px;
+    width: 15px;
+    background-color: var(--indicatorGreen);
+    border-radius: 50%;
+    display: inline-block;
+}
+.voiceicon{
+    content: '';
+    border-radius: 16px;
+    display:inline-block;
+    font-size: 25px;
+    line-height: 50px;
+    z-index: 2;
+    margin-left: 1rem;
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+    background-color: #FF6E8A;
+}
 
+.pintag{
+    display: inline-block;
+    opacity: 0.9;
+    margin-right: 2rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 16px;
+    display:inline-block;
+    font-size: 25px;
+    line-height: 50px;
+    background-color: #0C0A12;
+    color:white;
+    width: 51px;
+    height: 51px;
+    text-align: center;
+    vertical-align: bottom;
+    z-index: 10;
+    transform: translate(2.5rem, -35rem);
+}
