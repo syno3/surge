@@ -7,15 +7,15 @@
     <meta name="viewport" content="width=
     , initial-scale=1.0">
     <!-- external references-->
-    <link rel="stylesheet" href="assets/style.css">
-    <link href="assets/fontawesome-free-5.15.4-web/css/all.css" rel="stylesheet"> <!--load all styles -->
-    <link rel="stylesheet" href="assets/index.js">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="{{ url_for('static', filename='fontawesome-free-5.15.4-web/css/all.css') }}" rel="stylesheet"> <!--load all styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.js') }}">
     <title>Surge driver state Monitoring</title>
 </head>
 <body>
     <div class ="container"><!--start container-->
         <div class = "sidebar"><!--start sidebar-->
-            <img src="assets/images/logo2.png" alt="logo"><!--close image-->
+            <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="logo"><!--close image-->
             <ul class="navigation"><!--start link list-->
                 <li><i class="fas fa-home margin"></i>Dashboard</li>
                 <li><i class="fas fa-play-circle margin"></i>Recordings</li>
@@ -31,7 +31,7 @@
                 <h2>Dashboard</h2><!--start h2-->
             </div><!--close topsection-->
             <div class="main_video"><!--start main video-->
-                <img src="assets/images/image1.jpg" alt="Streaming"><!--start video section-->
+                <img src="{{ url_for('video_feed') }}" alt="Streaming"><!--start video section-->
                 <div class ="nametag"><!--start name tag-->
                     <p class ="medium">James<span class="voiceicon"><i class="fas fa-microphone"></i></span></p>
                 </div><!--close nametage-->

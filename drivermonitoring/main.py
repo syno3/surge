@@ -39,7 +39,7 @@ class videoOutput:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        self.path = '../resources/video4.mp4'
+        self.path = '../resources/video2.mp4'
         self.recording_path = 'assets/recordings'
 
         # debugging

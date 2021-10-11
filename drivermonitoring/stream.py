@@ -1,5 +1,5 @@
 # we stream the output to the browser
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, url_for
 from main import videoOutput
 import cv2
 
