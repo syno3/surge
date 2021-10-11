@@ -14,9 +14,9 @@
 </head>
 <body>
     <div class ="container"><!--start container-->
-        <div class = "sidebar"><!--start sidebar-->
-            <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="logo"><!--close image-->
-            <ul class="navigation"><!--start link list-->
+<!--  <div class = "sidebar">
+            <img src="../static/images/logo2.png" alt="logo">
+            <ul class="navigation">
                 <li><i class="fas fa-home margin"></i>Dashboard</li>
                 <li><i class="fas fa-play-circle margin"></i>Recordings</li>
                 <li><i class="fas fa-sort-amount-down margin"></i>Statitsics</li>
@@ -24,11 +24,11 @@
                 <li><i class="fas fa-laptop margin"></i>Devices</li>
                 <li><i class="fas fa-user-circle margin"></i>User account</li>
                 <li><i class="fas fa-cog margin"></i>Settings</li>
-            </ul><!--close link list-->
-        </div><!--close sidebar-->
+            </ul>
+        </div>-->
         <div class ="main_container"><!--main container-->
             <div class ="topsection"><!--start topsection-->
-                <h2>Dashboard</h2><!--start h2-->
+                <h2>Surge Driver Monitoring</h2><!--start h2-->
             </div><!--close topsection-->
             <div class="main_video"><!--start main video-->
                 <img src="{{ url_for('video_feed') }}" alt="Streaming"><!--start video section-->
@@ -53,6 +53,9 @@
             </div>
             <div class="content_text">
                 <h2 class="content_title">Ignorance Detected</h2><span class="dot"></span><br><h2 class ="content_output small">None</h2>
+            </div>
+            <div class="content_text">
+                <h2 class="content_title">Distance to face</h2><span class="dot"></span><br><h2 class ="content_output small">2</h2>
             </div>
         </div>
         <div class="infosection"><!--start infosection-->

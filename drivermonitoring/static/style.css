@@ -15,18 +15,18 @@ body {
     --sidebarWidth: 332px;
     --topBarheight: 74px;
     --topbarfontfamily: 'Open Sans', sans-serif;
-    --topbarcolor: #201F32;
+    --topbarcolor: #484752;
     --indicatorGreen: #05FF00;
     --indicatorRed: #FF0000;
     --indicatorDriverStatus: #2BCCA3;
-    --cardwidth: 930px;
-    --cardheight: 500px;
-    --maincontainermargin: 20.7rem;
-    --mainmarginleft: 2rem; 
+    --cardwidth: 79vw;
+    --cardheight: 550px;
+    --maincontainermargin: 4rem;
+    --mainmarginleft: 9rem; 
     --driverstatecolor: #05FF00;
 }
 
-.sidebar{
+/* .sidebar{
     top: 0;
     bottom: 0;
     width: var(--sidebarWidth);
@@ -61,7 +61,7 @@ body {
 
 .sidebar >img:hover{
     transform: rotate(360deg);
-}
+} */
 .image{
     opacity: 0;
     margin-left: 3.8rem;
@@ -70,7 +70,6 @@ body {
     /* background-image: url("images/img_avatar.png"); */
 }
 .main_container {
-    margin-left: var(--maincontainermargin);
     min-height: 100vh;
 }
 .topsection{
@@ -78,9 +77,9 @@ body {
     height: var(--topBarheight);
 }
 .topsection > h2{
-    padding-top: 1rem;
+    padding-top: 1.5rem;
     font-family: var(--topbarfontfamily);
-    padding-left: 1rem;
+    padding-left: 1.5rem;
     color: #B8B7BA;
 }
 .main_video{
@@ -104,8 +103,9 @@ body {
     border: solid 7px var(--indicatorGreen);
 }
 .content{
-    margin-top: 1rem;
-    margin-left: var(--mainmarginleft);
+    margin-top: 2rem;
+    margin-left: 3rem;
+    margin-bottom: 2rem;
     padding-right: 2rem;
     display: inline-block;
 }
@@ -255,5 +255,5 @@ body {
     text-align: center;
     vertical-align: bottom;
     z-index: 10;
-    transform: translate(2.5rem, -35rem);
+    transform: translate(2.5rem, -37rem);
 }
