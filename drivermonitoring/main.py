@@ -2,25 +2,20 @@
 # convert to cython
 
 # required imports
+import os
 import cv2
 import numpy as np
-import os
 from threading import Thread
-
 # importing required cython files
 from enviroment import enviroment
 from face import face
 from cpu import cpu
 from abstract import *
-
 # we instantiate class in global variables
 Enviroment = enviroment()
 Face = face()
 CPU = cpu()
-
-
 # Drowsy = drowsines()
-
 
 # main video class
 class videoOutput:
@@ -39,7 +34,7 @@ class videoOutput:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        self.path = '../resources/video2.mp4'
+        self.path = '../resources/video4.mp4'
         self.recording_path = 'assets/recordings'
 
         # debugging
@@ -48,26 +43,61 @@ class videoOutput:
         self.i = 0
         self.cap = None
 
-        #global self variables
-
     # we record evidence of inappropriate driving   
-    def record_evidence(self, frame: np.ndarray):
+    def record_evidence(self, frame: np.ndarray) ->None:
+
+        """
+        parameters
+        _________
+
+        Frame : we take the frames as the input
+
+        function
+        ________
+
+        we write the frame to new location and increase index
+        
+        return
+        _______
+
+        None
+
+        """
+
         location = os.path.join(self.recording_path, 'capture' + str(self.i) + '.jpg')
         cv2.imwrite(location, frame)
         self.i += 1
 
     # we pass frames to the enviroment pipeline
-    def enviroment_pipeline(self, frame: np.ndarray) ->int:
-        brightness_level = Enviroment.brightness_level(frame)
-        saturation_level = Enviroment.saturation_level(frame)
-        return brightness_level, saturation_level
+    def enviroment_pipeline(self, frame: np.ndarray) ->str:
+
+        """
+        parameters
+        _________
+
+        Frame : we take the frames as the input
+
+        function
+        ________
+
+        we take frame and convert to HSV color space. We get the last V value and calculate the mean of the value.
+
+        using the mean we determine the level of brightness and saturation levels
+        
+        return
+        _______
+
+        str : the output string of the levels of brightness and saturation level
+        """
+        brightness_output = Enviroment.brightness_level(frame)
+        saturation_output = Enviroment.saturation_level(frame)
+        return brightness_output, saturation_output
 
     # we pass frames to face pileline
     def face_pipeline(self, frame: np.ndarray) ->int:
         pass
 
     def debug(self):
-
         # main video
         self.cap = cv2.VideoCapture(self.path)
         while self.cap.isOpened():
@@ -77,21 +107,21 @@ class videoOutput:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
 
-            frame = cv2.resize(frame, (680, 480))  # reducing this increases speed
+            frame = cv2.resize(frame, (680//2, 480//2))  # reducing this increases speed
 
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30), self.font, self.font_size,
                         self.yellow, self.font_thickness, self.line_type)
 
             #enviroment pipeline (module to be threaded)
-            brightness_level, saturation_level = self.enviroment_pipeline(frame)
+            brightness_output, saturation_output = self.enviroment_pipeline(frame)
 
             # frame brightness text
-            cv2.putText(frame, "Exposure: {}".format(brightness_level), (10, 50), self.font,
+            cv2.putText(frame, "Exposure: {}".format(brightness_output), (10, 50), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
 
             # frame saturation text
-            cv2.putText(frame, "Saturation: {}".format(saturation_level), (10, 70), self.font,
+            cv2.putText(frame, "Saturation: {}".format(saturation_output), (10, 70), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
 
             # frames per second test
@@ -138,16 +168,25 @@ class videoOutput:
             if cv2.waitKey(10) == ord('q'):
                 break
 
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'  # concat frame one by one and show result
-
         self.cap.release()
         cv2.destroyAllWindows()
 
+    # we create separate generator function for stream
+    def stream_buffer(self):
+        self.cap = cv2.VideoCapture(self.path)
+        while self.cap.isOpened():
+            ret, frame = self.cap.read()
+            # if frame is read correctly ret is True
+            if not ret:
+                print("Can't receive frame (stream end?). Exiting ...")
+                break
+
+
+            frame = cv2.resize(frame, (680//2, 480//2))
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
+
 
 if __name__ == '__main__':
-    run = videoOutput()
-    run.debug()  # actual video output
-
-    # CPU.run()  we get cpu debug information
+    pass
