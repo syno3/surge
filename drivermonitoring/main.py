@@ -48,13 +48,26 @@ class videoOutput:
         self.i = 0
         self.cap = None
 
+        #global self variables
+
     # we record evidence of inappropriate driving   
     def record_evidence(self, frame: np.ndarray):
         location = os.path.join(self.recording_path, 'capture' + str(self.i) + '.jpg')
         cv2.imwrite(location, frame)
         self.i += 1
 
+    # we pass frames to the enviroment pipeline
+    def enviroment_pipeline(self, frame: np.ndarray) ->int:
+        brightness_level = Enviroment.brightness_level(frame)
+        saturation_level = Enviroment.saturation_level(frame)
+        return brightness_level, saturation_level
+
+    # we pass frames to face pileline
+    def face_pipeline(self, frame: np.ndarray) ->int:
+        pass
+
     def debug(self):
+
         # main video
         self.cap = cv2.VideoCapture(self.path)
         while self.cap.isOpened():
@@ -70,12 +83,15 @@ class videoOutput:
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30), self.font, self.font_size,
                         self.yellow, self.font_thickness, self.line_type)
 
+            #enviroment pipeline (module to be threaded)
+            brightness_level, saturation_level = self.enviroment_pipeline(frame)
+
             # frame brightness text
-            cv2.putText(frame, "Exposure: {}".format(Enviroment.brightness_level(frame)), (10, 50), self.font,
+            cv2.putText(frame, "Exposure: {}".format(brightness_level), (10, 50), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
 
             # frame saturation text
-            cv2.putText(frame, "Saturation: {}".format(Enviroment.saturation_level(frame)), (10, 70), self.font,
+            cv2.putText(frame, "Saturation: {}".format(saturation_level), (10, 70), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
 
             # frames per second test
