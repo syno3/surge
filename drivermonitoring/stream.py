@@ -1,6 +1,5 @@
 # we stream the output to the browser
 from flask import Flask, render_template, Response
-import cv2
 from main import *
 
 
@@ -11,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', visibility="test")
+    return render_template('index.html', visibility="test", fps='24', ignorance="none", distance="2", detected='2')
 
 @app.route('/video_feed')
 def video_feed():

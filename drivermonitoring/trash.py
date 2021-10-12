@@ -2,4 +2,7 @@ from main import *
 
 run = videoOutput() # we instantiate the class
 
-run.global_variables()
+
+while(True):
+    values = next(run.global_variables())
+    print(values)

@@ -6,6 +6,7 @@ import os
 import cv2
 import numpy as np
 from threading import Thread
+
 # importing required cython files
 from enviroment import enviroment
 from face import face
@@ -42,6 +43,8 @@ class videoOutput:
         self.drowsy = False
         self.i = 0
         self.cap = None
+
+        self.play = False
 
     # we record evidence of inappropriate driving   
     def record_evidence(self, frame: np.ndarray) ->None:
@@ -107,7 +110,7 @@ class videoOutput:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
 
-            frame = cv2.resize(frame, (680//2, 480//2))  # reducing this increases speed
+            frame = cv2.resize(frame, (680, 480))  # reducing this increases speed
 
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30), self.font, self.font_size,
@@ -180,12 +183,25 @@ class videoOutput:
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
-
-
             frame = cv2.resize(frame, (680//2, 480//2))
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
+
+    # we debug global variables for flask render
+    def global_variables(self):
+        self.cap = cv2.VideoCapture(self.path)
+        while self.cap.isOpened():
+            ret, frame = self.cap.read()
+            # if frame is read correctly ret is True
+            if not ret:
+                print("Can't receive frame (stream end?). Exiting ...")
+                break
+
+            brightness_output, saturation_output = self.enviroment_pipeline(frame)
+            number = Enviroment.frames_per_second()
+            yield brightness_output, saturation_output, number
+
 
 
 if __name__ == '__main__':
