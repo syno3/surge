@@ -14,8 +14,9 @@ if [[ "$OSTYPE" == "win32"* ]]; then
 https://aka.ms/wslstore"
     exit 1
 else
-    read -p "Do you have python installed ? [Y/N]" : python
+    read -p "Do you have python installed ? [Y/N]" python
     if [[ "$python" == "y" || "$python" == "Y" || "$python" == "Yes" || "$python" == "Yes" || "$python" == "YES"]]; then
-
+        sudo apt-get install python 
+        sudo apt-get install python 
 fi
 

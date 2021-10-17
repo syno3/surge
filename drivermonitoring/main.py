@@ -11,7 +11,7 @@ from time import sleep
 
 # importing required cython files
 from enviroment import enviroment
-from face import face, drowsines
+from face import face
 from cpu import cpu
 from abstract import *
 
@@ -20,7 +20,6 @@ from abstract import *
 Enviroment = enviroment()
 Face = face()
 CPU = cpu()
-Drowsy = drowsines()
 
 # main video class
 class videoOutput:
@@ -144,19 +143,29 @@ class videoOutput:
 
             # error for face not detected
             e1 = cv2.getTickCount()  # debugging speed
-            detected, num_of_faces, _, dist = Face.detect_face(frame)  # will use rect later
-
+            detected, count, score, x, w, y, h = Face.facedetect(frame)
+            
             if detected:
                 # face detected
                 cv2.putText(frame, "Face detected: {}".format(detected), (10, 130), self.font, self.font_size,
                             self.green, self.font_thickness, self.line_type)
+                cv2.putText(frame, "Detection accuracy: {}%".format(score), (10, 150), self.font, self.font_size,
+                            self.green, self.font_thickness, self.line_type)
+                cv2.putText(frame, "Face position: {}, {}".format(x, y), (10, 170), self.font, self.font_size,
+                            self.green, self.font_thickness, self.line_type)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                cv2.rectangle(frame, (x, y), (x+w, y-25), (0, 0, 255), -1)
+                cv2.putText(frame, f'{score}', (x, y), 
+cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
                 # number of faces detected
-                cv2.putText(frame, "Number of Faces detected: {}".format(num_of_faces), (10, 150), self.font,
+                cv2.putText(frame, "Number of Faces detected: {}".format(count), (10, 210), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
                 # distance of camera from face
-                #cv2.putText(frame, "Distance from camera: {}".format(dist), (10, 170), self.font,
-                            #self.font_size, self.green, self.font_thickness, self.line_type)
+                marker = Face.find_marker(frame)
+                dist = Face.distance_to_camera(marker)
+                cv2.putText(frame, "Distance from camera: Appx {} inches".format(dist), (10, 230), self.font,
+                            self.font_size, self.green, self.font_thickness, self.line_type)
                 
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
                 # distracted, warning = Face.driver_attention(frame)
@@ -175,6 +184,12 @@ class videoOutput:
 
             e2 = cv2.getTickCount()  # debugging speed
             time = (e2 - e1) / cv2.getTickFrequency()  # debugging speed
+            if time < 0.01:
+                cv2.putText(frame, "Clock speed: {}".format(time), (10, 190), self.font,
+                            self.font_size, self.green, self.font_thickness, self.line_type)
+            else:
+                cv2.putText(frame, "Clock speed: {}".format(time), (10, 190), self.font,
+                            self.font_size, self.red, self.font_thickness, self.line_type)
             print(f"clock cycles per second: {time}")  # debugging speed
 
             cv2.imshow('frame', frame)
@@ -215,7 +230,5 @@ class videoOutput:
 
 
 if __name__ == '__main__':
-    print("*"*10, 'Running main file', "*"*10)
-    sleep(3) # we sleep for 3 seconds before running the file
     run = videoOutput()
     run.debug() # we run the actual video when the file is called

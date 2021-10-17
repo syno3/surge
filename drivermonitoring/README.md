@@ -97,12 +97,12 @@ _please refer to the [Documentation](documentation.md)_
 - [] Create visuals for the product
 - [] Add the prediction algorithim
 - [] Add face pose and orientation coordinates
-- [] Move to mediapipe
+- [X] Move to mediapipe
 - [] speed up the code
-- [] Add image adjustments
+- [X] Add image adjustments
 - [] Add distance measurement to reduce false (+ve's)
 - [] fix issues with sunglasses
-- [] clean redundant code
+- [X] clean redundant code
 - [] Intergrate with CAN buses in cars
 - [] Add more parameters to track
 - [] Multi-language Support
