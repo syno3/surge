@@ -1,3 +1,4 @@
+# we add 1.monocular depth, we detect faces with mediapipe + count faces
 import cv2
 import numpy as np
 
@@ -7,7 +8,10 @@ from imutils import face_utils
 from imutils.video import VideoStream
 from threading import Thread
 import time
-#import dlib
+import dlib
+
+# face detection module
+import mediapipe as mp # we will do face detection
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
@@ -27,9 +31,15 @@ class face:
 
         # try speed up code
         self.face_cascade = cv2.CascadeClassifier(self.front_face_harcascaade_path)
-
-        self.number_of_faces = 0
+        
+        # debugging global variables
+        self.number_of_faces = 0 # number of faces in the video
         self.i = 0
+        self.distance = 0 # distance of face from camera
+        
+        # mediapipe submodules
+        self.mp_face_detection = mp.solutions.face_detection
+        self.mp_drawing = mp.solutions.drawing_utils
     
     def detect_face(self, frame: np.ndarray) ->bool:
 
@@ -71,7 +81,12 @@ class face:
         else:
             self.boolean = True
 
-        return self.boolean, self.number_of_faces, faces
+        return self.boolean, self.number_of_faces, faces, self.distance
+    
+    
+    # we use media pipe for face detection and number of faces
+    def mediaPipe_facedetect(self, frame):
+        pass
         
     def driver_attention(self, frame: np.ndarray) -> str:
 

@@ -2,7 +2,7 @@
 # - we perform face tracking
 # - we monitor can bus driving
 # - we add support for gps data
-# -
+# - we play audio incase sleep detected
 # -
 # -
 # -
@@ -26,7 +26,3 @@ class GPS:
     def __init__(self) -> None:
         pass
 
-
-class CAN:
-    def __init__(self) -> None:
-        pass

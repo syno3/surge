@@ -6,17 +6,21 @@ import os
 import cv2
 import numpy as np
 from threading import Thread
+from playsound import playsound # we play warning sound
+from time import sleep
 
 # importing required cython files
 from enviroment import enviroment
-from face import face
+from face import face, drowsines
 from cpu import cpu
 from abstract import *
+
+
 # we instantiate class in global variables
 Enviroment = enviroment()
 Face = face()
 CPU = cpu()
-# Drowsy = drowsines()
+Drowsy = drowsines()
 
 # main video class
 class videoOutput:
@@ -45,6 +49,8 @@ class videoOutput:
         self.cap = None
 
         self.play = False
+        
+        # paths for notifications sounds
 
     # we record evidence of inappropriate driving   
     def record_evidence(self, frame: np.ndarray) ->None:
@@ -138,7 +144,7 @@ class videoOutput:
 
             # error for face not detected
             e1 = cv2.getTickCount()  # debugging speed
-            detected, num_of_faces, _ = Face.detect_face(frame)  # will use rect later
+            detected, num_of_faces, _, dist = Face.detect_face(frame)  # will use rect later
 
             if detected:
                 # face detected
@@ -148,16 +154,20 @@ class videoOutput:
                 # number of faces detected
                 cv2.putText(frame, "Number of Faces detected: {}".format(num_of_faces), (10, 150), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
+                # distance of camera from face
+                #cv2.putText(frame, "Distance from camera: {}".format(dist), (10, 170), self.font,
+                            #self.font_size, self.green, self.font_thickness, self.line_type)
+                
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
                 # distracted, warning = Face.driver_attention(frame)
-                # drowsy, _, _ = Drowsy.detect_drowsiness(frame)
+                #self.drowsy, _, _ = Drowsy.detect_drowsiness(frame)
                 if self.distracted:
                     # run the record part
                     self.record_evidence(frame)
                     # cv2.putText(frame, "Stay alert !!", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
-                if self.drowsy:
-                    self.record_evidence(frame)
-                    # cv2.putText(frame, f"{warning}", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+                #if self.drowsy:
+                    #self.record_evidence(frame)
+                    #cv2.putText(frame, "Please concetrate", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130), self.font, self.font_size, self.red,
@@ -205,4 +215,7 @@ class videoOutput:
 
 
 if __name__ == '__main__':
-    pass
+    print("*"*10, 'Running main file', "*"*10)
+    sleep(3) # we sleep for 3 seconds before running the file
+    run = videoOutput()
+    run.debug() # we run the actual video when the file is called
