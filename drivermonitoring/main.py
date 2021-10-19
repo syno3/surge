@@ -3,18 +3,18 @@
 
 # required imports
 import os
+from sys import flags
 import cv2
 import numpy as np
 from threading import Thread
-from playsound import playsound # we play warning sound
-from time import sleep
-
 # importing required cython files
 from enviroment import enviroment
 from face import face
 from cpu import cpu
 from abstract import *
 
+# for image adjustment
+from PIL import Image, ImageEnhance
 
 # we instantiate class in global variables
 Enviroment = enviroment()
@@ -27,7 +27,9 @@ class videoOutput:
         # random variables i need
         self.font = cv2.FONT_HERSHEY_COMPLEX
         self.font_size = 0.6
+        self.fon_size_big = 1.0
         self.font_thickness = 1
+        self.font_thickness_big = 2
         self.line_type = cv2.LINE_AA
 
         # colors for opencv
@@ -40,71 +42,51 @@ class videoOutput:
 
         self.path = '../resources/video4.mp4'
         self.recording_path = 'assets/recordings'
+        self.warning_path = 'assets/warning.mp3'
 
         # debugging
-        self.distracted = False
-        self.drowsy = False
+        self.distracted = True
+        self.drowsy = True
         self.i = 0
         self.cap = None
 
         self.play = False
+        self.chunk = 1024
         
         # paths for notifications sounds
 
+
     # we record evidence of inappropriate driving   
     def record_evidence(self, frame: np.ndarray) ->None:
-
-        """
-        parameters
-        _________
-
-        Frame : we take the frames as the input
-
-        function
-        ________
-
-        we write the frame to new location and increase index
+        # we collect frames of distraction and store in file
         
-        return
-        _______
-
-        None
-
-        """
-
         location = os.path.join(self.recording_path, 'capture' + str(self.i) + '.jpg')
         cv2.imwrite(location, frame)
         self.i += 1
 
+
     # we pass frames to the enviroment pipeline
     def enviroment_pipeline(self, frame: np.ndarray) ->str:
-
-        """
-        parameters
-        _________
-
-        Frame : we take the frames as the input
-
-        function
-        ________
-
-        we take frame and convert to HSV color space. We get the last V value and calculate the mean of the value.
-
-        using the mean we determine the level of brightness and saturation levels
+        # we reduce function loops by using pipeline
         
-        return
-        _______
+        brightness_output, brightness_value = Enviroment.brightness_level(frame)
+        saturation_output, saturation_value = Enviroment.saturation_level(frame)
+        return brightness_output, saturation_output, brightness_value, saturation_value
 
-        str : the output string of the levels of brightness and saturation level
-        """
-        brightness_output = Enviroment.brightness_level(frame)
-        saturation_output = Enviroment.saturation_level(frame)
-        return brightness_output, saturation_output
 
     # we pass frames to face pileline
     def face_pipeline(self, frame: np.ndarray) ->int:
         pass
 
+ 
+    # we enhance the frames
+    def enhanced(self, frame:np.ndarray):
+        pass
+    
+    # sound function
+    def play(self, path: str):
+        pass
+    
     def debug(self):
         # main video
         self.cap = cv2.VideoCapture(self.path)
@@ -122,7 +104,7 @@ class videoOutput:
                         self.yellow, self.font_thickness, self.line_type)
 
             #enviroment pipeline (module to be threaded)
-            brightness_output, saturation_output = self.enviroment_pipeline(frame)
+            brightness_output, saturation_output, brightness_value, saturation_value = self.enviroment_pipeline(frame)
 
             # frame brightness text
             cv2.putText(frame, "Exposure: {}".format(brightness_output), (10, 50), self.font,
@@ -170,13 +152,12 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
                 # distracted, warning = Face.driver_attention(frame)
                 #self.drowsy, _, _ = Drowsy.detect_drowsiness(frame)
-                if self.distracted:
+                if self.distracted and self.drowsy:
                     # run the record part
-                    self.record_evidence(frame)
-                    # cv2.putText(frame, "Stay alert !!", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
-                #if self.drowsy:
                     #self.record_evidence(frame)
-                    #cv2.putText(frame, "Please concetrate", (10, 190),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+                    cv2.putText(frame, "Stay alert !!", (10, 270),self.font, self.fon_size_big, self.red, self.font_thickness_big, self.line_type)
+                    cv2.putText(frame, "Please concetrate", (10, 320),self.font, self.fon_size_big, self.red, self.font_thickness_big, self.line_type)
+                    #self.play(self.warning_path) # play sound
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130), self.font, self.font_size, self.red,
@@ -208,7 +189,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             if not ret:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
-            frame = cv2.resize(frame, (680//2, 480//2))
+            frame = cv2.resize(frame, (680, 480))
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'

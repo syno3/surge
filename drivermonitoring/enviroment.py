@@ -68,7 +68,7 @@ class enviroment:
         if value > self._normal_exposure  and value < self._over_exposure:
             response.append('over exposure')
 
-        return response[0]
+        return response[0], value
 
     def saturation_level(self, frame: np.ndarray) ->str:
 
@@ -111,7 +111,7 @@ class enviroment:
         if value > self._normal_saturation  and value < self._over_saturation:
             response.append('over saturation')
 
-        return response[0]
+        return response[0], value
 
     def frames_per_second(self) ->int:
 

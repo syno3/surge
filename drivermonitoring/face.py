@@ -85,7 +85,8 @@ class face:
         w = self.KNOWN_WIDTH * focalLength
         
         return round(w/perWidth, 2)
-
+    
+    # we will use a pretrained model for this
     def driver_attention(self, frame: np.ndarray) -> str:
         pass
 
