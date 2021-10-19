@@ -3,10 +3,14 @@
 
 # required imports
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # we remove tensorflow warnings
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1' # we remove pygame message
 from sys import flags
 import cv2
 import numpy as np
 from threading import Thread
+from pygame import mixer # we will use this for sound
+
 # importing required cython files
 from enviroment import enviroment
 from face import face
@@ -20,6 +24,8 @@ from PIL import Image, ImageEnhance
 Enviroment = enviroment()
 Face = face()
 CPU = cpu()
+
+
 
 # main video class
 class videoOutput:
@@ -45,13 +51,14 @@ class videoOutput:
         self.warning_path = 'assets/warning.mp3'
 
         # debugging
-        self.distracted = True
-        self.drowsy = True
+        self.distracted = False
+        self.drowsy = False
         self.i = 0
         self.cap = None
-
-        self.play = False
-        self.chunk = 1024
+        
+        # we play warning sound 
+        mixer.init()
+        self.sound = mixer.Sound(self.warning_path)
         
         # paths for notifications sounds
 
@@ -82,10 +89,7 @@ class videoOutput:
     # we enhance the frames
     def enhanced(self, frame:np.ndarray):
         pass
-    
-    # sound function
-    def play(self, path: str):
-        pass
+      
     
     def debug(self):
         # main video
@@ -98,7 +102,9 @@ class videoOutput:
                 break
 
             frame = cv2.resize(frame, (680, 480))  # reducing this increases speed
-
+            height,width = frame.shape[:2] #we get frame height
+            
+            cv2.rectangle(frame, (0,height-50) , (200,height) , (0,0,0) , thickness=cv2.FILLED )
             # frame resolution text
             cv2.putText(frame, "Frame size: {}".format(frame.shape[:2]), (10, 30), self.font, self.font_size,
                         self.yellow, self.font_thickness, self.line_type)
@@ -150,14 +156,19 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                             self.font_size, self.green, self.font_thickness, self.line_type)
                 
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
-                # distracted, warning = Face.driver_attention(frame)
+                sleepy = Face.driver_attention(frame)
                 #self.drowsy, _, _ = Drowsy.detect_drowsiness(frame)
-                if self.distracted and self.drowsy:
+                if not sleepy:
                     # run the record part
                     #self.record_evidence(frame)
-                    cv2.putText(frame, "Stay alert !!", (10, 270),self.font, self.fon_size_big, self.red, self.font_thickness_big, self.line_type)
-                    cv2.putText(frame, "Please concetrate", (10, 320),self.font, self.fon_size_big, self.red, self.font_thickness_big, self.line_type)
-                    #self.play(self.warning_path) # play sound
+                    cv2.putText(frame, "Driver Not Attentive : {}".format(sleepy), (10, 250),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
+                else:
+                    cv2.putText(frame, "Driver Not Attentive : {}".format(sleepy), (10, 250),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
+                    # fix this bug
+                    try:
+                       self.sound.play() # we play sound
+                    except:
+                        pass
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130), self.font, self.font_size, self.red,

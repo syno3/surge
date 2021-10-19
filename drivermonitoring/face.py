@@ -1,4 +1,5 @@
 # we add 1.monocular depth, we detect faces with mediapipe + count faces
+import os
 import cv2
 import imutils
 import numpy as np
@@ -6,24 +7,28 @@ import numpy as np
 # face detection module
 import mediapipe as mp # we will do face detection
 
+# for sleep prediction
+from keras.models import load_model
+
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
 class face:
     def __init__(self) ->None:
 
-        # random variables we need
-        self.front_face_harcascaade_path ="assets/front_face.xml"
+        # cascade files
+        self.front_face_harcascaade_path = cv2.CascadeClassifier("assets/front_face.xml")
+        self.eye_cascade = cv2.CascadeClassifier("assets/eye.xml")
+        self.left_eye = cv2.CascadeClassifier("assets/left_eye.xml")
+        self.right_eye = cv2.CascadeClassifier("assets/right_eye.xml")
+        
+        
+        self.model =  load_model("assets/models/eyeStateModel1.h5")
+        self.sleeping = False
+        self.count=0
+        self.path = os.getcwd()
+        
+        # globals for face
         self.boolean =False
-
-        # booleans for the methods in class
-        self.eye_glasses =False
-        self.distracted =False
-        self.seat_belt =False
-        self.drowsy =False
-        self.boolean = False
-
-        # try speed up code
-        self.face_cascade = cv2.CascadeClassifier(self.front_face_harcascaade_path)
         
         # debugging global variables
         self.number_of_faces = 0 # number of faces in the video
@@ -86,9 +91,37 @@ class face:
         
         return round(w/perWidth, 2)
     
-    # we will use a pretrained model for this
-    def driver_attention(self, frame: np.ndarray) -> str:
+    # we need to fix speed
+    def driver_attention(self, frame: np.ndarray) -> bool:
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4)
+        
+        for (x,y,w,h) in eyes:
+            eyes=frame[y:y+h,x:x+w]
+            self.count=+1
+            eyes = cv2.resize(eyes, (32, 32))
+            eyes = np.array(eyes)
+            eyes = np.expand_dims(eyes, axis=0)
+            ypred = self.model.predict(eyes)
+            
+            prediction = np.argmax(ypred[0], axis=0)
+            
+            if prediction == 1:
+                self.sleeping = False
+            else:
+                self.sleeping = True
+                
+        return self.sleeping
+    
+    # we detect driver attention status
+    def driver_distracted(self, frame:np.ndarray) ->bool:
         pass
+        
+                
+
+
+
+        
 
 if __name__ == "__main__":
     pass
