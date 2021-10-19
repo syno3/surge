@@ -92,10 +92,17 @@ _please refer to the [Documentation](documentation.md)_
 ## Roadmap
 
 - [] Move the codebase to java
-- [] Add user Interface
+- [X] Add user Interface
+- [] Make the interface dynaminc
+- [] Create visuals for the product
+- [] Add the prediction algorithim
+- [] Add face pose and orientation coordinates
+- [X] Move to mediapipe
+- [] speed up the code
+- [X] Add image adjustments
 - [] Add distance measurement to reduce false (+ve's)
 - [] fix issues with sunglasses
-- [] clean redundant code
+- [X] clean redundant code
 - [] Intergrate with CAN buses in cars
 - [] Add more parameters to track
 - [] Multi-language Support

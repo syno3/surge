@@ -1,13 +1,10 @@
+# we add 1.monocular depth, we detect faces with mediapipe + count faces
 import cv2
+import imutils
 import numpy as np
 
-#drowsiness
-from scipy.spatial import distance as dist
-from imutils import face_utils
-from imutils.video import VideoStream
-from threading import Thread
-import time
-#import dlib
+# face detection module
+import mediapipe as mp # we will do face detection
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
@@ -27,142 +24,71 @@ class face:
 
         # try speed up code
         self.face_cascade = cv2.CascadeClassifier(self.front_face_harcascaade_path)
-
-        self.number_of_faces = 0
+        
+        # debugging global variables
+        self.number_of_faces = 0 # number of faces in the video
         self.i = 0
+        self.distance = 0 # distance of face from camera
+        
+        # mediapipe submodules
+        self.mp_face_detection = mp.solutions.face_detection
+        self.mp_drawing = mp.solutions.drawing_utils
+        
+        # global for depth
+        self.KNOWN_DISTANCE = 24.0
+        self.KNOWN_WIDTH = 11.0
     
-    def detect_face(self, frame: np.ndarray) ->bool:
+    
+    # we use media pipe for face detection and number of faces
+    def facedetect(self, frame: np.ndarray):
+        height, width, _ = frame.shape
+        count = 0
+        with self.mp_face_detection.FaceDetection(
+    model_selection=0, min_detection_confidence=0.5) as face_detection:
+            # To improve performance, optionally mark the image as not writeable to
+            # pass by reference.
+            frame.flags.writeable = False
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = face_detection.process(image)
+            for detection in enumerate(results.detections):
+                score = detection[1].score # percentage score of the model
+                score = round(score[0]*100, 2) # round to two decimal places
+                box = detection[1].location_data.relative_bounding_box
+                x, y, w, h = int(box.xmin*width), int(box.ymin * height), int(box.width*width), int(box.height*height)
+              
+            if results != ():
+                self.boolean = True
+                
+            count += 1  
+        return self.boolean, count, score, x, w, y, h
 
-        """ 
-        parameters
-        _________
+    @staticmethod
+    def find_marker(frame: np.ndarray):
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (5, 5), 0)
+        edged = cv2.Canny(gray, 35, 125)
 
-        Frame : we take the frames as the input
+        # find the contours in the edged image and keep the largest one;
+        # we'll assume that this is our piece of paper in the image
+        cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = imutils.grab_contours(cnts)
+        c = max(cnts, key = cv2.contourArea)
 
-        function
-        ________
-
-        we use harcaascade to detect face and the count the number of detected faces
-
-        we use dlib.get_frontal_face_detector() to determine the coordiantes of faces in frames and count the number of coordinates.
+        # compute the bounding box of the of the paper region and return it
+        return cv2.minAreaRect(c)
+    
+    # we need to accurately compute focal lenght for this
+    def distance_to_camera(self, perWidth):
+        perWidth = perWidth[1][0] 
+    	# compute and return the distance from the maker to the camera
+        focalLength = (perWidth* self.KNOWN_DISTANCE) / self.KNOWN_WIDTH
+        w = self.KNOWN_WIDTH * focalLength
         
-        return
-        _______
-
-        Bool : boolean of wether True incase face detected or false
-
-        """
-        # we resize image to reduce lag
-        scale_percent = 60 # percent of original size
-        width = int(frame.shape[1] * scale_percent / 100)
-        height = int(frame.shape[0] * scale_percent / 100)
-        dim = (width, height)
-        # resized image
-        resized = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
-
-        # convert to gray
-        frame = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
-        faces = self.face_cascade.detectMultiScale(frame, scaleFactor = 1.2, minNeighbors = 5)
-
-        # number of faces in frame
-        self.number_of_faces = len(faces)
-        if self.number_of_faces < 1:
-            self.boolean = False
-        else:
-            self.boolean = True
-
-        return self.boolean, self.number_of_faces, faces
-        
+        return round(w/perWidth, 2)
+    
+    # we will use a pretrained model for this
     def driver_attention(self, frame: np.ndarray) -> str:
-
-        """ 
-        parameters
-        _________
-
-        Frame : we take the frames as the input
-
-        function
-        ________
-
-        
-        return
-        _______
-
-        str : 
-
-        """
         pass
 
-# driver drowsiness class
-class drowsines:
-    def __init__(self) -> None:
-
-        self.EYE_AR_THRESH = 0.3 # threshold for eye aspect ratio
-        self.EYE_AR_CONSEC_FRAMES = 48 # consecutive frames with eyes closed
-        self.COUNTER = 0 # count number of frames
-        self.DROWSY = False # boolean indicator
-
-        self.detector = dlib.get_frontal_face_detector()
-        self.predictor = dlib.shape_predictor() # add value
-
-        # facial landmarks
-        (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_IDXS["left_eye"] # landmarks for left eye
-        (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_IDXS["right_eye"] # landmarks for right eye
-
-        self.lStart = lStart
-        self.lEnd = lEnd
-        self.rStart = rStart
-        self.rEnd = rEnd
-
-    @staticmethod
-    def eye_aspect_ratio(eye):
-        # Vertical eye landmarks
-        A = dist.euclidean(eye[1], eye[5])
-        B = dist.euclidean(eye[2], eye[4])
-        # Horizontal eye landmarks 
-        C = dist.euclidean(eye[0], eye[3])
-
-        # The EAR Equation 
-        EAR = (A + B) / (2.0 * C)
-        return EAR
-
-    @staticmethod
-    def mouth_aspect_ratio(mouth):
-
-        A = dist.euclidean(mouth[13], mouth[19])
-        B = dist.euclidean(mouth[14], mouth[18])
-        C = dist.euclidean(mouth[15], mouth[17])
-
-        MAR = (A + B + C) / 3.0
-        return MAR
-
-    def detect_drowsiness(self, frames:np.ndarray):
-
-        gray = cv2.cvtColor(frames, cv2.COLOR_BGR2GRAY)
-        rects = self.detector(gray, 0)
-
-        for rect in rects:
-            shape = self.predictor(gray, rect)
-            shape = face_utils.shape_to_np(shape)
-
-            leftEye = shape[self.lStart:self.lEnd]
-            rightEye = shape[self.rStart:self.rEnd]
-            leftEAR = self.eye_aspect_ratio(leftEye)
-            rightEAR = self.eye_aspect_ratio(rightEye)
-
-            ear = (leftEAR + rightEAR) / 2.0
-
-            leftEyeHull = cv2.convexHull(leftEye)
-            rightEyeHull = cv2.convexHull(rightEye)
-
-            if ear < self.EYE_AR_THRESH:
-                self.COUNTER += 1
-                if self.COUNTER >= self.EYE_AR_CONSEC_FRAMES:
-                    self.DROWSY = True
-
-        return self.DROWSY, leftEyeHull, rightEyeHull
-
-
-
 if __name__ == "__main__":
-    Drowsiness = drowsines()
+    pass
