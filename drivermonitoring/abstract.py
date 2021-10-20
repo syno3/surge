@@ -1,8 +1,8 @@
 # any other feature we would like to be added goes here
-# - we perform face tracking
+# - 
 # - we monitor can bus driving
 # - we add support for gps data
-# - we play audio incase sleep detected
+# - 
 # -
 # -
 # -
@@ -15,6 +15,7 @@
 
 import cv2
 import numpy as np
+import obd
 
 
 class FaceTracking:
@@ -25,4 +26,14 @@ class FaceTracking:
 class GPS:
     def __init__(self) -> None:
         pass
+    
+# we debug car details with obd2 port
+class Carhack:
+    def __init__(self) -> None:
+        pass
 
+
+
+if __name__ == "__main__":
+    run = Carhack()
+    

@@ -1,29 +1,38 @@
 # we add 1.monocular depth, we detect faces with mediapipe + count faces
+# we perform object detection
+# we look for distarcted driving
+
+import os
 import cv2
 import imutils
 import numpy as np
+import pandas as pd
 
 # face detection module
 import mediapipe as mp # we will do face detection
+
+# for sleep prediction
+from keras.models import load_model
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
 class face:
     def __init__(self) ->None:
 
-        # random variables we need
-        self.front_face_harcascaade_path ="assets/front_face.xml"
+        # cascade files
+        self.front_face_harcascaade_path = cv2.CascadeClassifier("assets/front_face.xml")
+        self.eye_cascade = cv2.CascadeClassifier("assets/eye.xml")
+        self.left_eye = cv2.CascadeClassifier("assets/left_eye.xml")
+        self.right_eye = cv2.CascadeClassifier("assets/right_eye.xml")
+        
+        
+        self.model =  load_model("assets/models/eyeStateModel1.h5")
+        self.sleeping = False
+        self.count=0
+        self.path = os.getcwd()
+        
+        # globals for face
         self.boolean =False
-
-        # booleans for the methods in class
-        self.eye_glasses =False
-        self.distracted =False
-        self.seat_belt =False
-        self.drowsy =False
-        self.boolean = False
-
-        # try speed up code
-        self.face_cascade = cv2.CascadeClassifier(self.front_face_harcascaade_path)
         
         # debugging global variables
         self.number_of_faces = 0 # number of faces in the video
@@ -37,7 +46,12 @@ class face:
         # global for depth
         self.KNOWN_DISTANCE = 24.0
         self.KNOWN_WIDTH = 11.0
-    
+        
+        # head pose detection
+        self.mp_face_mesh = mp.solutions.face_mesh
+        self.face_mesh = self.mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+        self.distracted = False
+        self.text = None
     
     # we use media pipe for face detection and number of faces
     def facedetect(self, frame: np.ndarray):
@@ -55,7 +69,6 @@ class face:
                 score = round(score[0]*100, 2) # round to two decimal places
                 box = detection[1].location_data.relative_bounding_box
                 x, y, w, h = int(box.xmin*width), int(box.ymin * height), int(box.width*width), int(box.height*height)
-              
             if results != ():
                 self.boolean = True
                 
@@ -86,9 +99,115 @@ class face:
         
         return round(w/perWidth, 2)
     
-    # we will use a pretrained model for this
-    def driver_attention(self, frame: np.ndarray) -> str:
+    # we need to fix speed
+    def driver_attention(self, frame: np.ndarray) -> bool:
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4)
+        
+        for (x,y,w,h) in eyes:
+            eyes=frame[y:y+h,x:x+w]
+            self.count=+1
+            eyes = cv2.resize(eyes, (32, 32))
+            eyes = np.array(eyes)
+            eyes = np.expand_dims(eyes, axis=0)
+            ypred = self.model.predict(eyes)
+            
+            prediction = np.argmax(ypred[0], axis=0)
+            
+            if prediction == 1:
+                self.sleeping = False
+            else:
+                self.sleeping = True
+                
+        return self.sleeping
+    
+    # we detect driver attention status
+    def driver_distracted(self, frame:np.ndarray) ->bool:
         pass
+    
+    
+    # we perform object detection
+    def objects(self, frame:np.ndarray) ->bool:
+        pass
+    
+    
+    # we perform head pose detection
+    def head_pose(self, frame:np.ndarray) -> str:
+        frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+        frame.flags.writeable = False
+        results = self.face_mesh.process(frame)
+        frame.flags.writeable = True
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        
+        img_h, img_w, img_c = frame.shape
+        face_3d = []
+        face_2d = []
+
+        if results.multi_face_landmarks:
+            for face_landmarks in results.multi_face_landmarks:
+                for idx, lm in enumerate(face_landmarks.landmark):
+                    if idx == 33 or idx == 263 or idx == 1 or idx == 61 or idx == 291 or idx == 199:
+                        if idx == 1:
+                            _ = (lm.x * img_w, lm.y * img_h)
+                            _ = (lm.x * img_w, lm.y * img_h, lm.z * 8000)
+
+                        x, y = int(lm.x * img_w), int(lm.y * img_h)
+
+                        # Get the 2D Coordinates
+                        face_2d.append([x, y])
+
+                        # Get the 3D Coordinates
+                        face_3d.append([x, y, lm.z])       
+
+            # Convert it to the NumPy array
+            face_2d = np.array(face_2d, dtype=np.float64)
+
+            # Convert it to the NumPy array
+            face_3d = np.array(face_3d, dtype=np.float64)
+            # The camera matrix
+            focal_length = 1 * img_w
+
+            cam_matrix = np.array([ [focal_length, 0, img_h / 2],
+                                    [0, focal_length, img_w / 2],
+                                    [0, 0, 1]])
+
+            # The Distance Matrix
+            dist_matrix = np.zeros((4, 1), dtype=np.float64)
+
+            # Solve PnP
+            _, rot_vec, _ = cv2.solvePnP(face_3d, face_2d, cam_matrix, dist_matrix)
+
+            # Get rotational matrix
+            rmat, _ = cv2.Rodrigues(rot_vec)
+
+            # Get angles
+            angles, _, _, _, _, _ = cv2.RQDecomp3x3(rmat)
+
+            # Get the y rotation degree
+            x = angles[0] * 360
+            y = angles[1] * 360
+            
+            if y < -10:
+                self.text = "Left"
+                self.distracted = True
+            elif y > 10:
+                self.text = "Right"
+                self.distracted = True
+            elif x < -10:
+                self.text = "Down"
+                self.distracted = True
+            else:
+                self.text = "Forward"
+                self.distracted = False
+
+        return self.distracted, self.text
+
+        
+                
+
+
+
+        
 
 if __name__ == "__main__":
     pass
