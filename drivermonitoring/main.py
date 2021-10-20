@@ -93,7 +93,8 @@ class videoOutput:
     
     def debug(self):
         # main video
-        self.cap = cv2.VideoCapture(self.path)
+        #self.cap = cv2.VideoCapture(self.path)
+        self.cap = cv2.VideoCapture(0)
         while self.cap.isOpened():
             ret, frame = self.cap.read()
             # if frame is read correctly ret is True
@@ -157,7 +158,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
                 sleepy = Face.driver_attention(frame)
-                #self.drowsy, _, _ = Drowsy.detect_drowsiness(frame)
+                #self.distarcted, _, _ = Drowsy.driver_distracted(frame)
                 if not sleepy:
                     # run the record part
                     #self.record_evidence(frame)
@@ -165,10 +166,43 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 else:
                     cv2.putText(frame, "Driver Not Attentive : {}".format(sleepy), (10, 250),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
                     # fix this bug
-                    try:
+                    """ try:
                        self.sound.play() # we play sound
                     except:
-                        pass
+                        pass """
+                        
+                # we get head pose direction      
+                head_pose, text  = Face.head_pose(frame) # we get head direction
+                if head_pose:
+                    # run the record part
+                    #self.record_evidence(frame)
+                    cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.red, self.font_thickness, self.line_type)     
+                else:
+                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
+
+
+
+
+
+
+
+
+   
+                    
+                    
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130), self.font, self.font_size, self.red,
