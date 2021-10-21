@@ -87,9 +87,22 @@ class videoOutput:
 
  
     # we enhance the frames
-    def enhanced(self, frame:np.ndarray):
-        pass
-      
+    def enhanced(self, frame:np.ndarray) ->np.ndarray:
+        frame = ImageEnhance.Brightness(frame)
+        factor = 1.5 # brigtens the image
+        frame = frame.enhance(factor)
+        
+        return frame
+    
+    
+    # we darken the frames
+    def darken(self, frame:np.ndarray) ->np.ndarray:
+        frame = ImageEnhance.Brightness(frame)
+        factor = 0.5 #darkens the image
+        frame = frame.enhance(factor)
+        
+        return frame
+            
     
     def debug(self):
         # main video
@@ -111,7 +124,7 @@ class videoOutput:
                         self.yellow, self.font_thickness, self.line_type)
 
             #enviroment pipeline (module to be threaded)
-            brightness_output, saturation_output, brightness_value, saturation_value = self.enviroment_pipeline(frame)
+            brightness_output, saturation_output, brightness_value, _ = self.enviroment_pipeline(frame)
 
             # frame brightness text
             cv2.putText(frame, "Exposure: {}".format(brightness_output), (10, 50), self.font,
@@ -120,7 +133,16 @@ class videoOutput:
             # frame saturation text
             cv2.putText(frame, "Saturation: {}".format(saturation_output), (10, 70), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
-
+            # we enhance image brighten or darken
+            try:
+                if brightness_value > 194:
+                    print(' we darken the frame')
+                    frame = self.darken(frame) # we darken frame
+                if brightness_value < 65:
+                    print(' we brighten the frame')
+                    frame = self.enhanced(frame) # we brignten frame
+            except:
+                continue
             # frames per second test
             number = Enviroment.frames_per_second()
             if number < 15:
@@ -182,15 +204,16 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.red, self.font_thickness, self.line_type)     
                 else:
                      cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
-                     # we detect objects in the video frame                   
+
+                # we detect driver pose
+                cx, cy = Face.body_pose(frame)
+                cv2.putText(frame, "Driver pose : {}, {}".format(cx, cy), (10, 290),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
+                # we detect proper driving pose
+                    
+                # we detect objects
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
+                
                     
                     
 

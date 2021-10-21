@@ -44,6 +44,11 @@ class face:
         self.mp_face_detection = mp.solutions.face_detection
         self.mp_drawing = mp.solutions.drawing_utils
         
+        # mediapipe pose submodules
+        self.mpPose = mp.solutions.pose
+        self.pose = self.mpPose.Pose()
+        self.mpDraw = mp.solutions.drawing_utils
+        
         # global for depth
         self.KNOWN_DISTANCE = 24.0
         self.KNOWN_WIDTH = 11.0
@@ -159,10 +164,10 @@ class face:
                 continue
             
             
-            score_txt = f'{100 * round(score,0)}'
+            score = 100 * round(score,0)
             
             
-        return score_txt, ymin, xmin, ymax, xmax
+        return score, ymin, xmin, ymax, xmax, pred_labels
     
     
     # we perform head pose detection
@@ -235,9 +240,42 @@ class face:
                 self.distracted = False
 
         return self.distracted, self.text
-
-        
+    
+    # we detect for proper pose in driving (aka both hands at steering wheel)
+    def body_pose(self, frame:np.ndarray):
+        imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = self.pose.process(imgRGB)
+        if results.pose_landmarks:
+            #self.mpDraw.draw_landmarks(frame, results.pose_landmarks, self.mpPose.POSE_CONNECTIONS)
+            for _, lm in enumerate(results.pose_landmarks.landmark):
+                h, w,_ = frame.shape
+                cx, cy = int(lm.x*w), int(lm.y*h)
                 
+        return cx, cy
+    
+    
+    # we will add face 3d landmark tracking (aka face 3d control)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
