@@ -13,7 +13,8 @@ import mediapipe as mp # we will do face detection
 
 # for sleep prediction
 from keras.models import load_model
-
+import tensorflow as tf
+import tensorflow_hub as hub
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
 class face:
@@ -43,6 +44,11 @@ class face:
         self.mp_face_detection = mp.solutions.face_detection
         self.mp_drawing = mp.solutions.drawing_utils
         
+        # mediapipe pose submodules
+        self.mpPose = mp.solutions.pose
+        self.pose = self.mpPose.Pose()
+        self.mpDraw = mp.solutions.drawing_utils
+        
         # global for depth
         self.KNOWN_DISTANCE = 24.0
         self.KNOWN_WIDTH = 11.0
@@ -52,6 +58,21 @@ class face:
         self.face_mesh = self.mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.distracted = False
         self.text = None
+        
+        #object detection
+        #self.detector = hub.load("https://tfhub.dev/tensorflow/efficientdet/lite2/detection/1")
+        #self.labels = pd.read_csv('labels.csv',sep=';',index_col='ID')
+        #self.labels = self.labels['OBJECT (2017 REL.)']
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
     # we use media pipe for face detection and number of faces
     def facedetect(self, frame: np.ndarray):
@@ -99,10 +120,10 @@ class face:
         
         return round(w/perWidth, 2)
     
-    # we need to fix speed
+    # we need to fix speed // not working properly // we move to cnn 
     def driver_attention(self, frame: np.ndarray) -> bool:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4)
+        eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4) # look for faster option (slowing down code)
         
         for (x,y,w,h) in eyes:
             eyes=frame[y:y+h,x:x+w]
@@ -128,7 +149,25 @@ class face:
     
     # we perform object detection
     def objects(self, frame:np.ndarray) ->bool:
-        pass
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb_tensor = tf.convert_to_tensor(frame, dtype=tf.uint8)
+        rgb_tensor = tf.expand_dims(rgb_tensor , 0)
+        boxes, scores, classes, _ = self.detector(rgb_tensor)
+        pred_labels = classes.numpy().astype('int')[0]
+        pred_labels = [self.labels[i] for i in pred_labels]
+        pred_boxes = boxes.numpy()[0].astype('int')
+        pred_scores = scores.numpy()[0]
+        
+        #loop throughout the detections and place a box around it  
+        for score, (ymin,xmin,ymax,xmax), label in zip(pred_scores, pred_boxes, pred_labels):
+            if score < 0.5:
+                continue
+            
+            
+            score = 100 * round(score,0)
+            
+            
+        return score, ymin, xmin, ymax, xmax, pred_labels
     
     
     # we perform head pose detection
@@ -201,9 +240,42 @@ class face:
                 self.distracted = False
 
         return self.distracted, self.text
-
-        
+    
+    # we detect for proper pose in driving (aka both hands at steering wheel)
+    def body_pose(self, frame:np.ndarray):
+        imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = self.pose.process(imgRGB)
+        if results.pose_landmarks:
+            #self.mpDraw.draw_landmarks(frame, results.pose_landmarks, self.mpPose.POSE_CONNECTIONS)
+            for _, lm in enumerate(results.pose_landmarks.landmark):
+                h, w,_ = frame.shape
+                cx, cy = int(lm.x*w), int(lm.y*h)
                 
+        return cx, cy
+    
+    
+    # we will add face 3d landmark tracking (aka face 3d control)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
