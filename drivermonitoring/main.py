@@ -150,9 +150,12 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 # number of faces detected
                 cv2.putText(frame, "Number of Faces detected: {}".format(count), (10, 210), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
-                # distance of camera from face
+                # distance of camera from face // we create threads
                 marker = Face.find_marker(frame)
                 dist = Face.distance_to_camera(marker)
+                
+                
+                
                 cv2.putText(frame, "Distance from camera: Appx {} inches".format(dist), (10, 230), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
                 
@@ -179,8 +182,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.red, self.font_thickness, self.line_type)     
                 else:
                      cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
-                    
-                    
+                     # we detect objects in the video frame                   
                     
                     
                     
@@ -256,5 +258,13 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
 
 if __name__ == '__main__':
+    import cProfile, pstats
+    profiler = cProfile.Profile()
+    profiler.enable() 
+      
     run = videoOutput()
     run.debug() # we run the actual video when the file is called
+    
+    profiler.disable()
+    stats = pstats.Stats(profiler)
+    stats.dump_stats(filename='assets/stats/stats.prof') # we dump the debug file
