@@ -96,15 +96,15 @@ _please refer to the [Documentation](documentation.md)_
 - [] Make the interface dynaminc
 - [] Create visuals for the product
 - [] Add the prediction algorithim
-- [] Add face pose and orientation coordinates
+- [X] Add face pose and orientation coordinates
 - [X] Move to mediapipe
 - [] speed up the code
 - [X] Add image adjustments
-- [] Add distance measurement to reduce false (+ve's)
+- [X] Add distance measurement to reduce false (+ve's)
 - [] fix issues with sunglasses
 - [X] clean redundant code
 - [] Intergrate with CAN buses in cars
-- [] Add more parameters to track
+- [X] Add more parameters to track
 - [] Multi-language Support
     - [] Chinese
     - [] Spanish
@@ -119,9 +119,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b dev`)
+2. Create your Feature Branch (`git checkout -b feature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin dev`)
+4. Push to the Branch (`git push origin feature`)
 5. Open a Pull Request
 
 ## License
@@ -130,6 +130,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@festus_mk](https://twitter.com/your_username) - email@example.com
+Your Name - [@festus_mk](https://twitter.com/your_username) - sinotechxvista@gmail.com
 
 Project Link: [syno3](https://github.com/syno3/surge)
