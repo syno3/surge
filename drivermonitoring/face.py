@@ -67,12 +67,7 @@ class face:
         
         
         
-        
-        
-        
-        
-        
-        
+    
     
     # we use media pipe for face detection and number of faces
     def facedetect(self, frame: np.ndarray):
