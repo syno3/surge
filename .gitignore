@@ -5,3 +5,4 @@ __pycache__
 .pytest_cache
 fleet weabapp
 cpp/
+fontawesome-free-5.15.4-web/
