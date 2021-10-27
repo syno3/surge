@@ -8,7 +8,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1' # we remove pygame message
 from sys import flags
 import cv2
 import numpy as np
-from threading import Thread
+from threading import Thread # we will use later
 from pygame import mixer # we will use this for sound
 
 # importing required cython files
@@ -18,14 +18,12 @@ from cpu import cpu
 from abstract import *
 
 # for image adjustment
-from PIL import Image, ImageEnhance
+from PIL import ImageEnhance
 
 # we instantiate class in global variables
 Enviroment = enviroment()
 Face = face()
 CPU = cpu()
-
-
 
 # main video class
 class videoOutput:
@@ -208,25 +206,10 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 # we detect driver pose
                 cx, cy = Face.body_pose(frame)
                 cv2.putText(frame, "Driver pose : {}, {}".format(cx, cy), (10, 290),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
-                # we detect proper driving pose
-                    
-                # we detect objects
-                    
-                    
+     
+                # we driving behavior
                 
-                    
-                    
-
-
-
-
-
-
-
-
-
-   
-                    
+                                   
                     
             else:
                 # face not detected
@@ -276,7 +259,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
             brightness_output, saturation_output = self.enviroment_pipeline(frame)
             number = Enviroment.frames_per_second()
-            yield brightness_output, saturation_output, number
+            return brightness_output, saturation_output, number
 
 
 
