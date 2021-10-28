@@ -6,7 +6,6 @@ import os
 import cv2
 import imutils
 import numpy as np
-import pandas as pd
 
 # face detection module
 import mediapipe as mp # we will do face detection
@@ -14,7 +13,7 @@ import mediapipe as mp # we will do face detection
 # for sleep prediction
 from keras.models import load_model
 import tensorflow as tf
-import tensorflow_hub as hub
+
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
 class face:
@@ -63,11 +62,7 @@ class face:
         #self.detector = hub.load("https://tfhub.dev/tensorflow/efficientdet/lite2/detection/1")
         #self.labels = pd.read_csv('labels.csv',sep=';',index_col='ID')
         #self.labels = self.labels['OBJECT (2017 REL.)']
-        
-        
-        
-        
-    
+          
     
     # we use media pipe for face detection and number of faces
     def facedetect(self, frame: np.ndarray):

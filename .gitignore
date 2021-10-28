@@ -4,3 +4,5 @@ __pycache__
 .vscode
 .pytest_cache
 fleet weabapp
+fontawesome-free-5.15.4-web/
+hello.cpp
