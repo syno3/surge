@@ -6,3 +6,10 @@ __pycache__
 fleet weabapp
 fontawesome-free-5.15.4-web/
 hello.cpp
+.vs
+x64
+src.sln
+*.filters
+src.vcxproj.user
+src.vcxproj.filters
+src.vcxproj
