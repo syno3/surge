@@ -71,7 +71,7 @@ for linux users:
 
 * git
   ```sh
-  sudo apt-get install python3
+  sudo apt-get install python3.9-dev
   
 for windows users:
 1. install [git](https://git-scm.com/downloads) using the link.
@@ -104,8 +104,12 @@ _please refer to the [Documentation](documentation.md)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Move the codebase to java
+- [] Move the codebase to c++ and java
 - [X] Add user Interface
+- [] Fix bugs
+- [] Upadte readme
+- [] Create custom dataset
+- [] create graphics
 - [] Make the interface dynaminc
 - [] Create visuals for the product
 - [] Add the prediction algorithim
