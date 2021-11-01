@@ -1,3 +1,4 @@
+depricated/
 resources
 __pycache__
 .idea
@@ -13,3 +14,5 @@ src.sln
 src.vcxproj.user
 src.vcxproj.filters
 src.vcxproj
+basic.cpp
+debug.cpp

@@ -39,7 +39,7 @@
 The driver state monitoring, also known as driver attention monitor, is a vehicle safety system to assess the driver's alertness and warn the driver if needed and eventually apply the brakes. It was first introduced by Toyota in 2006 for its and Lexus latest models. It was first offered in Japan on the GS 450h. The system's functions co-operate with the pre-collision system (PCS). The system uses infrared sensors to monitor driver attentiveness. Specifically, the driver monitoring system includes a CCD camera placed on the steering column which tracks the face, via infrared LED detectors. If the driver is not paying attention to the road ahead and a dangerous situation is detected, the system will warn the driver by flashing lights, warning sounds. If no action is taken, the vehicle will apply the brakes (a warning alarm will sound followed by a brief automatic application of the braking system).
 
 ## Aggressive Driving Style Criteria: (Input Variables)
-certain monitors for specific aggressive driving style behaviours like:
+we monitor for specific aggressive driving style behaviours like:
 
 1. Sudden Accelerations or Decelerations
 2. Sudden Braking
@@ -66,12 +66,12 @@ Please follow closely the following installation instruction for linux and windo
 
 for linux users:
 you need to start-off by installing opencv on your machine:
-* git
+* bash
   ```sh
   sudo apt -y remove x264 libx264-dev
 
 after that install g++ compiler and other dependancies
-* git
+* bash
   ```sh
   sudo apt -y install build-essential checkinstall cmake pkg-config yasm
   sudo apt -y install git gfortran
@@ -85,7 +85,7 @@ after that install g++ compiler and other dependancies
   cd $cwd
 
 
-* git
+* bash
   ```sh
   sudo apt -y install libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
   sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
@@ -98,21 +98,21 @@ after that install g++ compiler and other dependancies
 
 other optional dependancies
 
-* git
+* bash
   ```sh
   sudo apt -y install libprotobuf-dev protobuf-compiler
   sudo apt -y install libgoogle-glog-dev libgflags-dev
   sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 
 install python and some libraries
-* git
+* bash
   ```sh
   sudo apt -y install python3-dev python3-pip
   sudo -H pip3 install -U pip numpy
   sudo apt -y install python3-testresources
 
 install virtualenv and virtualenvwrapper modules to create Python virtual environments.
-* git
+* bash
   ```sh
   cd $cwd
   python3 -m venv OpenCV-"$cvVersion"-py3
@@ -121,17 +121,17 @@ install virtualenv and virtualenvwrapper modules to create Python virtual enviro
   source "$cwd"/OpenCV-"$cvVersion"-py3/bin/activate
 
 now install python libraries within this virtual environment
-* git
+* bash
   ```sh
   pip install wheel numpy scipy matplotlib scikit-image scikit-learn ipython dlib
 
 quit virtual environment
-* git
+* bash
   ```sh
   deactivate
 
 download opencv and opencv_contrib
-* git
+* bash
   ```sh
   git clone https://github.com/opencv/opencv.git
   cd opencv
@@ -143,14 +143,14 @@ download opencv and opencv_contrib
   cd ..
 
 compile opencv with opencv_contrib
-* git
+* bash
   ```sh
   cd opencv
   mkdir build
   cd build
 
 we start compilation process
-* git
+* bash
   ```sh
   cmake -D CMAKE_BUILD_TYPE=RELEASE \
             -D CMAKE_INSTALL_PREFIX=$cwd/installation/OpenCV-"$cvVersion" \
@@ -165,33 +165,31 @@ we start compilation process
         -D BUILD_EXAMPLES=ON ..
 
 we build the package
-* git
+* bash
   ```sh
     make -j4
     make install
 
 create CMakeLists.txt file and add
-* git
+* bash
   ```sh
     cmake_minimum_required(VERSION 3.1)
     # Enable C++11
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-
+    
 set opencv dir and opencv_home dir
-* git
+* bash
   ```sh
     SET(OpenCV_DIR <OpenCV_Home_Dir>/installation/OpenCV-master/lib/cmake/opencv4)
     SET(OpenCV_DIR /home/hp/OpenCV_installation/installation/OpenCV-master/lib/cmake/opencv4)
 
-
 run the actual program
-* git
+* bash
   ```sh
     mkdir build && cd build
     cmake ..
     cmake --build . --config Release
-
     
 for windows users:
 1. install [git](https://git-scm.com/downloads) using the link.
