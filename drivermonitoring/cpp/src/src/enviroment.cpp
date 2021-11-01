@@ -4,40 +4,63 @@
     // check saturation level
     // get frames per second
 
-#include <iostream>
-#include <ctime>
-#include <opencv2/opencv.hpp>
+#include "classes.h";
 
+string enviroment::saturation_level(Mat frame){
+    // we calculate the mean of hsv[...,2]
+    cvtColor(frame, frame, COLOR_BGR2HSV);
+    float value_S = (float)mean(frame)[1];
+    if(value_S == enviroment::_no_saturation){
+        return "no saturation";
+    }
+    else if(value_S > enviroment::_no_saturation && value_S < enviroment::_little_saturation){
+        return "Minimal saturation";
+    }
+    else if(value_S > enviroment::_little_saturation && value_S < enviroment::_slight_saturation){
+        return "slight saturation";
+    }
+    else if(value_S == enviroment::_slight_saturation && value_S < enviroment::_normal_saturation){
+        return "normal saturation";
+    }
+    else (value_S == enviroment::_normal_saturation && value_S < enviroment::_over_saturation);{
+        return "over saturation";
+    }
+};
 
-using namespace cv;
-using namespace std;
-
-class enviroment {
-public:
-    // exposure values
-    const int _no_exposure = 0, _little_exposure = 65, _slight_exposure = 130, _normal_exposure = 194, _over_exposure = 255;
-    //saturation values
-    const int _no_saturation = 0, _little_saturation = 65, _slight_saturation = 130, _normal_saturation = 194, _over_saturation = 255;
-    // frames per second values
-    const float prev_frame_time = 0.0, new_frame_time = 0.0;
-    // constructors
-    // brightness level constructor
-    float brightness_level(Mat frame) {
-        return 0.0;
-    };
-    // saturation level constructor
-    float saturation_level(Mat frame) {
-        return 0.0;
-    };
-    // frames per second constructor
-    int frames_per_second() {
-        return 0;
-    };
+string enviroment::brightness_level(Mat frame) {
+    // we calculate the mean of hsv[...,1]
+    cvtColor(frame, frame, COLOR_BGR2HSV);
+    float value = (float)mean(frame)[2];
+    if (value == enviroment::_no_exposure) {
+        return "no saturation";
+    }
+    else if (value > enviroment::_no_exposure && value < enviroment::_little_exposure) {
+        return "Minimal exposure";
+    }
+    else if (value > enviroment::_little_exposure && value < enviroment::_slight_exposure) {
+        return "slight exposure";
+    }
+    else if (value == enviroment::_slight_exposure && value < enviroment::_normal_exposure) {
+        return "normal exposure";
+    }
+    else (value == enviroment::_normal_exposure && value < enviroment::_over_exposure); {
+        return "over exposure";
+    }
 };
 
 
-int main() {
-    enviroment env;
-    std::cout << env._little_exposure << endl;
-    return 0;
+// we debug the enviroment class
+void main() {
+   enviroment env; // class declaration
+   const string path = "E:\\surge\\resources\\video1.mp4";
+   VideoCapture cap(path);
+   Mat frame;
+   while (true) {
+       cap.read(frame);
+       resize(frame, frame, Size(), 0.5, 0.5);
+       double fps = cap.get(CAP_PROP_FPS);
+       cout << "Frames per second: " << fps << endl;
+       imshow("video", frame);
+       waitKey(1);
+   };
 }
