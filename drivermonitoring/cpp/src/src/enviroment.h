@@ -9,6 +9,16 @@
 using namespace cv;
 using namespace std;
 
+
+struct brightness_R {
+    string response;
+    float value;
+};
+struct saturation_R {
+    string response;
+    float value;
+};
+
 // enviroment class
 class enviroment {
 public:
@@ -22,15 +32,7 @@ public:
     Mat hsvImage;
     // constructors
     // brightness level constructor
-    string brightness_level(Mat frame);
-    string saturation_level(Mat frame);
-};
-// face class
-
-class face {
-public:
-    // variable declaration
-
-    // constructor declarations
+    brightness_R brightness_level(Mat frame);
+    saturation_R saturation_level(Mat frame);
 
 };
