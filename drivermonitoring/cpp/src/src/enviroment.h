@@ -9,16 +9,16 @@
 using namespace cv;
 using namespace std;
 
-// define return type for brightness_level constructor
+
 struct brightness_R {
     string response;
     float value;
 };
-// define return type for saturation_level constructor
 struct saturation_R {
     string response;
     float value;
 };
+
 // enviroment class
 class enviroment {
 public:
@@ -34,4 +34,5 @@ public:
     // brightness level constructor
     brightness_R brightness_level(Mat frame);
     saturation_R saturation_level(Mat frame);
+
 };
