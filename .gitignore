@@ -16,3 +16,6 @@ src.vcxproj.filters
 src.vcxproj
 basic.cpp
 debug.cpp
+enviroment.html
+build/
+.setup.py.swp

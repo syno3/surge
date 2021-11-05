@@ -5,6 +5,7 @@
 #include <opencv2/opencv.hpp>
 #include "opencv2/highgui/highgui.hpp"
 
+// we need to add support for(mlpack cpp, mediapipe cpp)
 
 // return values for the face constructor functions
 // face detect retrun values
