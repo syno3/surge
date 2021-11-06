@@ -11,6 +11,7 @@ import cv2
 import imutils
 import numpy as np
 cimport numpy as np # we import cython numpy api
+from libcpp cimport bool
 
 # face detection module
 import mediapipe as mp # we will do face detection
@@ -23,8 +24,10 @@ import tensorflow as tf
 # we need to use numpy to optimize the code, // learn opencv optimization
 cdef class face:
     # variables type declaration
-    cdef int number_of_faces, i, count
+    cdef int number_of_faces, i, count, distance
     cdef float KNOWN_DISTANCE, KNOWN_WIDTH, distracted
+    cdef bint sleeping, boolean
+    print('\033[95m'"face class imported"'\033[0m')
 
     def __cinit__(self):
 

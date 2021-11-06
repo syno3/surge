@@ -1,29 +1,26 @@
 #include "face.h";
 
 // function declaration
-facedetect_R face::facedetect(cv::Mat frame) {
+// we try to write everything with computer vison and keras (if it works)
 
-    return {};
+//we build face detection constructor
+std::vector<cv::Rect> face::detect_face_rectangles(const cv::Mat& frame) {
+    // we try something else
+    std::vector<cv::Rect> faces;
+
+    return faces;
 };
-distance_to_camera_R face::distance_to_camera(cv::Mat frame) {
+distance_to_camera_R face::distance_to_camera(const cv::Mat& frame) {
 
-    return {};
+    return distance_to_camera_R();
 };
-driver_attention_R face::driver_attention(cv::Mat frame) {
+driver_attention_R face::driver_attention(const cv::Mat& frame) {
 
-    return {};
+    return driver_attention_R();
 };
-objects_R face::objects(cv::Mat frame) {
+head_pose_R face::head_pose(const cv::Mat& frame) {
 
-    return {};
-};
-head_pose_R face::head_pose(cv::Mat frame) {
-
-    return {};
-};
-body_pose_R face::body_pose(cv::Mat frame) {
-
-    return {};
+    return head_pose_R();
 };
 
 // the debug function
@@ -36,8 +33,8 @@ void main() {
         cap.read(frame);
         resize(frame, frame, cv::Size(), 0.5, 0.5);
         double fps = cap.get(cv::CAP_PROP_FPS);
-        //cout << "Frames per second: " << fps << endl;
-        //std::cout << face.body_pose(frame).value << std::endl;
+        std::cout << "Frames per second: " << fps << std::endl;
+        face.detect_face_rectangles(frame); // function call for face detection
         cv::imshow("video", frame);
         cv::waitKey(1);
     };

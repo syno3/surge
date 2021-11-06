@@ -4,8 +4,10 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/objdetect.hpp"
+#include <opencv2/dnn/dnn.hpp>
 
-// we need to add support for(mlpack cpp, mediapipe cpp)
+// we add global type declaration
 
 // return values for the face constructor functions
 // face detect retrun values
@@ -13,7 +15,7 @@ struct facedetect_R {
     bool facedeteced;
     int count;
     int score;
-    float x, w, y, h;
+    float x, y, w, h;
 };
 // distance from camera
 struct distance_to_camera_R {
@@ -24,31 +26,25 @@ struct driver_attention_R {
     bool driversleeping;
 };
 
-// object detection return value
-struct objects_R {
-    int objscore;
-    float ymin, xmin, ymax, xmax, pred_labels;
-};
 // head pose return values
 struct head_pose_R {
     bool driverDistracted;
     std::string response_text;
 
 };
-// body pose return value
-struct body_pose_R {
-    float cx, cy;
-};
 // face class
 class face {
 public:
-    // variable declaration
-
     // constructor declarations
-    facedetect_R facedetect(cv::Mat frame);
-    distance_to_camera_R distance_to_camera(cv::Mat frame);
-    driver_attention_R driver_attention(cv::Mat frame);
-    objects_R objects(cv::Mat frame);
-    head_pose_R head_pose(cv::Mat frame);
-    body_pose_R body_pose(cv::Mat frame);
+    const std::string path = "E:\\surge\\drivermonitoring\\assets\\front_face.xml";
+    cv::CascadeClassifier facecascade;
+    std::vector<cv::Rect> faces;
+    cv::Mat gray;
+
+    //void FaceDetector();
+    std::vector<cv::Rect> detect_face_rectangles(const cv::Mat& frame);
+    distance_to_camera_R distance_to_camera(const cv::Mat& frame);
+    driver_attention_R driver_attention(const cv::Mat& frame);
+    head_pose_R head_pose(const cv::Mat& frame);
+
 };
