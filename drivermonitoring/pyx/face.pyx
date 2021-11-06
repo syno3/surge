@@ -1,11 +1,16 @@
-# we add 1.monocular depth, we detect faces with mediapipe + count faces
-# we perform object detection
-# we look for distarcted driving
+# distutils: language = c++
+# cython: language_level = 3
 
+# -*- coding: utf-8 -*-
+# cython: language_level=3
+from __future__ import print_function
+
+cimport cython
 import os
 import cv2
 import imutils
 import numpy as np
+cimport numpy as np # we import cython numpy api
 
 # face detection module
 import mediapipe as mp # we will do face detection
@@ -16,8 +21,12 @@ import tensorflow as tf
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
-class face:
-    def __init__(self) ->None:
+cdef class face:
+    # variables type declaration
+    cdef int number_of_faces, i, count
+    cdef float KNOWN_DISTANCE, KNOWN_WIDTH, distracted
+
+    def __cinit__(self):
 
         # cascade files
         self.front_face_harcascaade_path = cv2.CascadeClassifier("assets/front_face.xml")
@@ -65,7 +74,7 @@ class face:
           
     
     # we use media pipe for face detection and number of faces
-    def facedetect(self, frame: np.ndarray):
+    cdef inline facedetect(self, frame):
         height, width, _ = frame.shape
         count = 0
         with self.mp_face_detection.FaceDetection(
@@ -87,7 +96,7 @@ class face:
         return self.boolean, count, score, x, w, y, h
 
     @staticmethod
-    def find_marker(frame: np.ndarray):
+    cdef inline find_marker(frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
         edged = cv2.Canny(gray, 35, 125)
@@ -102,7 +111,7 @@ class face:
         return cv2.minAreaRect(c)
     
     # we need to accurately compute focal lenght for this
-    def distance_to_camera(self, perWidth):
+    cdef inline distance_to_camera(self, perWidth):
         perWidth = perWidth[1][0] 
     	# compute and return the distance from the maker to the camera
         focalLength = (perWidth* self.KNOWN_DISTANCE) / self.KNOWN_WIDTH
@@ -111,7 +120,7 @@ class face:
         return round(w/perWidth, 2)
     
     # we need to fix speed // not working properly // we move to cnn 
-    def driver_attention(self, frame: np.ndarray) -> bool:
+    cdef inline driver_attention(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4) # look for faster option (slowing down code)
         
@@ -133,12 +142,12 @@ class face:
         return self.sleeping
     
     # we detect driver attention status
-    def driver_distracted(self, frame:np.ndarray) ->bool:
+    cdef inline driver_distracted(self):
         pass
     
     
     # we perform object detection
-    def objects(self, frame:np.ndarray) ->bool:
+    cdef inline objects(self, frame):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb_tensor = tf.convert_to_tensor(frame, dtype=tf.uint8)
         rgb_tensor = tf.expand_dims(rgb_tensor , 0)
@@ -161,7 +170,7 @@ class face:
     
     
     # we perform head pose detection
-    def head_pose(self, frame:np.ndarray) -> str:
+    cdef inline head_pose(self, frame):
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         frame.flags.writeable = False
         results = self.face_mesh.process(frame)
@@ -232,7 +241,7 @@ class face:
         return self.distracted, self.text
     
     # we detect for proper pose in driving (aka both hands at steering wheel)
-    def body_pose(self, frame:np.ndarray):
+    def body_pose(self, frame):
         imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = self.pose.process(imgRGB)
         if results.pose_landmarks:

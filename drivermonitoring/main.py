@@ -5,25 +5,30 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # we remove tensorflow warnings
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1' # we remove pygame message
-from sys import flags
+os.environ['SDL_AUDIODRIVER'] = 'dsp' #audio driver
+import sys
 import cv2
 import numpy as np
 from threading import Thread # we will use later
 from pygame import mixer # we will use this for sound
 
-# importing required cython files
-from enviroment import enviroment
-from face import face
+# importing depricated code
+#from enviroment import enviroment
+#from face import face
 from cpu import cpu
 from abstract import *
+
+#cython modules
+from pyx import test # we use this to log when cython class import works
+from pyx import enviroment # we import enviroment file
 
 # for image adjustment
 from PIL import ImageEnhance
 
 # we instantiate class in global variables
-Enviroment = enviroment()
-Face = face()
-CPU = cpu()
+Enviroment = enviroment.enviroment()
+#Face = face()
+#CPU = cpu()
 
 # main video class
 class videoOutput:
