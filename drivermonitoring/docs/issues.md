@@ -27,3 +27,12 @@ Traceback (most recent call last):
     for detection in enumerate(results.detections):
 TypeError: 'NoneType' object is not iterable
 [ WARN:0] global C:\Users\runneradmin\AppData\Local\Temp\pip-req-build-1i5nllza\opencv\modules\videoio\src\cap_msmf.cpp (438) `anonymous-namespace'::SourceReaderCB::~SourceReaderCB terminating async callback
+
+4. WSL pygame error
+
+Traceback (most recent call last):
+  File "main.py", line 276, in <module>
+    run = videoOutput()
+  File "main.py", line 63, in __init__
+    mixer.init()
+pygame.error

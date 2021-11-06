@@ -22,6 +22,8 @@ cdef class enviroment:
     cdef int _no_saturation, _little_saturation, _slight_saturation, _normal_saturation, _over_saturation
     cdef np.ndarray frame
 
+    print('\033[95m'"enviroment class imported"'\033[0m')
+
     def __cinit__(self):    
         # exposure values
         self._no_exposure = 0
