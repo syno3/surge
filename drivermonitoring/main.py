@@ -21,13 +21,15 @@ from abstract import *
 #cython modules
 from pyx import test # we use this to log when cython class import works
 from pyx import enviroment # we import enviroment file
+from pyx import face
+
 
 # for image adjustment
 from PIL import ImageEnhance
 
 # we instantiate class in global variables
 Enviroment = enviroment.enviroment()
-#Face = face()
+Face = face.face()
 #CPU = cpu()
 
 # main video class
