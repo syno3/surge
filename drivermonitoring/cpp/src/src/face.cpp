@@ -1,29 +1,27 @@
 #include "face.h";
-
+#define log(x) cout << x << endl
 // function declaration
 // we try to write everything with computer vison and keras (if it works)
 
 //we build face detection constructor
-void face::object_detection(const cv::Mat& frame) {
-    // we try something else
-    std::ifstream ifs(std::string(face::classes).c_str()); //load the classes list
-    std::string line;
-    // Load in all the classes from the file
+void face::FaceDetector() {
+    ifstream ifs(classes.c_str());
+    string line;
     while (getline(ifs, line))
     {
-        std::cout << line << std::endl;
-        class_names.emplace_back(line);
+        //log(line);
+        class_names.push_back(line);
     }
-    // Read in the neural network from the files
-    cv::dnn::Net net = cv::dnn::readNet(weights, config, "TensorFlow"); // major bug
-    // create blob from image
-    cv::Mat blob = cv::dnn::blobFromImage(frame, 1.0, cv::Size(300, 300), cv::Scalar(127.5, 127.5, 127.5),true, false);
-    net.setInput(blob);
-    cv::Mat output = net.forward();
-    // matrix with the result
-    cv::Mat results(output.size[2], output.size[3], CV_32F, output.ptr<float>());
-    // run through the result
-    // Run through all the predictions
+    net = cv::dnn::readNetFromTensorflow(tensorflowWeightFile, tensorflowConfigFile);
+
+};
+
+void face::face_detection(const cv::Mat frame) {
+    Mat blob = blobFromImage(frame, 1.0, Size(300, 300), Scalar(127.5, 127.5, 127.5), true, false);
+    net.setInput(blob, "data");
+    Mat detection = net.forward("detection_out");
+    Mat results(detection.size[2], detection.size[3], CV_32F, detection.ptr<float>());
+
     for (int i = 0; i < results.rows; i++) {
         int class_id = int(results.at<float>(i, 1));
         float confidence = results.at<float>(i, 2);
@@ -34,13 +32,14 @@ void face::object_detection(const cv::Mat& frame) {
             int bboxY = int(results.at<float>(i, 4) * frame.rows);
             int bboxWidth = int(results.at<float>(i, 5) * frame.cols - bboxX);
             int bboxHeight = int(results.at<float>(i, 6) * frame.rows - bboxY);
-            cv::rectangle(frame, cv::Point(bboxX, bboxY), cv::Point(bboxX + bboxWidth, bboxY + bboxHeight), cv::Scalar(0, 0, 255), 2);
-            std::string class_name = class_names[class_id - 1];
-            cv::putText(frame, class_name + " " + std::to_string(int(confidence * 100)) + "%", cv::Point(bboxX, bboxY - 10), cv::FONT_HERSHEY_SIMPLEX, 1.5, cv::Scalar(0, 255, 0), 2);
+            rectangle(frame, Point(bboxX, bboxY), Point(bboxX + bboxWidth, bboxY + bboxHeight), Scalar(0, 0, 255), 2);
+            string class_name = class_names[class_id - 1];
+            putText(frame, class_name + " " + to_string(int(confidence * 100)) + "%", Point(bboxX, bboxY - 10), FONT_HERSHEY_SIMPLEX, 1.5, Scalar(0, 255, 0), 2);
         }
     }
 
 };
+
 distance_to_camera_R face::distance_to_camera(const cv::Mat& frame) {
 
     return distance_to_camera_R();
@@ -57,17 +56,17 @@ head_pose_R face::head_pose(const cv::Mat& frame) {
 // the debug function
 void main() {
     face face; // class declaration
-    const std::string path = "E:\\surge\\resources\\video1.mp4";
-    cv::VideoCapture cap(path);
+    //const std::string path = "E:\\surge\\resources\\video1.mp4"; // will use to play video
+    face.FaceDetector(); // setup function
+    cv::VideoCapture cap(0);
     cv::Mat frame;
     while (true) {
         cap.read(frame);
-        resize(frame, frame, cv::Size(), 0.5, 0.5);
-        auto start = cv::getTickCount();
-        face.object_detection(frame); // function call for face detection
-        auto end = cv::getTickCount();
-        auto totalTime = (end - start) / cv::getTickFrequency();
-        std::cout << "FPS :" << (1 / totalTime) << std::endl;
+        auto start = getTickCount(); // we calculate clock cycles per second
+        face.face_detection(frame); // actual face detection
+        auto end = getTickCount();
+        auto totalTime = (end - start) / getTickFrequency();
+        log(totalTime);
         cv::imshow("video", frame);
         cv::waitKey(1);
     };

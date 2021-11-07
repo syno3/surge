@@ -36,3 +36,5 @@ Traceback (most recent call last):
   File "main.py", line 63, in __init__
     mixer.init()
 pygame.error
+
+5. extreemly slow face detection c++

@@ -7,9 +7,12 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/dnn/dnn.hpp>
 #include <opencv2/dnn/all_layers.hpp>
-#include <fstream>
 
 // we add global type declaration
+
+using namespace std;
+using namespace cv;
+using namespace dnn;
 
 // return values for the face constructor functions
 // face detect retrun values
@@ -34,20 +37,22 @@ struct head_pose_R {
     std::string response_text;
 
 };
+
 // face class
 class face {
 public:
     // constructor declarations
-    const std::string weights = "E:\surge\drivermonitoring\cpp\src\src\resources\frozen_inference_graph.pb";
-    const std::string classes = "E:\surge\drivermonitoring\cpp\src\src\resources\object_detection_classes_coco.txt";
-    const std::string config = "E:\surge\drivermonitoring\cpp\src\src\resources\ssd_mobilenet_v2_coco_2018_03_29.pbtxt.txt";
+    const std::string classes = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\ssd_mobilenet_v2_coco_2018_03_29.pbtxt";
+    const std::string tensorflowConfigFile = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\opencv_face_detector.pbtxt";
+    const std::string tensorflowWeightFile = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\opencv_face_detector_uint8.pb";
+
 
     std::vector<std::string> class_names;
+    Net net;
     float min_confidence_score = 0.5;
 
-
-    //void FaceDetector();
-    void object_detection(const cv::Mat& frame);
+    void FaceDetector();
+    void face_detection(const cv::Mat frame);
     distance_to_camera_R distance_to_camera(const cv::Mat& frame);
     driver_attention_R driver_attention(const cv::Mat& frame);
     head_pose_R head_pose(const cv::Mat& frame);
