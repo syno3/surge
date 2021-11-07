@@ -1,11 +1,13 @@
 #pragma once
 
-
+#ifndef FACE_H
+#define FACE_H
 #include <iostream>
+#include <fstream>
 #include <opencv2/opencv.hpp>
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/objdetect.hpp"
 #include <opencv2/dnn/dnn.hpp>
+#include <opencv2/dnn/all_layers.hpp>
+#include <fstream>
 
 // we add global type declaration
 
@@ -36,15 +38,20 @@ struct head_pose_R {
 class face {
 public:
     // constructor declarations
-    const std::string path = "E:\\surge\\drivermonitoring\\assets\\front_face.xml";
-    cv::CascadeClassifier facecascade;
-    std::vector<cv::Rect> faces;
-    cv::Mat gray;
+    const std::string weights = "E:\surge\drivermonitoring\cpp\src\src\resources\frozen_inference_graph.pb";
+    const std::string classes = "E:\surge\drivermonitoring\cpp\src\src\resources\object_detection_classes_coco.txt";
+    const std::string config = "E:\surge\drivermonitoring\cpp\src\src\resources\ssd_mobilenet_v2_coco_2018_03_29.pbtxt.txt";
+
+    std::vector<std::string> class_names;
+    float min_confidence_score = 0.5;
+
 
     //void FaceDetector();
-    std::vector<cv::Rect> detect_face_rectangles(const cv::Mat& frame);
+    void object_detection(const cv::Mat& frame);
     distance_to_camera_R distance_to_camera(const cv::Mat& frame);
     driver_attention_R driver_attention(const cv::Mat& frame);
     head_pose_R head_pose(const cv::Mat& frame);
 
 };
+
+#endif

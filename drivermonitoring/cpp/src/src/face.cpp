@@ -4,11 +4,42 @@
 // we try to write everything with computer vison and keras (if it works)
 
 //we build face detection constructor
-std::vector<cv::Rect> face::detect_face_rectangles(const cv::Mat& frame) {
+void face::object_detection(const cv::Mat& frame) {
     // we try something else
-    std::vector<cv::Rect> faces;
+    std::ifstream ifs(std::string(face::classes).c_str()); //load the classes list
+    std::string line;
+    // Load in all the classes from the file
+    while (getline(ifs, line))
+    {
+        std::cout << line << std::endl;
+        class_names.emplace_back(line);
+    }
+    // Read in the neural network from the files
+    cv::dnn::Net net = cv::dnn::readNet(weights, config, "TensorFlow"); // major bug
+    // create blob from image
+    cv::Mat blob = cv::dnn::blobFromImage(frame, 1.0, cv::Size(300, 300), cv::Scalar(127.5, 127.5, 127.5),true, false);
+    net.setInput(blob);
+    cv::Mat output = net.forward();
+    // matrix with the result
+    cv::Mat results(output.size[2], output.size[3], CV_32F, output.ptr<float>());
+    // run through the result
+    // Run through all the predictions
+    for (int i = 0; i < results.rows; i++) {
+        int class_id = int(results.at<float>(i, 1));
+        float confidence = results.at<float>(i, 2);
 
-    return faces;
+        // Check if the detection is over the min threshold and then draw bbox
+        if (confidence > min_confidence_score) {
+            int bboxX = int(results.at<float>(i, 3) * frame.cols);
+            int bboxY = int(results.at<float>(i, 4) * frame.rows);
+            int bboxWidth = int(results.at<float>(i, 5) * frame.cols - bboxX);
+            int bboxHeight = int(results.at<float>(i, 6) * frame.rows - bboxY);
+            cv::rectangle(frame, cv::Point(bboxX, bboxY), cv::Point(bboxX + bboxWidth, bboxY + bboxHeight), cv::Scalar(0, 0, 255), 2);
+            std::string class_name = class_names[class_id - 1];
+            cv::putText(frame, class_name + " " + std::to_string(int(confidence * 100)) + "%", cv::Point(bboxX, bboxY - 10), cv::FONT_HERSHEY_SIMPLEX, 1.5, cv::Scalar(0, 255, 0), 2);
+        }
+    }
+
 };
 distance_to_camera_R face::distance_to_camera(const cv::Mat& frame) {
 
@@ -32,9 +63,11 @@ void main() {
     while (true) {
         cap.read(frame);
         resize(frame, frame, cv::Size(), 0.5, 0.5);
-        double fps = cap.get(cv::CAP_PROP_FPS);
-        std::cout << "Frames per second: " << fps << std::endl;
-        face.detect_face_rectangles(frame); // function call for face detection
+        auto start = cv::getTickCount();
+        face.object_detection(frame); // function call for face detection
+        auto end = cv::getTickCount();
+        auto totalTime = (end - start) / cv::getTickFrequency();
+        std::cout << "FPS :" << (1 / totalTime) << std::endl;
         cv::imshow("video", frame);
         cv::waitKey(1);
     };
