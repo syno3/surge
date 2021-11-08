@@ -10,7 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-
+using namespace cv;
 
 class calibration {
 public:
@@ -20,8 +20,10 @@ public:
 	std::vector<cv::Point3f> objp;
 	std::vector<cv::String> images;
 	cv::Mat frame, gray;
+	int CHESSBOARD[2]{6, 9};
 
 	//constructor declaration
+	void distortionCoeffiecient();
 };
 
 #endif

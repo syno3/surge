@@ -37,7 +37,6 @@ struct head_pose_R {
     std::string response_text;
 
 };
-
 // face class
 class face {
 public:
@@ -50,9 +49,8 @@ public:
     std::vector<std::string> class_names;
     Net net;
     float min_confidence_score = 0.5;
-
-    void FaceDetector();
-    void face_detection(const cv::Mat frame);
+    Net FaceDetector();
+    void face_detection(const cv::Mat frame, Net net);
     distance_to_camera_R distance_to_camera(const cv::Mat& frame);
     driver_attention_R driver_attention(const cv::Mat& frame);
     head_pose_R head_pose(const cv::Mat& frame);

@@ -4,7 +4,7 @@
 // we try to write everything with computer vison and keras (if it works)
 
 //we build face detection constructor
-void face::FaceDetector() {
+Net face::FaceDetector() {
     ifstream ifs(classes.c_str());
     string line;
     while (getline(ifs, line))
@@ -12,11 +12,11 @@ void face::FaceDetector() {
         //log(line);
         class_names.push_back(line);
     }
-    net = cv::dnn::readNetFromTensorflow(tensorflowWeightFile, tensorflowConfigFile);
+    return cv::dnn::readNetFromTensorflow(tensorflowWeightFile, tensorflowConfigFile);
 
 };
 
-void face::face_detection(const cv::Mat frame) {
+void face::face_detection(const cv::Mat frame, Net net) {
     Mat blob = blobFromImage(frame, 1.0, Size(300, 300), Scalar(127.5, 127.5, 127.5), true, false);
     net.setInput(blob, "data");
     Mat detection = net.forward("detection_out");
@@ -33,7 +33,7 @@ void face::face_detection(const cv::Mat frame) {
             int bboxWidth = int(results.at<float>(i, 5) * frame.cols - bboxX);
             int bboxHeight = int(results.at<float>(i, 6) * frame.rows - bboxY);
             rectangle(frame, Point(bboxX, bboxY), Point(bboxX + bboxWidth, bboxY + bboxHeight), Scalar(0, 0, 255), 2);
-            string class_name = class_names[class_id - 1];
+            string class_name = class_names[int(class_id - 1)]; // major bug
             putText(frame, class_name + " " + to_string(int(confidence * 100)) + "%", Point(bboxX, bboxY - 10), FONT_HERSHEY_SIMPLEX, 1.5, Scalar(0, 255, 0), 2);
         }
     }
@@ -57,13 +57,13 @@ head_pose_R face::head_pose(const cv::Mat& frame) {
 void main() {
     face face; // class declaration
     //const std::string path = "E:\\surge\\resources\\video1.mp4"; // will use to play video
-    face.FaceDetector(); // setup function
+    Net model = face.FaceDetector(); // setup function
     cv::VideoCapture cap(0);
     cv::Mat frame;
     while (true) {
         cap.read(frame);
         auto start = getTickCount(); // we calculate clock cycles per second
-        face.face_detection(frame); // actual face detection
+        face.face_detection(frame, model); // actual face detection
         auto end = getTickCount();
         auto totalTime = (end - start) / getTickFrequency();
         log(totalTime);
