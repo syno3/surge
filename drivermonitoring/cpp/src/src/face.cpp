@@ -40,17 +40,15 @@ void face::face_detection(const cv::Mat frame, Net net) {
 
 };
 
-distance_to_camera_R face::distance_to_camera(const cv::Mat& frame) {
-
-    return distance_to_camera_R();
-};
 driver_attention_R face::driver_attention(const cv::Mat& frame) {
+    // we perform sleep detection with pretrained model
 
     return driver_attention_R();
 };
-head_pose_R face::head_pose(const cv::Mat& frame) {
+body_pose_R face::body_pose(const cv::Mat& frame) {
+    // we determine the direction head is facing
 
-    return head_pose_R();
+    return body_pose_R();
 };
 
 // the debug function
