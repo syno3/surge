@@ -28,6 +28,7 @@ public:
 
 	//constructor declaration
 	void distortionCoeffiecient();
+	void undistort(Mat& frame);
 };
 
 #endif
