@@ -3,7 +3,13 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "depends": [],
+        "depends": [
+            "/usr/lib/python3/dist-packages/numpy/core/include/numpy/arrayobject.h",
+            "/usr/lib/python3/dist-packages/numpy/core/include/numpy/ufuncobject.h"
+        ],
+        "include_dirs": [
+            "/usr/lib/python3/dist-packages/numpy/core/include"
+        ],
         "language": "c++",
         "name": "enviroment",
         "sources": [
@@ -647,6 +653,11 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include <stdio.h>
 #include "numpy/arrayobject.h"
 #include "numpy/ufuncobject.h"
+#include "ios"
+#include "new"
+#include "stdexcept"
+#include "typeinfo"
+#include <vector>
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -877,8 +888,8 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "enviroment.pyx",
   "stringsource",
+  "enviroment.pyx",
   "__init__.pxd",
   "type.pxd",
 };
@@ -1072,7 +1083,7 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "enviroment.pyx":16
+/* "enviroment.pyx":18
  * np.import_array()
  * DTYPE = np.int
  * ctypedef np.int_t DTYPE_t             # <<<<<<<<<<<<<<
@@ -1143,36 +1154,8 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
-struct __pyx_ctuple_char__ptr__and_int;
-typedef struct __pyx_ctuple_char__ptr__and_int __pyx_ctuple_char__ptr__and_int;
-struct __pyx_ctuple_char__ptr__and_float;
-typedef struct __pyx_ctuple_char__ptr__and_float __pyx_ctuple_char__ptr__and_float;
 
-/* "enviroment.pyx":46
- *         #self.new_frame_time = 0.0
- * 
- *     cdef inline (char*, int) brightness_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
- * 
- *         """
- */
-struct __pyx_ctuple_char__ptr__and_int {
-  char *f0;
-  int f1;
-};
-
-/* "enviroment.pyx":90
- *         return response[0]
- * 
- *     cdef inline (char*, float) saturation_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
- * 
- *         """
- */
-struct __pyx_ctuple_char__ptr__and_float {
-  char *f0;
-  float f1;
-};
-
-/* "enviroment.pyx":20
+/* "enviroment.pyx":22
  * # main class
  * # we need to use numpy to optimize the code, // learn opencv optimization
  * cdef class enviroment:             # <<<<<<<<<<<<<<
@@ -1198,14 +1181,14 @@ struct __pyx_obj_10enviroment_enviroment {
 
 
 struct __pyx_vtabstruct_10enviroment_enviroment {
-  __pyx_ctuple_char__ptr__and_int (*brightness_level)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
-  __pyx_ctuple_char__ptr__and_float (*saturation_level)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
-  float (*frames_per_second)(struct __pyx_obj_10enviroment_enviroment *);
+  std::vector<char *>  (*brightness_level)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
+  std::vector<char *>  (*saturation_level)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
+  double (*frames_per_second)(struct __pyx_obj_10enviroment_enviroment *);
 };
 static struct __pyx_vtabstruct_10enviroment_enviroment *__pyx_vtabptr_10enviroment_enviroment;
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
-static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(struct __pyx_obj_10enviroment_enviroment *);
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *);
+static CYTHON_INLINE double __pyx_f_10enviroment_10enviroment_frames_per_second(struct __pyx_obj_10enviroment_enviroment *);
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1419,23 +1402,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
 /* PyObjectCallOneArg.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
 
-/* ListAppend.proto */
-#if CYTHON_USE_PYLIST_INTERNALS && CYTHON_ASSUME_SAFE_MACROS
-static CYTHON_INLINE int __Pyx_PyList_Append(PyObject* list, PyObject* x) {
-    PyListObject* L = (PyListObject*) list;
-    Py_ssize_t len = Py_SIZE(list);
-    if (likely(L->allocated > len) & likely(len > (L->allocated >> 1))) {
-        Py_INCREF(x);
-        PyList_SET_ITEM(list, len, x);
-        __Pyx_SET_SIZE(list, len + 1);
-        return 0;
-    }
-    return PyList_Append(list, x);
-}
-#else
-#define __Pyx_PyList_Append(L,x) PyList_Append(L,x)
-#endif
-
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
@@ -1595,13 +1561,47 @@ static void __pyx_insert_code_object(int code_line, PyCodeObject* code_object);
 static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename);
 
-/* GCCDiagnostics.proto */
-#if defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
-#define __Pyx_HAS_GCC_DIAGNOSTIC
+/* CppExceptionConversion.proto */
+#ifndef __Pyx_CppExn2PyErr
+#include <new>
+#include <typeinfo>
+#include <stdexcept>
+#include <ios>
+static void __Pyx_CppExn2PyErr() {
+  try {
+    if (PyErr_Occurred())
+      ; // let the latest Python exn pass through and ignore the current one
+    else
+      throw;
+  } catch (const std::bad_alloc& exn) {
+    PyErr_SetString(PyExc_MemoryError, exn.what());
+  } catch (const std::bad_cast& exn) {
+    PyErr_SetString(PyExc_TypeError, exn.what());
+  } catch (const std::bad_typeid& exn) {
+    PyErr_SetString(PyExc_TypeError, exn.what());
+  } catch (const std::domain_error& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::invalid_argument& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::ios_base::failure& exn) {
+    PyErr_SetString(PyExc_IOError, exn.what());
+  } catch (const std::out_of_range& exn) {
+    PyErr_SetString(PyExc_IndexError, exn.what());
+  } catch (const std::overflow_error& exn) {
+    PyErr_SetString(PyExc_OverflowError, exn.what());
+  } catch (const std::range_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::underflow_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::exception& exn) {
+    PyErr_SetString(PyExc_RuntimeError, exn.what());
+  }
+  catch (...)
+  {
+    PyErr_SetString(PyExc_RuntimeError, "Unknown exception");
+  }
+}
 #endif
-
-/* FromPyCTupleUtility.proto */
-static __pyx_ctuple_char__ptr__and_int __pyx_convert__from_py___pyx_ctuple_char__ptr__and_int(PyObject *);
 
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
@@ -1701,17 +1701,22 @@ static __pyx_ctuple_char__ptr__and_int __pyx_convert__from_py___pyx_ctuple_char_
     #endif
 #endif
 
+/* GCCDiagnostics.proto */
+#if defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+#define __Pyx_HAS_GCC_DIAGNOSTIC
+#endif
+
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
@@ -1735,9 +1740,9 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame); /* proto*/
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame); /* proto*/
-static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(CYTHON_UNUSED struct __pyx_obj_10enviroment_enviroment *__pyx_v_self); /* proto*/
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame); /* proto*/
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame); /* proto*/
+static CYTHON_INLINE double __pyx_f_10enviroment_10enviroment_frames_per_second(CYTHON_UNUSED struct __pyx_obj_10enviroment_enviroment *__pyx_v_self); /* proto*/
 
 /* Module declarations from 'cython' */
 
@@ -1771,6 +1776,8 @@ static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, char *, char *, int *); /*proto*/
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
+/* Module declarations from 'libcpp.vector' */
+
 /* Module declarations from 'enviroment' */
 static PyTypeObject *__pyx_ptype_10enviroment_enviroment = 0;
 #define __Pyx_MODULE_NAME "enviroment"
@@ -1778,7 +1785,6 @@ extern int __pyx_module_is_main_enviroment;
 int __pyx_module_is_main_enviroment = 0;
 
 /* Implementation of 'enviroment' */
-static PyObject *__pyx_builtin_print;
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
@@ -1794,7 +1800,6 @@ static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_time[] = "time";
 static const char __pyx_k_DTYPE[] = "DTYPE";
 static const char __pyx_k_numpy[] = "numpy";
-static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1809,21 +1814,10 @@ static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_COLOR_BGR2HSV[] = "COLOR_BGR2HSV";
-static const char __pyx_k_No_saturation[] = "No saturation";
-static const char __pyx_k_no_saturation[] = "no saturation";
-static const char __pyx_k_over_exposure[] = "over exposure";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
-static const char __pyx_k_Normal_exposure[] = "Normal exposure";
-static const char __pyx_k_over_saturation[] = "over saturation";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
-static const char __pyx_k_slight_exposure[] = "slight exposure";
-static const char __pyx_k_Minimal_exposure[] = "Minimal exposure";
-static const char __pyx_k_Normal_saturation[] = "Normal saturation";
-static const char __pyx_k_slight_saturation[] = "slight saturation";
-static const char __pyx_k_Minimal_saturation[] = "Minimal saturation";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
-static const char __pyx_k_95menviroment_class_imported_0m[] = "\033[95menviroment class imported\033[0m";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
@@ -1832,18 +1826,12 @@ static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not F
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
 static const char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
-static PyObject *__pyx_kp_u_95menviroment_class_imported_0m;
 static PyObject *__pyx_n_s_COLOR_BGR2HSV;
 static PyObject *__pyx_n_s_DTYPE;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_ImportError;
-static PyObject *__pyx_kp_u_Minimal_exposure;
-static PyObject *__pyx_kp_u_Minimal_saturation;
-static PyObject *__pyx_kp_u_No_saturation;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
-static PyObject *__pyx_kp_u_Normal_exposure;
-static PyObject *__pyx_kp_u_Normal_saturation;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_ValueError;
@@ -1860,14 +1848,10 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
-static PyObject *__pyx_kp_u_no_saturation;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_u_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_u_numpy_core_umath_failed_to_impor;
-static PyObject *__pyx_kp_u_over_exposure;
-static PyObject *__pyx_kp_u_over_saturation;
-static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reduce;
@@ -1875,8 +1859,6 @@ static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
 static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
-static PyObject *__pyx_kp_u_slight_exposure;
-static PyObject *__pyx_kp_u_slight_saturation;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
@@ -1897,11 +1879,10 @@ static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
-static PyObject *__pyx_tuple__11;
 /* Late includes */
 
-/* "enviroment.pyx":27
- *     print('\033[95m'"enviroment class imported"'\033[0m')
+/* "enviroment.pyx":29
+ *     printf('\033[95m'"enviroment class imported \n"'\033[0m')
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
  *         # exposure values
@@ -1929,7 +1910,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "enviroment.pyx":29
+  /* "enviroment.pyx":31
  *     def __cinit__(self):
  *         # exposure values
  *         self._no_exposure = 0             # <<<<<<<<<<<<<<
@@ -1938,7 +1919,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_no_exposure = 0;
 
-  /* "enviroment.pyx":30
+  /* "enviroment.pyx":32
  *         # exposure values
  *         self._no_exposure = 0
  *         self._little_exposure = 65             # <<<<<<<<<<<<<<
@@ -1947,7 +1928,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_little_exposure = 65;
 
-  /* "enviroment.pyx":31
+  /* "enviroment.pyx":33
  *         self._no_exposure = 0
  *         self._little_exposure = 65
  *         self._slight_exposure = 130             # <<<<<<<<<<<<<<
@@ -1956,7 +1937,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_slight_exposure = 0x82;
 
-  /* "enviroment.pyx":32
+  /* "enviroment.pyx":34
  *         self._little_exposure = 65
  *         self._slight_exposure = 130
  *         self._normal_exposure = 194             # <<<<<<<<<<<<<<
@@ -1965,7 +1946,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_normal_exposure = 0xC2;
 
-  /* "enviroment.pyx":33
+  /* "enviroment.pyx":35
  *         self._slight_exposure = 130
  *         self._normal_exposure = 194
  *         self._over_exposure = 255             # <<<<<<<<<<<<<<
@@ -1974,7 +1955,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_over_exposure = 0xFF;
 
-  /* "enviroment.pyx":36
+  /* "enviroment.pyx":38
  * 
  *         # saturation values
  *         self._no_saturation = 0             # <<<<<<<<<<<<<<
@@ -1983,7 +1964,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_no_saturation = 0;
 
-  /* "enviroment.pyx":37
+  /* "enviroment.pyx":39
  *         # saturation values
  *         self._no_saturation = 0
  *         self._little_saturation = 65             # <<<<<<<<<<<<<<
@@ -1992,7 +1973,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_little_saturation = 65;
 
-  /* "enviroment.pyx":38
+  /* "enviroment.pyx":40
  *         self._no_saturation = 0
  *         self._little_saturation = 65
  *         self._slight_saturation = 130             # <<<<<<<<<<<<<<
@@ -2001,7 +1982,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_slight_saturation = 0x82;
 
-  /* "enviroment.pyx":39
+  /* "enviroment.pyx":41
  *         self._little_saturation = 65
  *         self._slight_saturation = 130
  *         self._normal_saturation = 194             # <<<<<<<<<<<<<<
@@ -2010,7 +1991,7 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_normal_saturation = 0xC2;
 
-  /* "enviroment.pyx":40
+  /* "enviroment.pyx":42
  *         self._slight_saturation = 130
  *         self._normal_saturation = 194
  *         self._over_saturation = 255             # <<<<<<<<<<<<<<
@@ -2019,8 +2000,8 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
  */
   __pyx_v_self->_over_saturation = 0xFF;
 
-  /* "enviroment.pyx":27
- *     print('\033[95m'"enviroment class imported"'\033[0m')
+  /* "enviroment.pyx":29
+ *     printf('\033[95m'"enviroment class imported \n"'\033[0m')
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
  *         # exposure values
@@ -2033,19 +2014,19 @@ static int __pyx_pf_10enviroment_10enviroment___cinit__(struct __pyx_obj_10envir
   return __pyx_r;
 }
 
-/* "enviroment.pyx":46
+/* "enviroment.pyx":48
  *         #self.new_frame_time = 0.0
  * 
- *     cdef inline (char*, int) brightness_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
+ *     cdef inline vector[char*] brightness_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
 
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame) {
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_brightness_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame) {
   PyArrayObject *__pyx_v_hsv = 0;
   float __pyx_v_value;
-  PyObject *__pyx_v_response = 0;
-  __pyx_ctuple_char__ptr__and_int __pyx_r;
+  std::vector<char *>  __pyx_v_response;
+  std::vector<char *>  __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -2056,28 +2037,26 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
   float __pyx_t_7;
   int __pyx_t_8;
   int __pyx_t_9;
-  int __pyx_t_10;
-  __pyx_ctuple_char__ptr__and_int __pyx_t_11;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("brightness_level", 0);
 
-  /* "enviroment.pyx":69
+  /* "enviroment.pyx":71
  *         # we define the return types
  * 
  *         cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)             # <<<<<<<<<<<<<<
  *         cdef float value = hsv[...,1].mean()
- *         cdef list response = []
+ *         cdef vector[char*] response
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_cvtColor); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_cvtColor); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_COLOR_BGR2HSV); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_COLOR_BGR2HSV); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2095,7 +2074,7 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, ((PyObject *)__pyx_v_frame), __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 71, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -2104,14 +2083,14 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, ((PyObject *)__pyx_v_frame), __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 71, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else
   #endif
   {
-    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (__pyx_t_2) {
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -2122,25 +2101,25 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 71, __pyx_L1_error)
   __pyx_v_hsv = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "enviroment.pyx":70
+  /* "enviroment.pyx":72
  * 
  *         cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  *         cdef float value = hsv[...,1].mean()             # <<<<<<<<<<<<<<
- *         cdef list response = []
+ *         cdef vector[char*] response
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_hsv), __pyx_tuple_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_hsv), __pyx_tuple_); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -2155,215 +2134,224 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 72, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_value = __pyx_t_7;
 
-  /* "enviroment.pyx":71
- *         cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
- *         cdef float value = hsv[...,1].mean()
- *         cdef list response = []             # <<<<<<<<<<<<<<
- * 
- *         if value == self._no_exposure:
- */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_response = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "enviroment.pyx":73
- *         cdef list response = []
+  /* "enviroment.pyx":75
+ *         cdef vector[char*] response
  * 
  *         if value == self._no_exposure:             # <<<<<<<<<<<<<<
- *             response.append("no saturation")
+ *             response.push_back("no saturation")
  * 
  */
   __pyx_t_8 = ((__pyx_v_value == __pyx_v_self->_no_exposure) != 0);
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":74
+    /* "enviroment.pyx":76
  * 
  *         if value == self._no_exposure:
- *             response.append("no saturation")             # <<<<<<<<<<<<<<
+ *             response.push_back("no saturation")             # <<<<<<<<<<<<<<
  * 
  *         if value > self._no_exposure and value <self._little_exposure:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_no_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 74, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"no saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 76, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":73
- *         cdef list response = []
+    /* "enviroment.pyx":75
+ *         cdef vector[char*] response
  * 
  *         if value == self._no_exposure:             # <<<<<<<<<<<<<<
- *             response.append("no saturation")
+ *             response.push_back("no saturation")
  * 
  */
   }
 
-  /* "enviroment.pyx":76
- *             response.append("no saturation")
+  /* "enviroment.pyx":78
+ *             response.push_back("no saturation")
  * 
  *         if value > self._no_exposure and value <self._little_exposure:             # <<<<<<<<<<<<<<
- *             response.append('Minimal exposure')
+ *             response.push_back("Minimal exposure")
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_no_exposure) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_no_exposure) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L5_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_little_exposure) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_little_exposure) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L5_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":77
+    /* "enviroment.pyx":79
  * 
  *         if value > self._no_exposure and value <self._little_exposure:
- *             response.append('Minimal exposure')             # <<<<<<<<<<<<<<
+ *             response.push_back("Minimal exposure")             # <<<<<<<<<<<<<<
  * 
  *         if value > self._little_exposure  and value < self._slight_exposure:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_Minimal_exposure); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 77, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"Minimal exposure"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 79, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":76
- *             response.append("no saturation")
+    /* "enviroment.pyx":78
+ *             response.push_back("no saturation")
  * 
  *         if value > self._no_exposure and value <self._little_exposure:             # <<<<<<<<<<<<<<
- *             response.append('Minimal exposure')
+ *             response.push_back("Minimal exposure")
  * 
  */
   }
 
-  /* "enviroment.pyx":79
- *             response.append('Minimal exposure')
+  /* "enviroment.pyx":81
+ *             response.push_back("Minimal exposure")
  * 
  *         if value > self._little_exposure  and value < self._slight_exposure:             # <<<<<<<<<<<<<<
- *             response.append('slight exposure')
+ *             response.push_back("slight exposure")
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_little_exposure) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_little_exposure) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L8_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_slight_exposure) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_slight_exposure) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L8_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":80
+    /* "enviroment.pyx":82
  * 
  *         if value > self._little_exposure  and value < self._slight_exposure:
- *             response.append('slight exposure')             # <<<<<<<<<<<<<<
+ *             response.push_back("slight exposure")             # <<<<<<<<<<<<<<
  * 
  *         if value > self._slight_exposure  and value < self._normal_exposure:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_slight_exposure); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 80, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"slight exposure"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 82, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":79
- *             response.append('Minimal exposure')
+    /* "enviroment.pyx":81
+ *             response.push_back("Minimal exposure")
  * 
  *         if value > self._little_exposure  and value < self._slight_exposure:             # <<<<<<<<<<<<<<
- *             response.append('slight exposure')
+ *             response.push_back("slight exposure")
  * 
  */
   }
 
-  /* "enviroment.pyx":82
- *             response.append('slight exposure')
+  /* "enviroment.pyx":84
+ *             response.push_back("slight exposure")
  * 
  *         if value > self._slight_exposure  and value < self._normal_exposure:             # <<<<<<<<<<<<<<
- *             response.append('Normal exposure')
+ *             response.push_back("Normal exposure")
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_slight_exposure) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_slight_exposure) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L11_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_normal_exposure) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_normal_exposure) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L11_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":83
+    /* "enviroment.pyx":85
  * 
  *         if value > self._slight_exposure  and value < self._normal_exposure:
- *             response.append('Normal exposure')             # <<<<<<<<<<<<<<
+ *             response.push_back("Normal exposure")             # <<<<<<<<<<<<<<
  * 
  *         if value > self._normal_exposure  and value < self._over_exposure:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_Normal_exposure); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 83, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"Normal exposure"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 85, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":82
- *             response.append('slight exposure')
+    /* "enviroment.pyx":84
+ *             response.push_back("slight exposure")
  * 
  *         if value > self._slight_exposure  and value < self._normal_exposure:             # <<<<<<<<<<<<<<
- *             response.append('Normal exposure')
+ *             response.push_back("Normal exposure")
  * 
  */
   }
 
-  /* "enviroment.pyx":85
- *             response.append('Normal exposure')
+  /* "enviroment.pyx":87
+ *             response.push_back("Normal exposure")
  * 
  *         if value > self._normal_exposure  and value < self._over_exposure:             # <<<<<<<<<<<<<<
- *             response.append('over exposure')
+ *             response.push_back("over exposure")
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_normal_exposure) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_normal_exposure) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L14_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_over_exposure) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_over_exposure) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L14_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":86
+    /* "enviroment.pyx":88
  * 
  *         if value > self._normal_exposure  and value < self._over_exposure:
- *             response.append('over exposure')             # <<<<<<<<<<<<<<
+ *             response.push_back("over exposure")             # <<<<<<<<<<<<<<
  * 
- *         return response[0]
+ *         return response
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_over_exposure); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 86, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"over exposure"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 88, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":85
- *             response.append('Normal exposure')
+    /* "enviroment.pyx":87
+ *             response.push_back("Normal exposure")
  * 
  *         if value > self._normal_exposure  and value < self._over_exposure:             # <<<<<<<<<<<<<<
- *             response.append('over exposure')
+ *             response.push_back("over exposure")
  * 
  */
   }
 
-  /* "enviroment.pyx":88
- *             response.append('over exposure')
+  /* "enviroment.pyx":90
+ *             response.push_back("over exposure")
  * 
- *         return response[0]             # <<<<<<<<<<<<<<
+ *         return response             # <<<<<<<<<<<<<<
  * 
- *     cdef inline (char*, float) saturation_level(self, np.ndarray frame):
+ *     cdef inline vector[char*] saturation_level(self, np.ndarray frame):
  */
-  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_response, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_11 = __pyx_convert__from_py___pyx_ctuple_char__ptr__and_int(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 88, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_11;
+  __pyx_r = __pyx_v_response;
   goto __pyx_L0;
 
-  /* "enviroment.pyx":46
+  /* "enviroment.pyx":48
  *         #self.new_frame_time = 0.0
  * 
- *     cdef inline (char*, int) brightness_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
+ *     cdef inline vector[char*] brightness_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
@@ -2379,24 +2367,23 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_int __pyx_f_10enviroment_10envi
   __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_hsv);
-  __Pyx_XDECREF(__pyx_v_response);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "enviroment.pyx":90
- *         return response[0]
+/* "enviroment.pyx":92
+ *         return response
  * 
- *     cdef inline (char*, float) saturation_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
+ *     cdef inline vector[char*] saturation_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
 
-static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame) {
+static CYTHON_INLINE std::vector<char *>  __pyx_f_10enviroment_10enviroment_saturation_level(struct __pyx_obj_10enviroment_enviroment *__pyx_v_self, PyArrayObject *__pyx_v_frame) {
   PyObject *__pyx_v_hsv = NULL;
   float __pyx_v_value;
-  PyObject *__pyx_v_response = 0;
-  __pyx_ctuple_char__ptr__and_float __pyx_r;
+  std::vector<char *>  __pyx_v_response;
+  std::vector<char *>  __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -2407,29 +2394,26 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   float __pyx_t_7;
   int __pyx_t_8;
   int __pyx_t_9;
-  int __pyx_t_10;
-  char *__pyx_t_11;
-  __pyx_ctuple_char__ptr__and_float __pyx_t_12;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("saturation_level", 0);
 
-  /* "enviroment.pyx":113
+  /* "enviroment.pyx":115
  *         # we define the data types
  * 
  *         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)             # <<<<<<<<<<<<<<
  *         cdef float value = hsv[...,1].mean()
- *         cdef list response = []
+ *         cdef vector[char*] response
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_cvtColor); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_cvtColor); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_cv2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_COLOR_BGR2HSV); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_COLOR_BGR2HSV); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2447,7 +2431,7 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, ((PyObject *)__pyx_v_frame), __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 115, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -2456,14 +2440,14 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, ((PyObject *)__pyx_v_frame), __pyx_t_4};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 115, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else
   #endif
   {
-    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (__pyx_t_2) {
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -2474,7 +2458,7 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
@@ -2482,16 +2466,16 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   __pyx_v_hsv = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "enviroment.pyx":114
+  /* "enviroment.pyx":116
  * 
  *         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  *         cdef float value = hsv[...,1].mean()             # <<<<<<<<<<<<<<
- *         cdef list response = []
+ *         cdef vector[char*] response
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_hsv, __pyx_tuple_); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_hsv, __pyx_tuple_); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 116, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 116, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -2506,217 +2490,224 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 116, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_7 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_7 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 116, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_value = __pyx_t_7;
 
-  /* "enviroment.pyx":115
- *         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
- *         cdef float value = hsv[...,1].mean()
- *         cdef list response = []             # <<<<<<<<<<<<<<
- * 
- *         if value == self._no_saturation:
- */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_response = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "enviroment.pyx":117
- *         cdef list response = []
+  /* "enviroment.pyx":119
+ *         cdef vector[char*] response
  * 
  *         if value == self._no_saturation:             # <<<<<<<<<<<<<<
- *             response.append('No saturation')
+ *             response.push_back('No saturation')
  * 
  */
   __pyx_t_8 = ((__pyx_v_value == __pyx_v_self->_no_saturation) != 0);
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":118
+    /* "enviroment.pyx":120
  * 
  *         if value == self._no_saturation:
- *             response.append('No saturation')             # <<<<<<<<<<<<<<
+ *             response.push_back('No saturation')             # <<<<<<<<<<<<<<
  * 
  *         if value > self._no_saturation and value <self._little_saturation:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_No_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 118, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"No saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 120, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":117
- *         cdef list response = []
+    /* "enviroment.pyx":119
+ *         cdef vector[char*] response
  * 
  *         if value == self._no_saturation:             # <<<<<<<<<<<<<<
- *             response.append('No saturation')
+ *             response.push_back('No saturation')
  * 
  */
   }
 
-  /* "enviroment.pyx":120
- *             response.append('No saturation')
+  /* "enviroment.pyx":122
+ *             response.push_back('No saturation')
  * 
  *         if value > self._no_saturation and value <self._little_saturation:             # <<<<<<<<<<<<<<
- *             response.append('Minimal saturation')
+ *             response.push_back('Minimal saturation')
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_no_saturation) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_no_saturation) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L5_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_little_saturation) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_little_saturation) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L5_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":121
+    /* "enviroment.pyx":123
  * 
  *         if value > self._no_saturation and value <self._little_saturation:
- *             response.append('Minimal saturation')             # <<<<<<<<<<<<<<
+ *             response.push_back('Minimal saturation')             # <<<<<<<<<<<<<<
  * 
  *         if value > self._little_saturation  and value < self._slight_saturation:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_Minimal_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 121, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"Minimal saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 123, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":120
- *             response.append('No saturation')
+    /* "enviroment.pyx":122
+ *             response.push_back('No saturation')
  * 
  *         if value > self._no_saturation and value <self._little_saturation:             # <<<<<<<<<<<<<<
- *             response.append('Minimal saturation')
+ *             response.push_back('Minimal saturation')
  * 
  */
   }
 
-  /* "enviroment.pyx":123
- *             response.append('Minimal saturation')
+  /* "enviroment.pyx":125
+ *             response.push_back('Minimal saturation')
  * 
  *         if value > self._little_saturation  and value < self._slight_saturation:             # <<<<<<<<<<<<<<
- *             response.append('slight saturation')
+ *             response.push_back('slight saturation')
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_little_saturation) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_little_saturation) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L8_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_slight_saturation) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_slight_saturation) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L8_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":124
+    /* "enviroment.pyx":126
  * 
  *         if value > self._little_saturation  and value < self._slight_saturation:
- *             response.append('slight saturation')             # <<<<<<<<<<<<<<
+ *             response.push_back('slight saturation')             # <<<<<<<<<<<<<<
  * 
  *         if value > self._slight_saturation  and value < self._normal_saturation:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_slight_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 124, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"slight saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 126, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":123
- *             response.append('Minimal saturation')
+    /* "enviroment.pyx":125
+ *             response.push_back('Minimal saturation')
  * 
  *         if value > self._little_saturation  and value < self._slight_saturation:             # <<<<<<<<<<<<<<
- *             response.append('slight saturation')
+ *             response.push_back('slight saturation')
  * 
  */
   }
 
-  /* "enviroment.pyx":126
- *             response.append('slight saturation')
+  /* "enviroment.pyx":128
+ *             response.push_back('slight saturation')
  * 
  *         if value > self._slight_saturation  and value < self._normal_saturation:             # <<<<<<<<<<<<<<
- *             response.append('Normal saturation')
+ *             response.push_back('Normal saturation')
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_slight_saturation) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_slight_saturation) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L11_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_normal_saturation) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_normal_saturation) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L11_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":127
+    /* "enviroment.pyx":129
  * 
  *         if value > self._slight_saturation  and value < self._normal_saturation:
- *             response.append('Normal saturation')             # <<<<<<<<<<<<<<
+ *             response.push_back('Normal saturation')             # <<<<<<<<<<<<<<
  * 
  *         if value > self._normal_saturation  and value < self._over_saturation:
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_Normal_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 127, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"Normal saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 129, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":126
- *             response.append('slight saturation')
+    /* "enviroment.pyx":128
+ *             response.push_back('slight saturation')
  * 
  *         if value > self._slight_saturation  and value < self._normal_saturation:             # <<<<<<<<<<<<<<
- *             response.append('Normal saturation')
+ *             response.push_back('Normal saturation')
  * 
  */
   }
 
-  /* "enviroment.pyx":129
- *             response.append('Normal saturation')
+  /* "enviroment.pyx":131
+ *             response.push_back('Normal saturation')
  * 
  *         if value > self._normal_saturation  and value < self._over_saturation:             # <<<<<<<<<<<<<<
- *             response.append('over saturation')
+ *             response.push_back('over saturation')
  * 
  */
-  __pyx_t_10 = ((__pyx_v_value > __pyx_v_self->_normal_saturation) != 0);
-  if (__pyx_t_10) {
+  __pyx_t_9 = ((__pyx_v_value > __pyx_v_self->_normal_saturation) != 0);
+  if (__pyx_t_9) {
   } else {
-    __pyx_t_8 = __pyx_t_10;
+    __pyx_t_8 = __pyx_t_9;
     goto __pyx_L14_bool_binop_done;
   }
-  __pyx_t_10 = ((__pyx_v_value < __pyx_v_self->_over_saturation) != 0);
-  __pyx_t_8 = __pyx_t_10;
+  __pyx_t_9 = ((__pyx_v_value < __pyx_v_self->_over_saturation) != 0);
+  __pyx_t_8 = __pyx_t_9;
   __pyx_L14_bool_binop_done:;
   if (__pyx_t_8) {
 
-    /* "enviroment.pyx":130
+    /* "enviroment.pyx":132
  * 
  *         if value > self._normal_saturation  and value < self._over_saturation:
- *             response.append('over saturation')             # <<<<<<<<<<<<<<
+ *             response.push_back('over saturation')             # <<<<<<<<<<<<<<
  * 
- *         return response[0], value
+ *         return response
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_response, __pyx_kp_u_over_saturation); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 130, __pyx_L1_error)
+    try {
+      __pyx_v_response.push_back(((char *&)"over saturation"));
+    } catch(...) {
+      __Pyx_CppExn2PyErr();
+      __PYX_ERR(1, 132, __pyx_L1_error)
+    }
 
-    /* "enviroment.pyx":129
- *             response.append('Normal saturation')
+    /* "enviroment.pyx":131
+ *             response.push_back('Normal saturation')
  * 
  *         if value > self._normal_saturation  and value < self._over_saturation:             # <<<<<<<<<<<<<<
- *             response.append('over saturation')
+ *             response.push_back('over saturation')
  * 
  */
   }
 
-  /* "enviroment.pyx":132
- *             response.append('over saturation')
+  /* "enviroment.pyx":134
+ *             response.push_back('over saturation')
  * 
- *         return response[0], value             # <<<<<<<<<<<<<<
+ *         return response             # <<<<<<<<<<<<<<
  * 
  *     @cython.cdivision(True)
  */
-  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_response, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_11 = __Pyx_PyObject_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(0, 132, __pyx_L1_error)
-  __pyx_t_12.f0 = __pyx_t_11;
-  __pyx_t_12.f1 = __pyx_v_value;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_12;
+  __pyx_r = __pyx_v_response;
   goto __pyx_L0;
 
-  /* "enviroment.pyx":90
- *         return response[0]
+  /* "enviroment.pyx":92
+ *         return response
  * 
- *     cdef inline (char*, float) saturation_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
+ *     cdef inline vector[char*] saturation_level(self, np.ndarray frame):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
@@ -2732,24 +2723,23 @@ static CYTHON_INLINE __pyx_ctuple_char__ptr__and_float __pyx_f_10enviroment_10en
   __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_hsv);
-  __Pyx_XDECREF(__pyx_v_response);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "enviroment.pyx":135
+/* "enviroment.pyx":137
  * 
  *     @cython.cdivision(True)
- *     cdef inline float frames_per_second(self):             # <<<<<<<<<<<<<<
+ *     cdef inline double frames_per_second(self):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
 
-static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(CYTHON_UNUSED struct __pyx_obj_10enviroment_enviroment *__pyx_v_self) {
+static CYTHON_INLINE double __pyx_f_10enviroment_10enviroment_frames_per_second(CYTHON_UNUSED struct __pyx_obj_10enviroment_enviroment *__pyx_v_self) {
   double __pyx_v_fps;
   double __pyx_v_new_frame_time;
   double __pyx_v_prev_frame_time;
-  float __pyx_r;
+  double __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -2760,7 +2750,7 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("frames_per_second", 0);
 
-  /* "enviroment.pyx":157
+  /* "enviroment.pyx":159
  *         ## type declarations
  *         cdef double fps
  *         cdef double new_frame_time = 0.0, prev_frame_time = 0.0             # <<<<<<<<<<<<<<
@@ -2770,16 +2760,16 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
   __pyx_v_new_frame_time = 0.0;
   __pyx_v_prev_frame_time = 0.0;
 
-  /* "enviroment.pyx":159
+  /* "enviroment.pyx":161
  *         cdef double new_frame_time = 0.0, prev_frame_time = 0.0
  * 
  *         new_frame_time = time.time()             # <<<<<<<<<<<<<<
  * 
  *         fps = 1.0/(new_frame_time-prev_frame_time)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_time); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2794,14 +2784,14 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 161, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_new_frame_time = __pyx_t_4;
 
-  /* "enviroment.pyx":161
+  /* "enviroment.pyx":163
  *         new_frame_time = time.time()
  * 
  *         fps = 1.0/(new_frame_time-prev_frame_time)             # <<<<<<<<<<<<<<
@@ -2810,7 +2800,7 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
  */
   __pyx_v_fps = (1.0 / (__pyx_v_new_frame_time - __pyx_v_prev_frame_time));
 
-  /* "enviroment.pyx":163
+  /* "enviroment.pyx":165
  *         fps = 1.0/(new_frame_time-prev_frame_time)
  * 
  *         prev_frame_time = new_frame_time             # <<<<<<<<<<<<<<
@@ -2819,7 +2809,7 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
  */
   __pyx_v_prev_frame_time = __pyx_v_new_frame_time;
 
-  /* "enviroment.pyx":165
+  /* "enviroment.pyx":167
  *         prev_frame_time = new_frame_time
  * 
  *         return fps             # <<<<<<<<<<<<<<
@@ -2827,10 +2817,10 @@ static CYTHON_INLINE float __pyx_f_10enviroment_10enviroment_frames_per_second(C
   __pyx_r = __pyx_v_fps;
   goto __pyx_L0;
 
-  /* "enviroment.pyx":135
+  /* "enviroment.pyx":137
  * 
  *     @cython.cdivision(True)
- *     cdef inline float frames_per_second(self):             # <<<<<<<<<<<<<<
+ *     cdef inline double frames_per_second(self):             # <<<<<<<<<<<<<<
  * 
  *         """
  */
@@ -2881,11 +2871,11 @@ static PyObject *__pyx_pf_10enviroment_10enviroment_2__reduce_cython__(CYTHON_UN
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(1, 2, __pyx_L1_error)
+  __PYX_ERR(0, 2, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -2937,11 +2927,11 @@ static PyObject *__pyx_pf_10enviroment_10enviroment_4__setstate_cython__(CYTHON_
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(1, 4, __pyx_L1_error)
+  __PYX_ERR(0, 4, __pyx_L1_error)
 
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
@@ -5579,18 +5569,12 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_kp_u_95menviroment_class_imported_0m, __pyx_k_95menviroment_class_imported_0m, sizeof(__pyx_k_95menviroment_class_imported_0m), 0, 1, 0, 0},
   {&__pyx_n_s_COLOR_BGR2HSV, __pyx_k_COLOR_BGR2HSV, sizeof(__pyx_k_COLOR_BGR2HSV), 0, 0, 1, 1},
   {&__pyx_n_s_DTYPE, __pyx_k_DTYPE, sizeof(__pyx_k_DTYPE), 0, 0, 1, 1},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
-  {&__pyx_kp_u_Minimal_exposure, __pyx_k_Minimal_exposure, sizeof(__pyx_k_Minimal_exposure), 0, 1, 0, 0},
-  {&__pyx_kp_u_Minimal_saturation, __pyx_k_Minimal_saturation, sizeof(__pyx_k_Minimal_saturation), 0, 1, 0, 0},
-  {&__pyx_kp_u_No_saturation, __pyx_k_No_saturation, sizeof(__pyx_k_No_saturation), 0, 1, 0, 0},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
-  {&__pyx_kp_u_Normal_exposure, __pyx_k_Normal_exposure, sizeof(__pyx_k_Normal_exposure), 0, 1, 0, 0},
-  {&__pyx_kp_u_Normal_saturation, __pyx_k_Normal_saturation, sizeof(__pyx_k_Normal_saturation), 0, 1, 0, 0},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
@@ -5607,14 +5591,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_ndarray_is_not_C_contiguous, __pyx_k_ndarray_is_not_C_contiguous, sizeof(__pyx_k_ndarray_is_not_C_contiguous), 0, 1, 0, 0},
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
-  {&__pyx_kp_u_no_saturation, __pyx_k_no_saturation, sizeof(__pyx_k_no_saturation), 0, 1, 0, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_u_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 1, 0, 0},
   {&__pyx_kp_u_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 1, 0, 0},
-  {&__pyx_kp_u_over_exposure, __pyx_k_over_exposure, sizeof(__pyx_k_over_exposure), 0, 1, 0, 0},
-  {&__pyx_kp_u_over_saturation, __pyx_k_over_saturation, sizeof(__pyx_k_over_saturation), 0, 1, 0, 0},
-  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
@@ -5622,16 +5602,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
   {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
-  {&__pyx_kp_u_slight_exposure, __pyx_k_slight_exposure, sizeof(__pyx_k_slight_exposure), 0, 1, 0, 0},
-  {&__pyx_kp_u_slight_saturation, __pyx_k_slight_saturation, sizeof(__pyx_k_slight_saturation), 0, 1, 0, 0},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 25, __pyx_L1_error)
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 2, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(2, 272, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(2, 285, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(2, 855, __pyx_L1_error)
@@ -5645,14 +5622,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "enviroment.pyx":70
+  /* "enviroment.pyx":72
  * 
  *         cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  *         cdef float value = hsv[...,1].mean()             # <<<<<<<<<<<<<<
- *         cdef list response = []
+ *         cdef vector[char*] response
  * 
  */
-  __pyx_tuple_ = PyTuple_Pack(2, Py_Ellipsis, __pyx_int_1); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(2, Py_Ellipsis, __pyx_int_1); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
@@ -5662,7 +5639,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
@@ -5671,7 +5648,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
@@ -5751,17 +5728,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(2, 1043, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
-
-  /* "enviroment.pyx":25
- *     cdef np.ndarray frame
- * 
- *     print('\033[95m'"enviroment class imported"'\033[0m')             # <<<<<<<<<<<<<<
- * 
- *     def __cinit__(self):
- */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_95menviroment_class_imported_0m); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -5770,8 +5736,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
-  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(1, 1, __pyx_L1_error);
+  __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(1, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -5817,19 +5783,19 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   __pyx_vtabptr_10enviroment_enviroment = &__pyx_vtable_10enviroment_enviroment;
-  __pyx_vtable_10enviroment_enviroment.brightness_level = (__pyx_ctuple_char__ptr__and_int (*)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *))__pyx_f_10enviroment_10enviroment_brightness_level;
-  __pyx_vtable_10enviroment_enviroment.saturation_level = (__pyx_ctuple_char__ptr__and_float (*)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *))__pyx_f_10enviroment_10enviroment_saturation_level;
-  __pyx_vtable_10enviroment_enviroment.frames_per_second = (float (*)(struct __pyx_obj_10enviroment_enviroment *))__pyx_f_10enviroment_10enviroment_frames_per_second;
-  if (PyType_Ready(&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_vtable_10enviroment_enviroment.brightness_level = (std::vector<char *>  (*)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *))__pyx_f_10enviroment_10enviroment_brightness_level;
+  __pyx_vtable_10enviroment_enviroment.saturation_level = (std::vector<char *>  (*)(struct __pyx_obj_10enviroment_enviroment *, PyArrayObject *))__pyx_f_10enviroment_10enviroment_saturation_level;
+  __pyx_vtable_10enviroment_enviroment.frames_per_second = (double (*)(struct __pyx_obj_10enviroment_enviroment *))__pyx_f_10enviroment_10enviroment_frames_per_second;
+  if (PyType_Ready(&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(1, 22, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_10enviroment_enviroment.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10enviroment_enviroment.tp_dictoffset && __pyx_type_10enviroment_enviroment.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10enviroment_enviroment.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_10enviroment_enviroment.tp_dict, __pyx_vtabptr_10enviroment_enviroment) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_enviroment, (PyObject *)&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_10enviroment_enviroment.tp_dict, __pyx_vtabptr_10enviroment_enviroment) < 0) __PYX_ERR(1, 22, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_enviroment, (PyObject *)&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(1, 22, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10enviroment_enviroment) < 0) __PYX_ERR(1, 22, __pyx_L1_error)
   __pyx_ptype_10enviroment_enviroment = &__pyx_type_10enviroment_enviroment;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -6014,30 +5980,30 @@ if (!__Pyx_RefNanny) {
 }
 #endif
   __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_enviroment(void)", 0);
-  if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_check_binary_version() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
   #endif
-  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(1, 1, __pyx_L1_error)
   #ifdef __Pyx_CyFunction_USED
-  if (__pyx_CyFunction_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_CyFunction_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   #ifdef __Pyx_FusedFunction_USED
-  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Coroutine_USED
-  if (__pyx_Coroutine_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_Coroutine_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Generator_USED
-  if (__pyx_Generator_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_Generator_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   #ifdef __Pyx_AsyncGen_USED
-  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   #ifdef __Pyx_StopAsyncIteration_USED
-  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   /*--- Library function declarations ---*/
   /*--- Threads initialization code ---*/
@@ -6054,46 +6020,46 @@ if (!__Pyx_RefNanny) {
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
-  if (unlikely(!__pyx_m)) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (unlikely(!__pyx_m)) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
-  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(1, 1, __pyx_L1_error)
   Py_INCREF(__pyx_d);
-  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(1, 1, __pyx_L1_error)
   Py_INCREF(__pyx_b);
-  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(1, 1, __pyx_L1_error)
   Py_INCREF(__pyx_cython_runtime);
-  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(1, 1, __pyx_L1_error);
   /*--- Initialize various global constants etc. ---*/
-  if (__Pyx_InitGlobals() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_InitGlobals() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
-  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
   if (__pyx_module_is_main_enviroment) {
-    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name, __pyx_n_s_main) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
-    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
+    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(1, 1, __pyx_L1_error)
     if (!PyDict_GetItemString(modules, "enviroment")) {
-      if (unlikely(PyDict_SetItemString(modules, "enviroment", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+      if (unlikely(PyDict_SetItemString(modules, "enviroment", __pyx_m) < 0)) __PYX_ERR(1, 1, __pyx_L1_error)
     }
   }
   #endif
   /*--- Builtin init code ---*/
-  if (__Pyx_InitCachedBuiltins() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_InitCachedBuiltins() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   /*--- Constants init code ---*/
-  if (__Pyx_InitCachedConstants() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_InitCachedConstants() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   /*--- Global type/function init code ---*/
   (void)__Pyx_modinit_global_init_code();
   (void)__Pyx_modinit_variable_export_code();
   (void)__Pyx_modinit_function_export_code();
-  if (unlikely(__Pyx_modinit_type_init_code() < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
-  if (unlikely(__Pyx_modinit_type_import_code() < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (unlikely(__Pyx_modinit_type_init_code() < 0)) __PYX_ERR(1, 1, __pyx_L1_error)
+  if (unlikely(__Pyx_modinit_type_import_code() < 0)) __PYX_ERR(1, 1, __pyx_L1_error)
   (void)__Pyx_modinit_variable_import_code();
   (void)__Pyx_modinit_function_import_code();
   /*--- Execution code ---*/
   #if defined(__Pyx_Generator_USED) || defined(__Pyx_Coroutine_USED)
-  if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   #endif
 
   /* "enviroment.pyx":9
@@ -6103,9 +6069,9 @@ if (!__Pyx_RefNanny) {
  * import time
  * import numpy as np
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_cv2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_cv2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cv2, __pyx_t_1) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cv2, __pyx_t_1) < 0) __PYX_ERR(1, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "enviroment.pyx":10
@@ -6115,9 +6081,9 @@ if (!__Pyx_RefNanny) {
  * import numpy as np
  * cimport numpy as np
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_time, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_time, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_time, __pyx_t_1) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_time, __pyx_t_1) < 0) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "enviroment.pyx":11
@@ -6125,56 +6091,54 @@ if (!__Pyx_RefNanny) {
  * import time
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
- * 
+ * from libcpp.vector cimport vector
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(1, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "enviroment.pyx":14
- * cimport numpy as np
+  /* "enviroment.pyx":16
+ * from libc.stdio cimport printf
  * 
  * np.import_array()             # <<<<<<<<<<<<<<
  * DTYPE = np.int
  * ctypedef np.int_t DTYPE_t
  */
-  __pyx_t_2 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(1, 16, __pyx_L1_error)
 
-  /* "enviroment.pyx":15
+  /* "enviroment.pyx":17
  * 
  * np.import_array()
  * DTYPE = np.int             # <<<<<<<<<<<<<<
  * ctypedef np.int_t DTYPE_t
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_3) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_3) < 0) __PYX_ERR(1, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "enviroment.pyx":25
+  /* "enviroment.pyx":27
  *     cdef np.ndarray frame
  * 
- *     print('\033[95m'"enviroment class imported"'\033[0m')             # <<<<<<<<<<<<<<
+ *     printf('\033[95m'"enviroment class imported \n"'\033[0m')             # <<<<<<<<<<<<<<
  * 
  *     def __cinit__(self):
  */
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  (void)(printf(((char const *)"\033[95menviroment class imported \n\033[0m")));
 
   /* "enviroment.pyx":1
  * # distutils: language = c++             # <<<<<<<<<<<<<<
  * # cython: language_level = 3
  * 
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_3) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_3) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
   /* "../../../../../home/syno3/.local/lib/python3.8/site-packages/Cython/Includes/numpy/__init__.pxd":1045
@@ -7685,58 +7649,6 @@ bad:
     Py_XDECREF(py_frame);
 }
 
-/* CIntFromPyVerify */
-#define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
-#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
-    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
-#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
-    {\
-        func_type value = func_value;\
-        if (sizeof(target_type) < sizeof(func_type)) {\
-            if (unlikely(value != (func_type) (target_type) value)) {\
-                func_type zero = 0;\
-                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
-                    return (target_type) -1;\
-                if (is_unsigned && unlikely(value < zero))\
-                    goto raise_neg_overflow;\
-                else\
-                    goto raise_overflow;\
-            }\
-        }\
-        return (target_type) value;\
-    }
-
-/* FromPyCTupleUtility */
-static __pyx_ctuple_char__ptr__and_int __pyx_convert__from_py___pyx_ctuple_char__ptr__and_int(PyObject * o) {
-    __pyx_ctuple_char__ptr__and_int result;
-    if (!PyTuple_Check(o) || PyTuple_GET_SIZE(o) != 2) {
-        PyErr_Format(PyExc_TypeError, "Expected %.16s of size %d, got %.200s", "a tuple", 2, Py_TYPE(o)->tp_name);
-        goto bad;
-    }
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        result.f0 = __Pyx_PyObject_AsWritableString(PyTuple_GET_ITEM(o, 0));
-        if ((!result.f0) && PyErr_Occurred()) goto bad;
-        result.f1 = __Pyx_PyInt_As_int(PyTuple_GET_ITEM(o, 1));
-        if ((result.f1 == (int)-1) && PyErr_Occurred()) goto bad;
-#else
-    {
-        PyObject *item;
-        item = PySequence_ITEM(o, 0);  if (unlikely(!item)) goto bad;
-        result.f0 = __Pyx_PyObject_AsWritableString(item);
-        Py_DECREF(item);
-        if ((!result.f0) && PyErr_Occurred()) goto bad;
-        item = PySequence_ITEM(o, 1);  if (unlikely(!item)) goto bad;
-        result.f1 = __Pyx_PyInt_As_int(item);
-        Py_DECREF(item);
-        if ((result.f1 == (int)-1) && PyErr_Occurred()) goto bad;
-    }
-#endif
-    return result;
-bad:
-    return result;
-}
-
 /* Declarations */
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -8045,32 +7957,54 @@ bad:
     #endif
 #endif
 
+/* CIntFromPyVerify */
+#define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
+#define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
+    __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
+#define __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, exc)\
+    {\
+        func_type value = func_value;\
+        if (sizeof(target_type) < sizeof(func_type)) {\
+            if (unlikely(value != (func_type) (target_type) value)) {\
+                func_type zero = 0;\
+                if (exc && unlikely(value == (func_type)-1 && PyErr_Occurred()))\
+                    return (target_type) -1;\
+                if (is_unsigned && unlikely(value < zero))\
+                    goto raise_neg_overflow;\
+                else\
+                    goto raise_overflow;\
+            }\
+        }\
+        return (target_type) value;\
+    }
+
 /* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
 #ifdef __Pyx_HAS_GCC_DIAGNOSTIC
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
 #endif
-    const long neg_one = (long) -1, const_zero = (long) 0;
+    const int neg_one = (int) -1, const_zero = (int) 0;
 #ifdef __Pyx_HAS_GCC_DIAGNOSTIC
 #pragma GCC diagnostic pop
 #endif
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
-        if (sizeof(long) < sizeof(long)) {
+        if (sizeof(int) < sizeof(long)) {
             return PyInt_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(unsigned long)) {
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
             return PyLong_FromUnsignedLong((unsigned long) value);
 #ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
             return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
 #endif
         }
     } else {
-        if (sizeof(long) <= sizeof(long)) {
+        if (sizeof(int) <= sizeof(long)) {
             return PyInt_FromLong((long) value);
 #ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
             return PyLong_FromLongLong((PY_LONG_LONG) value);
 #endif
         }
@@ -8078,7 +8012,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     {
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(long),
+        return _PyLong_FromByteArray(bytes, sizeof(int),
                                      little, !is_unsigned);
     }
 }
@@ -8280,44 +8214,6 @@ raise_neg_overflow:
 }
 
 /* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const int neg_one = (int) -1, const_zero = (int) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntToPy */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value) {
 #ifdef __Pyx_HAS_GCC_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -8351,6 +8247,44 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES v
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(enum NPY_TYPES),
+                                     little, !is_unsigned);
+    }
+}
+
+/* CIntToPy */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+    const long neg_one = (long) -1, const_zero = (long) 0;
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic pop
+#endif
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(long) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(long) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(long),
                                      little, !is_unsigned);
     }
 }

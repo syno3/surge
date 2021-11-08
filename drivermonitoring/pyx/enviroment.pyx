@@ -10,6 +10,8 @@ import cv2
 import time
 import numpy as np
 cimport numpy as np
+from libcpp.vector cimport vector
+from libc.stdio cimport printf
 
 np.import_array()
 DTYPE = np.int
@@ -22,7 +24,7 @@ cdef class enviroment:
     cdef int _no_saturation, _little_saturation, _slight_saturation, _normal_saturation, _over_saturation
     cdef np.ndarray frame
 
-    print('\033[95m'"enviroment class imported"'\033[0m')
+    printf('\033[95m'"enviroment class imported \n"'\033[0m')
 
     def __cinit__(self):    
         # exposure values
@@ -43,7 +45,7 @@ cdef class enviroment:
         #self.prev_frame_time = 0.0
         #self.new_frame_time = 0.0
 
-    cdef inline (char*, int) brightness_level(self, np.ndarray frame):
+    cdef inline vector[char*] brightness_level(self, np.ndarray frame):
 
         """ 
         parameters
@@ -68,26 +70,26 @@ cdef class enviroment:
 
         cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         cdef float value = hsv[...,1].mean()
-        cdef list response = []
+        cdef vector[char*] response
 
         if value == self._no_exposure:
-            response.append("no saturation")
+            response.push_back("no saturation")
     
         if value > self._no_exposure and value <self._little_exposure:
-            response.append('Minimal exposure')
+            response.push_back("Minimal exposure")
 
         if value > self._little_exposure  and value < self._slight_exposure:
-            response.append('slight exposure')
+            response.push_back("slight exposure")
 
         if value > self._slight_exposure  and value < self._normal_exposure:
-            response.append('Normal exposure')
+            response.push_back("Normal exposure")
 
         if value > self._normal_exposure  and value < self._over_exposure:
-            response.append('over exposure')
+            response.push_back("over exposure")
 
-        return response[0]
+        return response
 
-    cdef inline (char*, float) saturation_level(self, np.ndarray frame):
+    cdef inline vector[char*] saturation_level(self, np.ndarray frame):
 
         """ 
         parameters
@@ -112,27 +114,27 @@ cdef class enviroment:
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         cdef float value = hsv[...,1].mean()
-        cdef list response = []
+        cdef vector[char*] response
 
         if value == self._no_saturation:
-            response.append('No saturation')
+            response.push_back('No saturation')
     
         if value > self._no_saturation and value <self._little_saturation:
-            response.append('Minimal saturation')
+            response.push_back('Minimal saturation')
 
         if value > self._little_saturation  and value < self._slight_saturation:
-            response.append('slight saturation')
+            response.push_back('slight saturation')
 
         if value > self._slight_saturation  and value < self._normal_saturation:
-            response.append('Normal saturation')
+            response.push_back('Normal saturation')
 
         if value > self._normal_saturation  and value < self._over_saturation:
-            response.append('over saturation')
+            response.push_back('over saturation')
 
-        return response[0], value
+        return response
 
     @cython.cdivision(True)
-    cdef inline float frames_per_second(self):
+    cdef inline double frames_per_second(self):
 
         """ 
         parameters

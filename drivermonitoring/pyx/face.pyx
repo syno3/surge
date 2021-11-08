@@ -12,6 +12,9 @@ import imutils
 import numpy as np
 cimport numpy as np # we import cython numpy api
 from libcpp cimport bool
+from libcpp.vector cimport vector
+from libc.stdio cimport printf
+from libcpp.string cimport string
 
 # face detection module
 import mediapipe as mp # we will do face detection
@@ -29,59 +32,42 @@ cdef class face:
     cdef int number_of_faces, i, count, distance
     cdef float KNOWN_DISTANCE, KNOWN_WIDTH, distracted
     cdef bint sleeping, boolean
-    
-    def __cinit__(self):
+    cdef string path
 
-        # cascade files
-        self.front_face_harcascaade_path = cv2.CascadeClassifier("assets/front_face.xml")
-        self.eye_cascade = cv2.CascadeClassifier("assets/eye.xml")
-        self.left_eye = cv2.CascadeClassifier("assets/left_eye.xml")
-        self.right_eye = cv2.CascadeClassifier("assets/right_eye.xml")
-        
-        
+
+
+    def __cinit__(self):
+                
         #self.model =  load_model("assets/models/eyeStateModel1.h5")
         self.sleeping = False
         self.count=0
-        self.path = os.getcwd()
-        
         # globals for face
         self.boolean =False
-        
         # debugging global variables
         self.number_of_faces = 0 # number of faces in the video
         self.i = 0
         self.distance = 0 # distance of face from camera
-        
-        # mediapipe submodules
-        self.mp_face_detection = mp.solutions.face_detection
-        self.mp_drawing = mp.solutions.drawing_utils
-        
-        # mediapipe pose submodules
-        self.mpPose = mp.solutions.pose
-        self.pose = self.mpPose.Pose()
-        self.mpDraw = mp.solutions.drawing_utils
-        
         # global for depth
         self.KNOWN_DISTANCE = 24.0
         self.KNOWN_WIDTH = 11.0
-        
         # head pose detection
-        self.mp_face_mesh = mp.solutions.face_mesh
-        self.face_mesh = self.mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.distracted = False
-        self.text = None
-        
         #object detection
         #self.detector = hub.load("https://tfhub.dev/tensorflow/efficientdet/lite2/detection/1")
         #self.labels = pd.read_csv('labels.csv',sep=';',index_col='ID')
         #self.labels = self.labels['OBJECT (2017 REL.)']
-        print('\033[95m'"face class imported succesfully"'\033[0m')
+        printf('\033[95m'"face class imported succesfully \n"'\033[0m')
     
     # we use media pipe for face detection and number of faces
     cdef inline facedetect(self, frame):
+        #type declarations for cython
+
+        cdef float height, width
+        cdef int count
+
         height, width, _ = frame.shape
         count = 0
-        with self.mp_face_detection.FaceDetection(
+        with mp.solutions.face_detection.FaceDetection(
     model_selection=0, min_detection_confidence=0.5) as face_detection:
             # To improve performance, optionally mark the image as not writeable to
             # pass by reference.
@@ -126,7 +112,7 @@ cdef class face:
     # we need to fix speed // not working properly // we move to cnn 
     cdef inline driver_attention(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        eyes = self.eye_cascade.detectMultiScale(gray, 1.1, 4) # look for faster option (slowing down code)
+        eyes = cv2.CascadeClassifier("assets/eye.xml").detectMultiScale(gray, 1.1, 4) # look for faster option (slowing down code)
         
         for (x,y,w,h) in eyes:
             eyes=frame[y:y+h,x:x+w]
@@ -177,7 +163,7 @@ cdef class face:
     cdef inline head_pose(self, frame):
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         frame.flags.writeable = False
-        results = self.face_mesh.process(frame)
+        results = mp.solutions.face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5).process(frame)
         frame.flags.writeable = True
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         
@@ -247,9 +233,9 @@ cdef class face:
     # we detect for proper pose in driving (aka both hands at steering wheel)
     def body_pose(self, frame):
         imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = self.pose.process(imgRGB)
+        results = mp.solutions.pose.Pose().process(imgRGB)
         if results.pose_landmarks:
-            #self.mpDraw.draw_landmarks(frame, results.pose_landmarks, self.mpPose.POSE_CONNECTIONS)
+            #mp.solutions.drawing_utils.draw_landmarks(frame, results.pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS)
             for _, lm in enumerate(results.pose_landmarks.landmark):
                 h, w,_ = frame.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)

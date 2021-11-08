@@ -272,4 +272,5 @@ class face:
         
 
 if __name__ == "__main__":
-    pass
+    Face = face()
+    print(type(Face.mp_face_detection))
