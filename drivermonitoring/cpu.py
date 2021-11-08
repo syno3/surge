@@ -3,11 +3,7 @@
 
 # required imports
 import psutil
-import sys
-from logging import error
-import platform
-from datetime import datetime
-
+import platform 
 
 #main cpu class
 class cpu:
@@ -127,4 +123,3 @@ class cpu:
         net_io = psutil.net_io_counters()
         print(f"Total Bytes Sent: {self.get_size(net_io.bytes_sent)}")
         print(f"Total Bytes Received: {self.get_size(net_io.bytes_recv)}")
-
