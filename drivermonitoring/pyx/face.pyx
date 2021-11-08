@@ -59,7 +59,7 @@ cdef class face:
         printf('\033[95m'"face class imported succesfully \n"'\033[0m')
     
     # we use media pipe for face detection and number of faces
-    cdef inline facedetect(self, frame):
+    cpdef facedetect(self, frame):
         #type declarations for cython
 
         cdef float height, width
@@ -85,8 +85,7 @@ cdef class face:
             count += 1  
         return self.boolean, count, score, x, w, y, h
 
-    @staticmethod
-    cdef inline find_marker(frame):
+    cpdef find_marker(frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
         edged = cv2.Canny(gray, 35, 125)
@@ -101,7 +100,7 @@ cdef class face:
         return cv2.minAreaRect(c)
     
     # we need to accurately compute focal lenght for this
-    cdef inline distance_to_camera(self, perWidth):
+    cpdef distance_to_camera(self, perWidth):
         perWidth = perWidth[1][0] 
     	# compute and return the distance from the maker to the camera
         focalLength = (perWidth* self.KNOWN_DISTANCE) / self.KNOWN_WIDTH
@@ -110,7 +109,7 @@ cdef class face:
         return round(w/perWidth, 2)
     
     # we need to fix speed // not working properly // we move to cnn 
-    cdef inline driver_attention(self, frame):
+    cpdef driver_attention(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         eyes = cv2.CascadeClassifier("assets/eye.xml").detectMultiScale(gray, 1.1, 4) # look for faster option (slowing down code)
         
@@ -132,12 +131,12 @@ cdef class face:
         return self.sleeping
     
     # we detect driver attention status
-    cdef inline driver_distracted(self):
+    cpdef driver_distracted(self):
         pass
     
     
     # we perform object detection
-    cdef inline objects(self, frame):
+    cpdef objects(self, frame):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb_tensor = tf.convert_to_tensor(frame, dtype=tf.uint8)
         rgb_tensor = tf.expand_dims(rgb_tensor , 0)
@@ -160,7 +159,7 @@ cdef class face:
     
     
     # we perform head pose detection
-    cdef inline head_pose(self, frame):
+    cpdef head_pose(self, frame):
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         frame.flags.writeable = False
         results = mp.solutions.face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5).process(frame)
@@ -231,7 +230,7 @@ cdef class face:
         return self.distracted, self.text
     
     # we detect for proper pose in driving (aka both hands at steering wheel)
-    def body_pose(self, frame):
+    cpdef body_pose(self, frame):
         imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp.solutions.pose.Pose().process(imgRGB)
         if results.pose_landmarks:

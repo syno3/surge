@@ -45,7 +45,7 @@ cdef class enviroment:
         #self.prev_frame_time = 0.0
         #self.new_frame_time = 0.0
 
-    cdef inline vector[char*] brightness_level(self, np.ndarray frame):
+    cpdef brightness_level(self, frame):
 
         """ 
         parameters
@@ -68,28 +68,28 @@ cdef class enviroment:
         """
         # we define the return types
 
-        cdef np.ndarray hsv  = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        cdef float value = hsv[...,1].mean()
-        cdef vector[char*] response
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        value = hsv[...,1].mean()
+        response = []
 
         if value == self._no_exposure:
-            response.push_back("no saturation")
+            response.append("no saturation")
     
         if value > self._no_exposure and value <self._little_exposure:
-            response.push_back("Minimal exposure")
+            response.append("Minimal exposure")
 
         if value > self._little_exposure  and value < self._slight_exposure:
-            response.push_back("slight exposure")
+            response.append("slight exposure")
 
         if value > self._slight_exposure  and value < self._normal_exposure:
-            response.push_back("Normal exposure")
+            response.append("Normal exposure")
 
         if value > self._normal_exposure  and value < self._over_exposure:
-            response.push_back("over exposure")
+            response.append("over exposure")
 
-        return response
+        return response[0], value
 
-    cdef inline vector[char*] saturation_level(self, np.ndarray frame):
+    cpdef saturation_level(self, np.ndarray frame):
 
         """ 
         parameters
@@ -113,28 +113,28 @@ cdef class enviroment:
         # we define the data types
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        cdef float value = hsv[...,1].mean()
-        cdef vector[char*] response
+        value = hsv[...,1].mean()
+        response = []
 
         if value == self._no_saturation:
-            response.push_back('No saturation')
+            response.append('No saturation')
     
         if value > self._no_saturation and value <self._little_saturation:
-            response.push_back('Minimal saturation')
+            response.append('Minimal saturation')
 
         if value > self._little_saturation  and value < self._slight_saturation:
-            response.push_back('slight saturation')
+            response.append('slight saturation')
 
         if value > self._slight_saturation  and value < self._normal_saturation:
-            response.push_back('Normal saturation')
+            response.append('Normal saturation')
 
         if value > self._normal_saturation  and value < self._over_saturation:
-            response.push_back('over saturation')
+            response.append('over saturation')
 
-        return response
+        return response[0], value
 
     @cython.cdivision(True)
-    cdef inline double frames_per_second(self):
+    cpdef frames_per_second(self):
 
         """ 
         parameters
