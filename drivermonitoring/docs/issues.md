@@ -38,3 +38,24 @@ Traceback (most recent call last):
 pygame.error
 
 5. extreemly slow face detection c++
+
+6. cython attribute error
+Traceback (most recent call last):
+  File "main.py", line 32, in <module>
+    Face = face.face()
+  File "face.pyx", line 56, in face.face.__cinit__
+AttributeError: 'face.face' object has no attribute 'mp_face_detection'
+
+7. Cant access webcam in wsl
+[ WARN:0] global /tmp/pip-req-build-h45n7_hz/opencv/modules/videoio/src/cap_v4l.cpp (890) open VIDEOIO(V4L2:/dev/video0): can't open camera by index
+
+8. main cant access cython methods
+Traceback (most recent call last):
+  File "E:\surge\drivermonitoring\main.py", line 279, in <module>
+    run.debug() # we run the actual video when the file is called
+  File "E:\surge\drivermonitoring\main.py", line 132, in debug
+    brightness_output, saturation_output, brightness_value, _ = self.enviroment_pipeline(frame)
+  File "E:\surge\drivermonitoring\main.py", line 84, in enviroment_pipeline
+    brightness_output, brightness_value = Enviroment.brightness_level(frame)
+AttributeError: 'enviroment.enviroment' object has no attribute 'brightness_level'
+[ WARN:0] global C:\Users\runneradmin\AppData\Local\Temp\pip-req-build-1i5nllza\opencv\modules\videoio\src\cap_msmf.cpp (438) `anonymous-namespace'::SourceReaderCB::~SourceReaderCB terminating async callback

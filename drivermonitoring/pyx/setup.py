@@ -2,20 +2,24 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
+import os
+import numpy
 
-
-""" ext_modules=[
-    Extension("enviroment", ["enviroment.pyx"]),
-    Extension("face", ["face.pyx"]),
-    Extension("test", ["test.pyx"]),
+""" mypackage_root_dir = os.path.dirname(__file__)
+with open(os.path.join(mypackage_root_dir, 'requirements.txt')) as requirements_file:
+    requirements = requirements_file.read().splitlines()
+ """
+extensions = [Extension(
+    name="enviroment",
+    sources=["enviroment.pyx"],
+    include_dirs=[numpy.get_include()],
+    )
 ]
 
-setup(
-  name = 'cythonize',
-  cmdclass = {'build_ext': build_ext},
-  ext_modules = ext_modules,
-) """
-
-setup(
-    ext_modules = cythonize("face.pyx", annotate=True)
+setup(name='cython',
+      version=0.1,
+      description='...',
+      author='festus murimi',
+      include_package_data=True,
+      ext_modules = cythonize(extensions),
 )

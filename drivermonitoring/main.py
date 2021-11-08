@@ -62,8 +62,8 @@ class videoOutput:
         self.cap = None
         
         # we play warning sound 
-        mixer.init()
-        self.sound = mixer.Sound(self.warning_path)
+        #mixer.init()
+        #self.sound = mixer.Sound(self.warning_path)
         
         # paths for notifications sounds
 
