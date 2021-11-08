@@ -10,7 +10,6 @@ import sys
 import cv2
 import numpy as np
 from threading import Thread # we will use later
-from pygame import mixer # we will use this for sound
 
 # importing depricated code
 #from enviroment import enviroment
