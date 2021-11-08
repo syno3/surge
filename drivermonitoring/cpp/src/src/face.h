@@ -22,17 +22,13 @@ struct facedetect_R {
     int score;
     float x, y, w, h;
 };
-// distance from camera
-struct distance_to_camera_R {
-    float distance;
-};
 // driver attention return values
 struct driver_attention_R {
     bool driversleeping;
 };
 
 // head pose return values
-struct head_pose_R {
+struct body_pose_R {
     bool driverDistracted;
     std::string response_text;
 
@@ -51,9 +47,8 @@ public:
     float min_confidence_score = 0.5;
     Net FaceDetector();
     void face_detection(const cv::Mat frame, Net net);
-    distance_to_camera_R distance_to_camera(const cv::Mat& frame);
     driver_attention_R driver_attention(const cv::Mat& frame);
-    head_pose_R head_pose(const cv::Mat& frame);
+    body_pose_R body_pose(const cv::Mat& frame);
 
 };
 

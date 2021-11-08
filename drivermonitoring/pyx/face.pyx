@@ -22,13 +22,14 @@ import tensorflow as tf
 
 # main face class
 # we need to use numpy to optimize the code, // learn opencv optimization
+
+# we need to convert all the objects to cdef for cython to access them !!
 cdef class face:
     # variables type declaration
     cdef int number_of_faces, i, count, distance
     cdef float KNOWN_DISTANCE, KNOWN_WIDTH, distracted
     cdef bint sleeping, boolean
-    print('\033[95m'"face class imported"'\033[0m')
-
+    
     def __cinit__(self):
 
         # cascade files
@@ -38,7 +39,7 @@ cdef class face:
         self.right_eye = cv2.CascadeClassifier("assets/right_eye.xml")
         
         
-        self.model =  load_model("assets/models/eyeStateModel1.h5")
+        #self.model =  load_model("assets/models/eyeStateModel1.h5")
         self.sleeping = False
         self.count=0
         self.path = os.getcwd()
@@ -74,7 +75,7 @@ cdef class face:
         #self.detector = hub.load("https://tfhub.dev/tensorflow/efficientdet/lite2/detection/1")
         #self.labels = pd.read_csv('labels.csv',sep=';',index_col='ID')
         #self.labels = self.labels['OBJECT (2017 REL.)']
-          
+        print('\033[95m'"face class imported succesfully"'\033[0m')
     
     # we use media pipe for face detection and number of faces
     cdef inline facedetect(self, frame):
