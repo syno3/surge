@@ -19,7 +19,11 @@ public:
 	std::vector<std::vector<cv::Point2f> > imgpoints;
 	std::vector<cv::Point3f> objp;
 	std::vector<cv::String> images;
-	cv::Mat frame, gray;
+	std::vector<cv::Point2f> corner_pts;
+	std::string path = "./images/*.jpg";
+	cv::Mat board, gray;
+	bool success;
+
 	int CHESSBOARD[2]{6, 9};
 
 	//constructor declaration
