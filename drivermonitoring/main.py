@@ -20,7 +20,7 @@ from abstract import *
 #cython modules
 from pyx import test # we use this to log when cython class import works
 from pyx import enviroment # we import enviroment file
-from pyx import face
+from pyx import face # we import face file
 
 
 # for image adjustment
@@ -138,15 +138,8 @@ class videoOutput:
             cv2.putText(frame, "Saturation: {}".format(saturation_output), (10, 70), self.font,
                         self.font_size, self.yellow, self.font_thickness, self.line_type)
             # we enhance image brighten or darken
-            try:
-                if brightness_value > 194:
-                    print(' we darken the frame')
-                    frame = self.darken(frame) # we darken frame
-                if brightness_value < 65:
-                    print(' we brighten the frame')
-                    frame = self.enhanced(frame) # we brignten frame
-            except:
-                continue
+            # we had bad implementation here
+            
             # frames per second test
             number = Enviroment.frames_per_second()
             if number < 15:
