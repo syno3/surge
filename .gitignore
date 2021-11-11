@@ -21,3 +21,5 @@ build/
 .setup.py.swp
 face.html
 assets/
+packages
+packages.config
