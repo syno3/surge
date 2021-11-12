@@ -1,27 +1,28 @@
 #pragma once
 
-#ifndef FACE_H
+#ifdef FACE_H
 #define FACE_H
 #include <iostream>
-#include <fstream>
 #include <opencv2/opencv.hpp>
-#include <opencv2/dnn/dnn.hpp>
-#include <opencv2/dnn/all_layers.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include <dlib/opencv.h>
+#include <dlib/image_processing/frontal_face_detector.h>
+#include <dlib/image_processing/render_face_detections.h>
+#include <dlib/image_processing.h>
+#include <dlib/gui_widgets.h>
+#include <dlib/image_io.h>
+
+
+
 
 // we add global type declaration
-
+using namespace dlib;
 using namespace std;
 using namespace cv;
-using namespace dnn;
 
 // return values for the face constructor functions
 // face detect retrun values
-struct facedetect_R {
-    bool facedeteced;
-    int count;
-    int score;
-    float x, y, w, h;
-};
 // driver attention return values
 struct driver_attention_R {
     bool driversleeping;
@@ -36,17 +37,13 @@ struct body_pose_R {
 // face class
 class face {
 public:
+    //class variables
+    shape_predictor sp;
+    std::vector<cv::Point> righteye;
+    std::vector<cv::Point> lefteye;
+
     // constructor declarations
-    const std::string classes = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\ssd_mobilenet_v2_coco_2018_03_29.pbtxt";
-    const std::string tensorflowConfigFile = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\opencv_face_detector.pbtxt";
-    const std::string tensorflowWeightFile = "E:\\surge\\drivermonitoring\\cpp\\src\\src\\assets\\opencv_face_detector_uint8.pb";
-
-
-    std::vector<std::string> class_names;
-    Net net;
-    float min_confidence_score = 0.5;
-    Net FaceDetector();
-    void face_detection(const cv::Mat frame, Net net);
+    double compute_ear(std::vector<cv::Point>& vec);
     driver_attention_R driver_attention(const cv::Mat& frame);
     body_pose_R body_pose(const cv::Mat& frame);
 
