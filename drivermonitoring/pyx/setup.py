@@ -10,8 +10,8 @@ with open(os.path.join(mypackage_root_dir, 'requirements.txt')) as requirements_
     requirements = requirements_file.read().splitlines()
  """
 extensions = [Extension(
-    name="face",
-    sources=["face.pyx"],
+    name="sleepNN",
+    sources=["sleepNN.pyx"],
     include_dirs=[numpy.get_include()],
     )
 ]

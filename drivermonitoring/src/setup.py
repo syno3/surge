@@ -4,8 +4,8 @@ from Cython.Build import cythonize
 import numpy
 
 extensions = [Extension(
-    name="enviroment",
-    sources=["enviroment.pyx"],
+    name="sleepNN",
+    sources=["sleepNN.pyx"],
     include_dirs=[numpy.get_include()],
     )
 ]
