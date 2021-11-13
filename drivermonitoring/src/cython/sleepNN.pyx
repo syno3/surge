@@ -99,9 +99,10 @@ cdef class sleep:
             if results.multi_face_landmarks:
                 mesh_coords = landmarksDetection(frame, results)
                 ratio = blinkRatio(mesh_coords, RIGHT_EYE, LEFT_EYE)
-                if ratio >4:
+                if ratio >6:
                     self.SLEEP_COUNTER +=1
-                    return self.SLEEP_COUNTER
+                    if self.SLEEP_COUNTER > 40:
+                        return True
                 else:
                     self.SLEEP_COUNTER = 0
                     

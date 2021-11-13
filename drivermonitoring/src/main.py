@@ -3,33 +3,31 @@
 
 # required imports
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # we remove tensorflow warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' # we remove tensorflow messages
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1' # we remove pygame message
 os.environ['SDL_AUDIODRIVER'] = 'dsp' #audio driver
-import sys
 import cv2
 import numpy as np
 from threading import Thread # we will use later
 
-# importing depricated code
-#from enviroment import enviroment
-#from face import face
-from cpu import cpu
-from abstract import *
+#python modules
+from python import cpu, pose
 
 #cython modules
-from pyx import test # we use this to log when cython class import works
-from pyx import enviroment # we import enviroment file
-from pyx import face # we import face file
+from cython import func, enviroment, sleepNN
 
+#cpp functions
+#from cpp import *
 
 # for image adjustment
 from PIL import ImageEnhance
 
 # we instantiate class in global variables
-Enviroment = enviroment.enviroment()
-Face = face.face()
-#CPU = cpu()
+ENVIROMENT = enviroment.enviroment()
+FACE = func.face()
+CPU = cpu.cpu()
+SLEEP = sleepNN.sleep()
+POSE = pose.pose()
 
 # main video class
 class videoOutput:
@@ -80,8 +78,8 @@ class videoOutput:
     def enviroment_pipeline(self, frame: np.ndarray) ->str:
         # we reduce function loops by using pipeline
         
-        brightness_output, brightness_value = Enviroment.brightness_level(frame)
-        saturation_output, saturation_value = Enviroment.saturation_level(frame)
+        brightness_output, brightness_value = ENVIROMENT.brightness_level(frame)
+        saturation_output, saturation_value = ENVIROMENT.saturation_level(frame)
         return brightness_output, saturation_output, brightness_value, saturation_value
 
 
@@ -136,12 +134,9 @@ class videoOutput:
 
             # frame saturation text
             cv2.putText(frame, "Saturation: {}".format(saturation_output), (10, 70), self.font,
-                        self.font_size, self.yellow, self.font_thickness, self.line_type)
-            # we enhance image brighten or darken
-            # we had bad implementation here
-            
+                        self.font_size, self.yellow, self.font_thickness, self.line_type)            
             # frames per second test
-            number = Enviroment.frames_per_second()
+            number = ENVIROMENT.frames_per_second()
             if number < 15:
                 cv2.putText(frame, "Frames Per Sec: {}".format(number), (10, 90), self.font, self.font_size, self.red,
                             self.font_thickness, self.line_type)
@@ -151,8 +146,7 @@ class videoOutput:
 
             # error for face not detected
             e1 = cv2.getTickCount()  # debugging speed
-            detected, count, score, x, w, y, h = Face.facedetect(frame)
-            
+            detected, count, score, x, w, y, h = FACE.facedetect(frame)       
             if detected:
                 # face detected
                 cv2.putText(frame, "Face detected: {}".format(detected), (10, 130), self.font, self.font_size,
@@ -170,31 +164,22 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 cv2.putText(frame, "Number of Faces detected: {}".format(count), (10, 210), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
                 # distance of camera from face // we create threads
-                marker = Face.find_marker(frame)
-                dist = Face.distance_to_camera(marker)
-                
-                
-                
+                marker = FACE.find_marker(frame)
+                dist = FACE.distance_to_camera(marker)
                 cv2.putText(frame, "Distance from camera: Appx {} inches".format(dist), (10, 230), self.font,
                             self.font_size, self.green, self.font_thickness, self.line_type)
                 
                 # driver attention aka (drowsiness, smartphone taking, wearing seatbelt) // keep proof ie. record part he was sleeping
-                sleepy = Face.driver_attention(frame)
+                sleepy = SLEEP.detect_sleep(frame)
                 #self.distarcted, _, _ = Drowsy.driver_distracted(frame)
-                if not sleepy:
+                if sleepy:
                     # run the record part
                     #self.record_evidence(frame)
-                    cv2.putText(frame, "Driver Not Attentive : {}".format(sleepy), (10, 250),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
-                else:
                     cv2.putText(frame, "Driver Not Attentive : {}".format(sleepy), (10, 250),self.font, self.font_size, self.red, self.font_thickness, self.line_type)
-                    # fix this bug
-                    """ try:
-                       self.sound.play() # we play sound
-                    except:
-                        pass """
-                        
+                else:
+                    cv2.putText(frame, "Driver Attentive", (10, 250),self.font, self.font_size, self.green, self.font_thickness, self.line_type)                    
                 # we get head pose direction      
-                head_pose, text  = Face.head_pose(frame) # we get head direction
+                head_pose, text  = POSE.head_pose(frame) # we get head direction
                 if head_pose:
                     # run the record part
                     #self.record_evidence(frame)
@@ -203,18 +188,12 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                      cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
 
                 # we detect driver pose
-                cx, cy = Face.body_pose(frame)
-                cv2.putText(frame, "Driver pose : {}, {}".format(cx, cy), (10, 290),self.font, self.font_size, self.green, self.font_thickness, self.line_type)
-     
-                # we driving behavior
-                
-                                   
-                    
+                cx, cy = POSE.body_pose(frame)
+                cv2.putText(frame, "Driver pose : {}, {}".format(cx, cy), (10, 290),self.font, self.font_size, self.green, self.font_thickness, self.line_type)            
             else:
                 # face not detected
                 cv2.putText(frame, "Face not detected", (10, 130), self.font, self.font_size, self.red,
                             self.font_thickness, self.line_type)
-
             e2 = cv2.getTickCount()  # debugging speed
             time = (e2 - e1) / cv2.getTickFrequency()  # debugging speed
             if time < 0.01:
@@ -257,7 +236,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                 break
 
             brightness_output, saturation_output = self.enviroment_pipeline(frame)
-            number = Enviroment.frames_per_second()
+            number = ENVIROMENT.frames_per_second()
             return brightness_output, saturation_output, number
 
 
