@@ -59,3 +59,17 @@ Traceback (most recent call last):
     brightness_output, brightness_value = Enviroment.brightness_level(frame)
 AttributeError: 'enviroment.enviroment' object has no attribute 'brightness_level'
 [ WARN:0] global C:\Users\runneradmin\AppData\Local\Temp\pip-req-build-1i5nllza\opencv\modules\videoio\src\cap_msmf.cpp (438) `anonymous-namespace'::SourceReaderCB::~SourceReaderCB terminating async callback
+
+9. poor results from eculadian distance sleep detection
+
+10. 
+
+
+
+
+
+
+
+
+
+
