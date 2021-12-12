@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* ABOUT US SECTION DESKTOP 1440*890 */
+:root{
+    --black: #20212A;
+    --logogreen: #72CD95;
+    --logosize: 35px;
+    --aboutheight: 630px;
+    --robotofont: 'Roboto', sans-serif;
+}
+.about{
+    background: var(--black);
+    height: var(--aboutheight);
+}
+.about-content{
+    display: flex;
+}
+.about-block{
+    display: block;
+}
+.about-text{
+    padding-top: 140px;
+    padding-right: 40px;
+}
+.about-text >h1{
+    color: var(--logogreen);
+    font-family: var(--robotofont);
+    font-size: 65px;
+    line-height: 60px;
+}
+.about-text >p{
+    color: var(--logogreen);
+    font-family: var(--robotofont);
+    line-height: 25px;
+    font-size: 20px;
+}
+.about-button{
+    height: 50px;
+    width: 150px;
+    border-radius: 40px;
+    background-color: #72CD95;
+    margin-left: 180px;
+}
+.about-button >h1{
+    color: white;
+    padding-left: 30px;
+    font-size: 20px;
+    font-family: var(--robotofont);
+    padding-top: 14px;
+}
+.about-button > h1 > a{
+    text-decoration: none;
+    color: white;
+}
+.about-image > img{
+    height: 80vmin;
+    pointer-events: none;
+    padding-top: 50px;
+    padding-left: 50px;
+    padding-right: 60px;
+}
+
+/* about styling smartphone max width 500 */
+@media only screen and (max-width: 500px){
+    :root{
+        --mobileaboutheight: 750px;
+    }
+    .about{
+        background: var(--black);
+        height: var(--mobileaboutheight);
+    }
+    .about-content{
+        display: block;
+    }
+    .about-text{
+        padding: 50px 20px 0px 20px;
+    }
+    .about-text >h1{
+        color: var(--logogreen);
+        font-family: var(--robotofont);
+        font-size: 40px;
+        line-height: 35px;
+    }
+    .about-text >p{
+        font-size: 17px;
+    }
+    .about-image > img{
+        height: 55vmin;
+        pointer-events: none;
+    }
+    .about-button{
+        height: 50px;
+        width: 150px;
+        border-radius: 40px;
+        background-color: #72CD95;
+        margin-left: 100px;
+    }
+
+}

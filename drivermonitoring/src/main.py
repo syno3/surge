@@ -6,6 +6,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' # we remove tensorflow messages
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1' # we remove pygame message
 os.environ['SDL_AUDIODRIVER'] = 'dsp' #audio driver
+
 import cv2
 import numpy as np
 from threading import Thread # we will use later
@@ -205,7 +206,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             print(f"clock cycles per second: {time}")  # debugging speed
 
             cv2.imshow('frame', frame)
-            if cv2.waitKey(10) == ord('q'):
+            if cv2.waitKey(1) == ord('q'):
                 break
 
         self.cap.release()
@@ -225,22 +226,6 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             frame = buffer.tobytes()
             yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
 
-    # we debug global variables for flask render
-    def global_variables(self):
-        self.cap = cv2.VideoCapture(self.path)
-        while self.cap.isOpened():
-            ret, frame = self.cap.read()
-            # if frame is read correctly ret is True
-            if not ret:
-                print("Can't receive frame (stream end?). Exiting ...")
-                break
-
-            brightness_output, saturation_output = self.enviroment_pipeline(frame)
-            number = ENVIROMENT.frames_per_second()
-            return brightness_output, saturation_output, number
-
-
-
 if __name__ == '__main__':
     import cProfile, pstats
     profiler = cProfile.Profile()
@@ -251,4 +236,4 @@ if __name__ == '__main__':
     
     profiler.disable()
     stats = pstats.Stats(profiler)
-    stats.dump_stats(filename='assets/stats/stats.prof') # we dump the debug file
+    stats.dump_stats(filename='../assets/stats/stats.prof') # we dump the debug file
