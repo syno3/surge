@@ -24,3 +24,5 @@ assets/
 packages
 packages.config
 .idea/
+.vs
+out

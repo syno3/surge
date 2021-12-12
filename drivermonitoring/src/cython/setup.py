@@ -11,8 +11,8 @@ extensions = [Extension(
 ]
 
 setup(name='cython',
-      version=0.1,
-      description='...',
-      author='festus murimi',
-      ext_modules = cythonize(extensions),
+    version=0.1,
+    description='...',
+    author='festus murimi',
+    ext_modules = cythonize(extensions),
 )

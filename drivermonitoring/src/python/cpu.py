@@ -8,7 +8,7 @@ import platform
 #main cpu class
 class cpu:
 
-    def __init__(self) -> None:
+    def __init__(self):
 
         # terminal colors
         self.HEADER = '\033[95m'
@@ -36,7 +36,7 @@ class cpu:
                 return f"{bytes:.2f}{unit}{suffix}"
             bytes /= self.factor
 
-    def run(self) ->None:
+    def run(self):
 
         print("="*40, "System Information", "="*40)
         uname = platform.uname()
