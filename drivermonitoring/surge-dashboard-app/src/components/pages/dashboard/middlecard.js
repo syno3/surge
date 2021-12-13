@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
+import MiddleCard2 from './middlecard2';
 
-class MiddleCard extends React.Component {
+class MiddleCard extends Component {
     /* contain states for the middle card */
-    state = {
-        details: [
-            {name: 'test', value: 449},
-            {name: 'test', value: 426},
-            {name: 'test', value: 33},
-            {name: 'test', value: 203},
-            {name: 'test', value: 94},
-        ]
-    }
-
     render() { 
         return (
         <div className='dashboard-middle-card-one'>
+            <div className='dashboard-middle-card-chart'>
+            </div>
+            <div className='dashboard-middle-card-r'>
+                {/* we will update later */}
+                <MiddleCard2 name='Resolved' number={442}/>
+                <MiddleCard2 name='Received' number={449}/>
+                <MiddleCard2 name='Average first response time' number={33}/>
+                <MiddleCard2 name='Average response time' number={94}/>
+            </div>
         </div>
         );
     }

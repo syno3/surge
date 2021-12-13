@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish&family=Roboto&display=swap');
+
 :root{
     --black: #20212A;
     --logogreen: #72CD95;
@@ -104,11 +106,15 @@ html, body{
     font-family: var(--fontfamily);
     color: #9FA2B4;
     font-size: 19px;
+    font-weight: 500;
+
 }
 .dashboard-card-value{
     font-family: var(--fontfamily);
     color: #252733;
     font-size: 30px;
+    font-weight: 600;
+
 }
 /* MIDDLE CARD STYLE DESKTOP */
 .dashboard-middle-card{
@@ -119,8 +125,37 @@ html, body{
     width: 79vw;
     background: #FFFFFF;
     border-radius: 8px;
+    border: 2px solid #DFE0EB;
+    display: flex;
 }
-/* MIDDLE CARD CONTENT */
+.dashboard-middle-card-chart{
+    width: 65%;
+    border-right: 2px solid #DFE0EB;
+}
+.dashboard-middle-card-r{
+    width: 35%;
+    border-radius: 0px 8px 8px 0px;
+    display: block;
+}
+
+.dashboard-middle-card-2{
+    height: 21%;
+    display: block;
+    justify-content: center;
+    text-align: center;
+}
+.dashboard-middle-card-2:not(:last-child){
+    border-bottom: 2px solid #DFE0EB;
+}
+
+.dashboard-card-name{
+    color: #9FA2B4;
+    font-size: 16px;
+    font-weight: 500;
+}
+.dashboard-card-number{
+    font-size: 24px;
+}
 
 /* BOTTOM CARD STYLE DESKTOP */
 .dasboard-bottom-cards{
@@ -135,6 +170,7 @@ html, body{
     background: #FFFFFF;
     border-radius: 8px;
     margin-right: 43px;
+    display: block;
 }
 .dashboard-bottom-card-two{
     width: 500px;
@@ -142,5 +178,64 @@ html, body{
     background: #FFFFFF;
     border-radius: 8px;
 }
+.dashboard-bottom-heading-one{
+    display: flex;
+    justify-content: space-between;
+}
+.bottom-heading-title{
+    padding-left: 30px;
+    color: #252733;
+    font-size: 19px;
+}
+.bottom-heading-flags{
+    font-size: 14px;
+    color: #72CD95;
+    padding-right: 50px;
+    padding-top: 10px;
+}
+.bottom-driver{
+    padding-top: 10px;
+}
+.bottom-driver-name-flags{
+    display: flex;
+    justify-content: space-between;
+}
+.bottom-driver-name-flags:not(:last-child){
+    border-bottom: 1px solid #DFE0EB;
+    padding-bottom: 25px;
+}
+.bottom-driver-name{
+    padding-left: 20px;
+    color: #252733;
+    font-size: 14px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+}
+.bottom-driver-number-flags{
+    color: #9FA2B4;
+    font-size: 14px;
+    padding-right: 40px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 500;
+}
 
-/* BOTTOM CARD CONTENT STYLE */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
