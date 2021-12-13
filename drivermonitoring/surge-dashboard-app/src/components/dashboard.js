@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import MainContent from './pages/dashboard/maincontent';
 import SideBar from './pages/dashboard/sidebar';
 import TopBar from './pages/dashboard/topbar';
+import MainContent from './pages/dashboard/maincontent';
 
 
-class Dashboard extends React.Component {
+class Dashboard extends Component {
     render() { 
         return (
             <div className='Dashboard'>
                 <SideBar />
                 <div className='maincontent'>
-                    <TopBar />
+                    <TopBar page='Overview'/>
                     <MainContent />
                 </div>
             </div>

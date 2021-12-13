@@ -12,7 +12,7 @@ class MainContent extends React.Component {
         <div className='dashboard-main'>
             <div className='dashboard-main-top-card'>
                 {/* link to firebase */}
-
+                
                 <Card name='Driver' number={60}/>
                 <Card name='Flags' number= {890}/>
                 <Card name='Cars' number={43}/>

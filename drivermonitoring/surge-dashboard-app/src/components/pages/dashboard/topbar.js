@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 
-class TopBar extends React.Component {
-
-    constructor(){
-        super();
-        this.state = {page: 'Overview'}
-    }
+class TopBar extends Component {
 
     render() { 
         return (
         <div className='topbar'>
             <div className='topbar-text'>
-                <h1>{this.state.page}</h1>
+                <h1>{this.props.page}</h1>
             </div>
             <div className='topbar-icons'>
                 {/* we will fix later */}
