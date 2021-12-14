@@ -51,11 +51,16 @@ html, body{
     color: #DDE2FF;
     font-family: var(--fontfamily);
     font-size: 16px;
-    padding-left: 40px;
-    padding-top: 10px;
+    padding-left: 10px;
+    font-weight: 500;
 }
 .Dashboard-li-links{
     height: 50px;
+    padding-left: 20px;
+    display: flex;
+}
+.Dashboard-link-icon{
+    padding-top: 7px;
 }
 .Dashboard-li-links:hover{
     background: #3f4047;
