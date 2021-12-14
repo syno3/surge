@@ -79,7 +79,26 @@ html, body{
     font-family: var(--fontfamily);
     font-size: 24px;
 }
-.topbar-icons
+.topbar-icons{
+    padding-right: 20px;
+    padding-top: 10px;
+    width: 85%;
+
+}
+.topbar-name{
+    font-size: 14px;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+    padding-right: 10px;
+}
+.topbar-name-avatar{
+    display: flex;
+    justify-content: end;
+}
+.topbar-name-avatar >img{
+    border-radius: 20px;
+}
+
 /* MAIN CONTENT 1440*890PX DESIGN */
 .dashboard-main{
     display: block;
@@ -219,19 +238,65 @@ html, body{
     font-weight: 500;
 }
 
+/* STATISTICS PAGE DESIGN DESKTOP */
 
+.statistics-middle{
+    display: flex;
+    margin: 0px 20px 0px 20px;
+    margin-top: 10px;
+}
 
+.statistics-middle-piechart{
+    width: 340px;
+    height: 400px;
+    background: white;
+    border: 1px solid #DFE0EB;
+    border-radius: 8px;
+}
 
+.Statistics-middle-linechart{
+    background: white;
+    border: 1px solid #DFE0EB;
+    width: 650px;
+    height: 400px;
+    margin-left: 80px;
+    border-radius: 8px;
+}
+.statistics-bottom-cards{
+    display: block;
+    margin: 20px 20px 0px 20px;
 
+}
+.statistics-bottom-row{
+    display: flex;
+    width: 1075px;
+    height: 120px;
+}
+.statistics-bottom-row:not(:last-child){
+    margin-bottom: 20px;
+}
 
-
-
-
-
-
-
-
-
+.statistics-bottom-row-card{
+    width: 270px;
+    background: white;
+    border: 1px solid #DFE0EB;
+    border-radius: 8px;
+}
+.statistics-bottom-row-card:not(:last-child){
+    margin-right: 20px;
+}
+.bottom-cards-flex{
+    display: flex;
+    justify-content: center;
+}
+.bottom-cards-block{
+    display: block;
+}
+.bottom-cards-num{
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Mulish', sans-serif;
+}
 
 
 
