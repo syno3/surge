@@ -12,20 +12,20 @@ import Dashboard from './components/dashboard';
 import NotFound from './components/404';
 
 import {Route, BrowserRouter, Switch} from "react-router-dom"
-
+import AuthContextprovider from './context/auth'
 class App extends React.Component {
     render() { 
         return (
-        <BrowserRouter>
-            <React.Fragment>
+        <AuthContextprovider>
+            <BrowserRouter>
                 <Switch>
                     <Route path='/' component={Home} exact/>
                     <Route path='/login' component={Login} />
                     <Route path='/dashboard' component={Dashboard} />
                     <Route component={NotFound} />
                 </Switch>
-            </React.Fragment>  
-        </BrowserRouter>
+            </BrowserRouter>
+        </AuthContextprovider>
         );
     }
 }

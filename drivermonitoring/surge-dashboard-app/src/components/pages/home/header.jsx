@@ -19,7 +19,7 @@ class Header extends Component {
             </div>
             <div className='headercontent'>
                 <div className='textcontent'> 
-                    <h1>Making Driving safer</h1>
+                    <h1 className='line-height'>Making Driving safer</h1>
                     <p>We are redefining the standards of saftey in the transportation industry.</p>
                     <div className='searchbox'>
                         <div className='seacrhboxbtn'>

@@ -78,8 +78,9 @@ body {
 }
 .textcontent >h1{
   font-size: 60px;
-  line-height: 15px;
-
+}
+.line-height{
+  line-height: 50px;
 }
 .textcontent >p{
   font-size: 20px;

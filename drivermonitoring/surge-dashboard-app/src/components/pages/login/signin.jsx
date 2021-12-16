@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import image from '../resources/login-image.svg'
 import googleicon from '../resources/google.svg'
+import {getAuth} from 'firebase/auth'
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
+
+import { useAuth } from '../../../context/auth';
+import app from '../../../utils/firebase'
 
 
-class SignIn extends React.Component {
-
-    /* we create state the updates */
-    state = {
-        status: false,
-    };
-
-    /* the main render function */
-    render() { 
-        return (
+const SignIn = () => {
+    const [signin] = useState(false)
+    return (
         <div className='login'>
             <div className='login-content'>
                 <div className='login-left-text'>
@@ -21,38 +19,42 @@ class SignIn extends React.Component {
                     <img src={image}/>
                 </div>
                 <div className='login-card-right'>
-                    {this.state.status ? this.cardbuttonsignin() : this.cardbuttonsignup()}
+                    {signin ? Cardbuttonsignin() : Cardbuttonsignup()}
                 </div>
             </div>
         </div>
         );
-    }
+}
 
-    cardbuttonsignup(){
-        return ( 
+const Cardbuttonsignup = () => {
+
+    const history = useHistory('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    return ( 
         <React.Fragment>              
             <div className='card-button'>
                 <button className='signin-button'>Sign In</button>
                 <button className='signup-button'>Sign Up</button>
             </div>
             <div className='card-forms'>
-                <form>
+
+                <form onSubmit={HandleSignUp(email, password, setIsSubmitting)}>
                     <ul>
                         <li>
-                            <input type='text' id="fname" name="fname" className='field-split align-left' placeholder="First Name"/>
-                            <input type='text' id="lname" name="lname" className='field-split align-right' placeholder="Last Name"/>
+                            <input value={email} onChange={e => setEmail(e.target.value)} type='text' id="email" name="email" className='field-full' placeholder="Email" required/>
                         </li>
                         <li>
-                            <input type='text' id="email" name="email" className='field-full' placeholder="Email"/>
+                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' id="password" name="password" className='field-full' placeholder="Password"/>
                         </li>
                         <li>
-                            <input type='password' id="password" name="password" className='field-full' placeholder="Password"/>
-                        </li>
-                        <li>
-                            <input type="submit" value="Lets Go!" />
+                            <input isLoading={isSubmitting} type="submit" value="Lets Go!" />
                         </li>
                     </ul>
                 </form>
+
             </div>
             <div className='card-google-auth'>
                 <img src={googleicon}/>
@@ -63,11 +65,11 @@ class SignIn extends React.Component {
             </div>
         </React.Fragment>
         );
-    }
 
+}
 
-    cardbuttonsignin(){
-        return ( 
+const Cardbuttonsignin = () => {
+    return ( 
         <React.Fragment>              
             <div className='card-button card-button-update'>
                 <button className='signup-button signup-button-update'>Sign In</button>
@@ -77,10 +79,10 @@ class SignIn extends React.Component {
                 <form>
                     <ul>
                         <li>
-                            <input type='text' id="email" name="email" className='field-full' placeholder="Use Email or Password"/>
+                            <input type='text' id="email" name="email" className='field-full' placeholder="Use Email or first name" required/>
                         </li>
                         <li>
-                            <input type='password' id="password" name="password" className='field-full signin-padding' placeholder="Password"/>
+                            <input type='password' id="password" name="password" className='field-full signin-padding' placeholder="Password" required/>
                         </li>
                         <li>
                             <input type="submit" value="Lets Continue!" />
@@ -97,22 +99,37 @@ class SignIn extends React.Component {
             </div>
         </React.Fragment>
         );
-    }
-
-    /* we will this function to update state when button clicked  */
-    constructor(){
-        super();
-        this.statesignin = this.statesignin.bind(this);
-        this.statesignup = this.statesignup.bind(this);
-    }
-
-    statesignin(){
-        this.setState({status: true});
-    }
-
-    statesignup(){
-        this.setState({status: false})
-    }
 }
 
+/* adds user to the database */
+const HandleSignUp = (email, password, setIsSubmitting) =>{
+    return (
+        useCallback(async event => {
+        event.preventDefault();
+        const auth = getAuth();
+
+        try {
+            await
+                createUserWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            alert(error.message);
+            }
+        setIsSubmitting(true)
+        console.log('successful login')
+        }))
+}
+
+
+/* logins in back the user to website */
+const HandleSignIn = () => {
+    return ();
+}
+
+
+
+
+
+
 export default SignIn;
+
+/* we write functions to for form submit to handle signin and signup */
