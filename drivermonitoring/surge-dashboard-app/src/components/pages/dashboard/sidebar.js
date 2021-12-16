@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import logo from '../resources/sidebarlogo.svg'
+import app from '../../../utils/firebase'
+
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import MapIcon from '@mui/icons-material/Map';
 import InsightsIcon from '@mui/icons-material/Insights';
 import HomeIcon from '@mui/icons-material/Home';
 import FlagIcon from '@mui/icons-material/Flag';
-
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 class SideBar extends Component {
@@ -53,6 +55,12 @@ class SideBar extends Component {
                         <SettingsIcon style={{fill: "#DDE2FF"}}/>
                     </div>
                     <h1>Settings</h1>
+                </div>
+                <div onClick={() => app.auth().signOut()} className='Dashboard-li-links'>
+                    <div className='Dashboard-link-icon'>
+                        <LogoutIcon style={{fill: "#DDE2FF"}}/>
+                    </div>
+                    <h1>Sign Out</h1>
                 </div>
             </div>
         </div>
