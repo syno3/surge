@@ -14,6 +14,7 @@ class StatisticsBody extends React.Component {
                 <Card name='Cars' number={43}/>
                 <Card name='Fuel' number={7000}/>
             </div>
+            
 
             <div className='statistics-middle'>
                 <div className='statistics-middle-piechart'>

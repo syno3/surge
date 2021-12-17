@@ -13,6 +13,8 @@ import NotFound from './components/404';
 
 import {Route, BrowserRouter, Switch} from "react-router-dom"
 import AuthContextprovider from './context/auth'
+
+
 class App extends React.Component {
     render() { 
         return (
