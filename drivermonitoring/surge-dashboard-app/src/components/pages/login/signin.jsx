@@ -1,16 +1,20 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import image from '../resources/login-image.svg'
 import googleicon from '../resources/google.svg'
 import {getAuth} from 'firebase/auth'
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
+import {useAuth} from '../../../context/auth';
+import useMounted from '../../../hooks/mounted';
+import {signinState, signinstateselector} from '../../../store/globalstate';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {useButton} from '../../../hooks/useButton';
 
-import { useAuth } from '../../../context/auth';
-import app from '../../../utils/firebase'
 
 
 const SignIn = () => {
-    const [signin] = useState(false)
+    const signin = useRecoilValue(signinstateselector)
+
     return (
         <div className='login'>
             <div className='login-content'>
@@ -28,15 +32,16 @@ const SignIn = () => {
 
 const Cardbuttonsignup = () => {
 
-    const history = useHistory('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
 
+    const{signin, switchtosignin, siwtchtosignup} = useButton()
+
     return ( 
         <React.Fragment>              
             <div className='card-button'>
-                <button className='signin-button'>Sign In</button>
+                <button onClick={() => switchtosignin()} className='signin-button'>Sign In</button>
                 <button className='signup-button'>Sign Up</button>
             </div>
             <div className='card-forms'>
@@ -69,28 +74,37 @@ const Cardbuttonsignup = () => {
 }
 
 const Cardbuttonsignin = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const {signInWithGoogle} = useAuth();
+    const {signin, switchtosignin, siwtchtosignup} = useButton()
+
+
     return ( 
         <React.Fragment>              
             <div className='card-button card-button-update'>
                 <button className='signup-button signup-button-update'>Sign In</button>
-                <button className='signin-button signin-button-update'>Sign Up</button>
+                <button onClick={() => siwtchtosignup()} className='signin-button signin-button-update'>Sign Up</button>
             </div>
             <div className='card-forms card-forms-padding'>
-                <form>
+                <form onSubmit={HandleSignIn(email, password, setIsSubmitting)}>
                     <ul>
                         <li>
-                            <input type='text' id="email" name="email" className='field-full' placeholder="Use Email or first name" required/>
+                            <input value={email} onChange={e => setEmail(e.target.value)} type='text' id="email" name="email" className='field-full' placeholder="Use Email" required/>
                         </li>
                         <li>
-                            <input type='password' id="password" name="password" className='field-full signin-padding' placeholder="Password" required/>
+                            <input value={password} onChange={e => setPassword(e.target.value)} type='password' id="password" name="password" className='field-full signin-padding' placeholder="Password" required/>
                         </li>
                         <li>
-                            <input type="submit" value="Lets Continue!" />
+                            <input isLoading={isSubmitting} type="submit" value="Lets Continue!" />
                         </li>
                     </ul>
                 </form>
             </div>
-            <div className='card-google-auth'>
+            <div onClick={() => signInWithGoogle()} className='card-google-auth'>
                 <img src={googleicon}/>
                 <h1>Sign In with google</h1>
             </div>
@@ -103,9 +117,13 @@ const Cardbuttonsignin = () => {
 
 /* adds user to the database */
 const HandleSignUp = (email, password, setIsSubmitting) =>{
+    const history = useHistory('')
+    const mounted = useMounted()
+
     return (
         useCallback(async event => {
         event.preventDefault();
+        setIsSubmitting(true)
         const auth = getAuth();
 
         try {
@@ -114,16 +132,36 @@ const HandleSignUp = (email, password, setIsSubmitting) =>{
         } catch (error) {
             alert(error.message);
             }
-        setIsSubmitting(true)
-        console.log('successful login')
+        (mounted.current && setIsSubmitting(false))
+        console.log('successful signup')
+        history.push('/dashboard')
         }))
 }
 
 
 /* logins in back the user to website */
-const HandleSignIn = () => {
-    return ();
+const HandleSignIn = (email, password, setIsSubmitting) => {
+    const history = useHistory('')
+    const mounted = useMounted()
+
+    return (
+        useCallback(async event => {
+        event.preventDefault();
+        setIsSubmitting(true)
+        const auth = getAuth();
+
+        try {
+            await
+                signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            alert(error.message);
+            }
+        (mounted.current && setIsSubmitting(false))
+        console.log('successful login')
+        history.push('./dashboard')
+        }))
 }
+
 
 
 

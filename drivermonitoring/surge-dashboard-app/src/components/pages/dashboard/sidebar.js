@@ -10,10 +10,16 @@ import HomeIcon from '@mui/icons-material/Home';
 import FlagIcon from '@mui/icons-material/Flag';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+import {useAuth} from '../../../context/auth'
 
-class SideBar extends Component {
-    render() { 
-        return (
+
+
+
+const SideBar = () => {
+
+    const {Logout} = useAuth();
+
+    return (
         <div className='Dashboard-sidebar'>
             <div className='Dashboard-logo'>
                 <img src={logo} />
@@ -56,7 +62,10 @@ class SideBar extends Component {
                     </div>
                     <h1>Settings</h1>
                 </div>
-                <div onClick={() => app.auth().signOut()} className='Dashboard-li-links'>
+                <div onClick={async e =>{
+                    e.preventDefault()
+                    Logout()
+                }} className='Dashboard-li-links'>
                     <div className='Dashboard-link-icon'>
                         <LogoutIcon style={{fill: "#DDE2FF"}}/>
                     </div>
@@ -65,7 +74,9 @@ class SideBar extends Component {
             </div>
         </div>
         );
-    }
 }
 
 export default SideBar;
+
+
+
