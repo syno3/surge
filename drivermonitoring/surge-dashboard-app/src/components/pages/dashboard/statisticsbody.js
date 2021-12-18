@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Card from './topcard';
 import SbottomCards from './statisticsbottomcards';
+import Pie from './statisticspie';
+import LineChartStats from './statisticsline'
 
 class StatisticsBody extends React.Component {
     render() { 
@@ -19,9 +21,11 @@ class StatisticsBody extends React.Component {
             <div className='statistics-middle'>
                 <div className='statistics-middle-piechart'>
                     {/* we will a pie chart D3.js */}
+                    <Pie />
                 </div>
                 <div className='Statistics-middle-linechart'>
                     {/* we will a line chart D3.js */}
+                    <LineChartStats />
                 </div>
             </div>
             

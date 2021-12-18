@@ -4,12 +4,17 @@ import image from '../resources/login-image.svg'
 import googleicon from '../resources/google.svg'
 import {getAuth} from 'firebase/auth'
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
-import {useAuth} from '../../../context/auth'
-import useMounted from '../../../hooks/mounted'
+import {useAuth} from '../../../context/auth';
+import useMounted from '../../../hooks/mounted';
+import {signinState, signinstateselector} from '../../../store/globalstate';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {useButton} from '../../../hooks/useButton';
+
 
 
 const SignIn = () => {
-    const [signin] = useState(true)
+    const signin = useRecoilValue(signinstateselector)
+
     return (
         <div className='login'>
             <div className='login-content'>
@@ -31,10 +36,12 @@ const Cardbuttonsignup = () => {
     const [password, setPassword] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
 
+    const{signin, switchtosignin, siwtchtosignup} = useButton()
+
     return ( 
         <React.Fragment>              
             <div className='card-button'>
-                <button className='signin-button'>Sign In</button>
+                <button onClick={() => switchtosignin()} className='signin-button'>Sign In</button>
                 <button className='signup-button'>Sign Up</button>
             </div>
             <div className='card-forms'>
@@ -73,13 +80,14 @@ const Cardbuttonsignin = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const {signInWithGoogle} = useAuth();
+    const {signin, switchtosignin, siwtchtosignup} = useButton()
 
 
     return ( 
         <React.Fragment>              
             <div className='card-button card-button-update'>
                 <button className='signup-button signup-button-update'>Sign In</button>
-                <button className='signin-button signin-button-update'>Sign Up</button>
+                <button onClick={() => siwtchtosignup()} className='signin-button signin-button-update'>Sign Up</button>
             </div>
             <div className='card-forms card-forms-padding'>
                 <form onSubmit={HandleSignIn(email, password, setIsSubmitting)}>
@@ -153,6 +161,7 @@ const HandleSignIn = (email, password, setIsSubmitting) => {
         history.push('./dashboard')
         }))
 }
+
 
 
 
