@@ -3,10 +3,6 @@ import avatar from '../resources/avatar.png';
 import {useAuth} from '../../../context/auth'
 
 
-
-
-
-
 const TopBar = ({page}) => {
     const {currentUser} = useAuth();
 

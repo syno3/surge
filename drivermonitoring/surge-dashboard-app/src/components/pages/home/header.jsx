@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import stars from '../resources/stars.svg';
 
+
+
 class Header extends Component {
     render() { 
         return (

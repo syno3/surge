@@ -21,7 +21,7 @@ export const signinstateselector = selector({
 /* global state for dashboard login */
 export const dashboardstate = atom({
     key: 'dashboardstate',
-    default: 'statistics',
+    default: 'overview',
 })
 
 export const dashboardselector = selector({

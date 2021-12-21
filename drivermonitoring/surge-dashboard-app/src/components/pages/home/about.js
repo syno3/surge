@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import image from '../resources/about-image.svg'
+import image from '../resources/about-image.svg';
 
 class About extends Component {
     render() { 
