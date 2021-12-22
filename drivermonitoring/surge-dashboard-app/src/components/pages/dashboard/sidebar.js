@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from '../resources/sidebarlogo.svg'
-import app from '../../../utils/firebase'
+import logo from '../resources/sidebarlogo.svg';
+import app from '../../../utils/firebase';
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';

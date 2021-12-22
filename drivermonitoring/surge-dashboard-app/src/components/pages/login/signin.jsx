@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import image from '../resources/login-image.svg'
-import googleicon from '../resources/google.svg'
-import {getAuth} from 'firebase/auth'
+import image from '../resources/login-image.svg';
+import googleicon from '../resources/google.svg';
+import {getAuth} from 'firebase/auth';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth'
 import {useAuth} from '../../../context/auth';
 import useMounted from '../../../hooks/mounted';

@@ -10,7 +10,7 @@ import Home from './components/home'
 import Login from './components/login'
 import Dashboard from './components/dashboard';
 import NotFound from './components/404';
-import ApexChart from './test'
+import LoadData from './test';
 
 import {Route, BrowserRouter, Switch} from "react-router-dom"
 import AuthContextprovider from './context/auth'
@@ -25,7 +25,7 @@ class App extends React.Component {
                     <Route path='/' component={Home} exact/>
                     <Route path='/login' component={Login} />
                     <Route path='/dashboard' component={Dashboard} />
-                    <Route path='/test' component={ApexChart} />
+                    <Route path='/test' component={LoadData} />
                     <Route component={NotFound} />
                 </Switch>
             </BrowserRouter>

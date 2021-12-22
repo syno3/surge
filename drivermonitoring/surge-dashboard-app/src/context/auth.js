@@ -18,7 +18,7 @@ export default function AuthContextprovider({children}){
     /* updating the display name (currentUser) */
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            setCurrentUser(user ? user.displayName : "empty")
+            setCurrentUser(user ? user.uid : "empty")
         });
         }, []);
 
