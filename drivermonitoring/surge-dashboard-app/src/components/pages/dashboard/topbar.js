@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import avatar from '../resources/avatar.png';
 import {useAuth} from '../../../context/auth';
 import app from '../../../utils/firebase';
@@ -7,23 +7,31 @@ import { getFirestore, collection, getDocs, query, where } from 'firebase/firest
 
 
 const TopBar = ({page}) => {
+
     const {currentUser} = useAuth();
     const [User, setUser] = useState([]);
     const [Loading, setLoading] = useState(false);
 
     const db = getFirestore(app);
     const userCollection = collection(db, "User");
-    const q = query(userCollection, where("userID", "==", currentUser))
 
-    getDocs(q).then((snapshot)=>{
-        setLoading(true);
-        snapshot.docs.forEach((doc)=>{
-            setUser({...doc.data(), id: doc.id})
-        })
-        console.log(User);
-    }).catch(err =>{
-        console.log(err)
-    }).finally(() => setLoading(false))
+    useEffect(()=>{
+        getuserdata();
+    }, [])
+
+    function getuserdata(){
+        const q = query(userCollection, where("userID", "==", currentUser))
+        getDocs(q).then((snapshot)=>{
+            setLoading(true);
+            snapshot.docs.forEach((doc)=>{
+                setUser({...doc.data(), id: doc.id})
+            })
+            console.log(User);
+        }).catch(err =>{
+            console.log(err)
+        }).finally(() => setLoading(false))
+    }
+
 
     return (
         <div className='topbar'>
