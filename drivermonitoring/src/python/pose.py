@@ -6,7 +6,7 @@ import mediapipe as mp
 class pose:
     print('hello there')
     def __init__(self):
-         # mediapipe submodules
+        # mediapipe submodules
         self.mp_face_detection = mp.solutions.face_detection
         self.mp_drawing = mp.solutions.drawing_utils
         

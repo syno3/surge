@@ -88,7 +88,7 @@ class videoOutput:
     def face_pipeline(self, frame: np.ndarray) ->int:
         pass
 
- 
+    
     # we enhance the frames
     def enhanced(self, frame:np.ndarray) ->np.ndarray:
         frame = ImageEnhance.Brightness(frame)
@@ -186,7 +186,7 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     #self.record_evidence(frame)
                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.red, self.font_thickness, self.line_type)     
                 else:
-                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
+                    cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
 
                 # we detect driver pose
                 cx, cy = POSE.body_pose(frame)
@@ -230,7 +230,7 @@ if __name__ == '__main__':
     import cProfile, pstats
     profiler = cProfile.Profile()
     profiler.enable() 
-      
+
     run = videoOutput()
     run.debug() # we run the actual video when the file is called
     
