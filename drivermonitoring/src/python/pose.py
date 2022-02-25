@@ -4,7 +4,7 @@ import mediapipe as mp
 
 
 class pose:
-    print('hello there')
+    
     def __init__(self):
         # mediapipe submodules
         self.mp_face_detection = mp.solutions.face_detection
@@ -94,7 +94,7 @@ class pose:
         return self.distracted, self.text
     
     # we detect for proper pose in driving (aka both hands at steering wheel)
-    def body_pose(self, frame:np.ndarray):
+    def body_pose(self, frame):
         imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = self.pose.process(imgRGB)
         if results.pose_landmarks:
@@ -102,6 +102,25 @@ class pose:
             for _, lm in enumerate(results.pose_landmarks.landmark):
                 h, w,_ = frame.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                
-        return cx, cy
-    
+
+                if cx and cy == []:
+                    return None, None
+                else:
+                    return cx, cy
+
+if __name__ =="__main__":
+    fc = pose()
+    cap = cv2.VideoCapture(0)
+    while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                print("Can't receive frame (stream end?). Exiting ...")
+                break
+            results = fc.body_pose(frame)
+            print(results)
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(10) == ord('q'):
+                break
+
+    cap.release()
+    cv2.destroyAllWindows()

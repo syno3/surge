@@ -147,7 +147,11 @@ class videoOutput:
 
             # error for face not detected
             e1 = cv2.getTickCount()  # debugging speed
-            detected, count, score, x, w, y, h = FACE.facedetect(frame)       
+            try:
+                detected, count, score, x, w, y, h = FACE.facedetect(frame)
+            except TypeError:
+                detected = False     
+            
             if detected:
                 # face detected
                 cv2.putText(frame, "Face detected: {}".format(detected), (10, 130), self.font, self.font_size,
@@ -189,7 +193,11 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     cv2.putText(frame, "Driver is Facing : {}".format(text), (10, 270),self.font, self.font_size, self.green, self.font_thickness, self.line_type)   
 
                 # we detect driver pose
-                cx, cy = POSE.body_pose(frame)
+                results = POSE.body_pose(frame)
+                if results != None:
+                    cx, cy = results
+                else:
+                    cx, cy = 0, 0
                 cv2.putText(frame, "Driver pose : {}, {}".format(cx, cy), (10, 290),self.font, self.font_size, self.green, self.font_thickness, self.line_type)            
             else:
                 # face not detected
@@ -227,13 +235,17 @@ cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             yield b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n'
 
 if __name__ == '__main__':
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable() 
+    try:
+        import cProfile, pstats
+        profiler = cProfile.Profile()
+        profiler.enable() 
 
-    run = videoOutput()
-    run.debug() # we run the actual video when the file is called
-    
-    profiler.disable()
-    stats = pstats.Stats(profiler)
-    stats.dump_stats(filename='../assets/stats/stats.prof') # we dump the debug file
+        run = videoOutput()
+        run.debug() # we run the actual video when the file is called
+        
+        profiler.disable()
+        stats = pstats.Stats(profiler)
+        stats.dump_stats(filename='../assets/stats/stats.prof') # we dump the debug file
+    except TypeError:
+        run = videoOutput()
+        run.debug()

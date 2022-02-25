@@ -82,6 +82,7 @@ class sleep:
     
     def __init__(self):
         self.SLEEP_COUNTER =0
+
     def detect_sleep(self, frame):
         with mp.solutions.face_mesh.FaceMesh(min_detection_confidence =0.5, min_tracking_confidence=0.5) as face_mesh:
             results  = face_mesh.process(frame)
@@ -96,18 +97,3 @@ class sleep:
                     self.SLEEP_COUNTER = 0
                     
 
-if __name__ =="__main__":
-    fc = sleep()
-    cap = cv2.VideoCapture(0)
-    while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                print("Can't receive frame (stream end?). Exiting ...")
-                break
-            fc.detect_sleep(frame)
-            cv2.imshow('frame', frame)
-            if cv2.waitKey(10) == ord('q'):
-                break
-
-    cap.release()
-    cv2.destroyAllWindows()
