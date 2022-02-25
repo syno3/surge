@@ -1,30 +1,14 @@
-# distutils: language = c++
-# cython: language_level = 3
 
-# -*- coding: utf-8 -*-
-# cython: language_level=3
-from __future__ import print_function
-
-cimport cython
 import os
 import cv2
 import imutils
 import numpy as np
-cimport numpy as np # we import cython numpy api
 import mediapipe as mp
-from libcpp cimport bool
-from libcpp.vector cimport vector
-from libc.stdio cimport printf
-from libcpp.string cimport string
 
-cdef class face:
-    cdef int number_of_faces, i, count, distance
-    cdef float KNOWN_DISTANCE, KNOWN_WIDTH, distracted
-    cdef bint sleeping, boolean
-    cdef string path
-    cdef int text
+class face:
 
-    def __cinit__(self):   
+
+    def __init__(self):   
         self.sleeping = False
         self.count=0
         self.text = 0
@@ -36,9 +20,7 @@ cdef class face:
         self.KNOWN_WIDTH = 11.0
         self.distracted = False
     
-    cpdef facedetect(self, frame):
-        cdef float height, width
-        cdef int count
+    def facedetect(self, frame):
 
         height, width, _ = frame.shape
         count = 0
@@ -58,7 +40,7 @@ cdef class face:
             count += 1  
         return self.boolean, count, score, x, w, y, h
 
-    cpdef find_marker(self, frame):
+    def find_marker(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
         edged = cv2.Canny(gray, 35, 125)
@@ -67,7 +49,7 @@ cdef class face:
         c = max(cnts, key = cv2.contourArea)
         return cv2.minAreaRect(c)
     
-    cpdef distance_to_camera(self, perWidth):
+    def distance_to_camera(self, perWidth):
         perWidth = perWidth[1][0] 
         focalLength = (perWidth* self.KNOWN_DISTANCE) / self.KNOWN_WIDTH
         w = self.KNOWN_WIDTH * focalLength

@@ -1,6 +1,5 @@
 # we write class to check cpu status
 
-
 # required imports
 import psutil
 import platform 

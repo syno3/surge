@@ -1,32 +1,15 @@
-# distutils: language = c++
-# cython: language_level = 3
-
-# -*- coding: utf-8 -*-
-# cython: language_level=3
-from __future__ import print_function
-
-cimport cython
+# import python modules
 import cv2
 import time
 import numpy as np
-cimport numpy as np
-from libcpp.vector cimport vector
-from libc.stdio cimport printf
-
-np.import_array()
-DTYPE = np.int
-ctypedef np.int_t DTYPE_t
 
 # main class
 # we need to use numpy to optimize the code, // learn opencv optimization
-cdef class enviroment:
-    cdef int _no_exposure, _little_exposure, _slight_exposure, _normal_exposure, _over_exposure
-    cdef int _no_saturation, _little_saturation, _slight_saturation, _normal_saturation, _over_saturation
-    cdef np.ndarray frame
+class enviroment:
 
-    printf('\033[95m'"enviroment class imported \n"'\033[0m')
+    print('\033[95m'"enviroment class imported \n"'\033[0m')
 
-    def __cinit__(self):    
+    def __init__(self):    
         # exposure values
         self._no_exposure = 0
         self._little_exposure = 65
@@ -45,7 +28,7 @@ cdef class enviroment:
         #self.prev_frame_time = 0.0
         #self.new_frame_time = 0.0
 
-    cpdef brightness_level(self, frame):
+    def brightness_level(self, frame):
 
         """ 
         parameters
@@ -89,7 +72,7 @@ cdef class enviroment:
 
         return response[0], value
 
-    cpdef saturation_level(self, np.ndarray frame):
+    def saturation_level(self, frame):
 
         """ 
         parameters
@@ -133,8 +116,7 @@ cdef class enviroment:
 
         return response[0], value
 
-    @cython.cdivision(True)
-    cpdef frames_per_second(self):
+    def frames_per_second(self):
 
         """ 
         parameters
@@ -155,8 +137,8 @@ cdef class enviroment:
 
         """
         ## type declarations
-        cdef double fps
-        cdef double new_frame_time = 0.0, prev_frame_time = 0.0
+        new_frame_time = 0.0
+        prev_frame_time = 0.0
 
         new_frame_time = time.time()
 
