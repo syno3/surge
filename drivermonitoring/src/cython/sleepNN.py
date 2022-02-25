@@ -1,24 +1,13 @@
-# distutils: language = c++
-# cython: language_level = 3
-
-# -*- coding: utf-8 -*-
-# cython: language_level=3
-from __future__ import print_function
 
 import cv2
 import numpy as np
 import mediapipe as mp
 import math
 
-#cython imports
-cimport numpy as np
-cimport cython
-from libcpp.vector cimport vector
-from libc.stdio cimport printf
 
 #gloabal functions
 # constants
-cdef int CLOSED_EYES_FRAME =3
+CLOSED_EYES_FRAME =3
 # face bounder indices 
 FACE_OVAL=[ 10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103,67, 109]
 
@@ -33,11 +22,11 @@ LEFT_EYEBROW =[ 336, 296, 334, 293, 300, 276, 283, 282, 295, 285 ]
 # right eyes indices
 RIGHT_EYE=[ 33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161 , 246 ]  
 RIGHT_EYEBROW=[ 70, 63, 105, 66, 107, 55, 65, 52, 53, 46 ]
-cdef int SLEEP_COUNTER = 0
+SLEEP_COUNTER = 0
 
 
 #functions
-cdef landmarksDetection(frame, results):
+def landmarksDetection(frame, results):
     """ 
     frame: input image
     results: 468 points
@@ -51,14 +40,14 @@ cdef landmarksDetection(frame, results):
     return mesh_coord
 
 # Euclaidean distance
-cdef euclaideanDistance(point, point1):
+def euclaideanDistance(point, point1):
     x, y = point
     x1, y1 = point1
     distance = math.sqrt((x1 - x)**2 + (y1 - y)**2)
     return distance
 
 # Blinking Ratio
-cdef blinkRatio(landmarks, right_indices, left_indices):
+def blinkRatio(landmarks, right_indices, left_indices):
     # Right eyes 
     # horizontal line 
     rh_right = landmarks[right_indices[0]]
@@ -89,11 +78,11 @@ cdef blinkRatio(landmarks, right_indices, left_indices):
 
 
 # WE NEED TO MOVE TO DNN MODEL
-cdef class sleep:
-    cdef int SLEEP_COUNTER
-    def __cinit__(self):
+class sleep:
+    
+    def __init__(self):
         self.SLEEP_COUNTER =0
-    cpdef detect_sleep(self, frame):
+    def detect_sleep(self, frame):
         with mp.solutions.face_mesh.FaceMesh(min_detection_confidence =0.5, min_tracking_confidence=0.5) as face_mesh:
             results  = face_mesh.process(frame)
             if results.multi_face_landmarks:
